@@ -190,6 +190,10 @@ table.show td.cke_editor_wrapper .lowerMenu object {
 table.show td.cke_editor_item_body {
   margin: 0 0 20px;
 }
+table.show td textarea.body {
+  width: 99%;
+  height: 300px;
+}
 table.show td textarea.head {
   width: 99%;
   height: 120px;
