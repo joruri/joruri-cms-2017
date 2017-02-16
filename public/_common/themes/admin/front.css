@@ -1,9 +1,14 @@
-#maintenances .piaceHeader,
+#maintenances .piaceHeader {
+  margin-bottom: 10px;
+  padding: 1px;
+  background-color: #F58E7E;
+  color: #fff;
+}
 #messages .piaceHeader {
   margin-bottom: 10px;
   padding: 1px;
-  border-left: 5px solid #000;
-  border-bottom: 1px solid #000;
+  background-color: #3C5082;
+  color: #fff;
 }
 #maintenances .piaceHeader .title,
 #messages .piaceHeader .title {
