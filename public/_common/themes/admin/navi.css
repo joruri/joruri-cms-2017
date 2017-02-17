@@ -1,57 +1,1 @@
-/* =========================================================
-   Navi
-========================================================= */
-
-#currentNaviSite,
-#currentNaviConcept {
-  display: block;
-  text-decoration: none;
-  line-height: 48px;
-  cursor: pointer;
-}
-#naviSites {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-}
-#naviSites ul {
-  margin: 0;
-  padding: 0;
-}
-#naviSites li {
-  margin: 0;
-  padding: 0;
-}
-#naviSites li .current {
-  color: #f0d;
-}
-#naviConcepts {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-}
-#naviConcepts ul {
-  margin: 0;
-  padding: 0 0 0 20px;
-}
-#naviConcepts li {
-  margin: 0;
-  padding: 0;
-}
-#naviConcepts li .icon {
-  display: inline-block;
-  width: 16px;
-  background-color: #eee;
-  text-align: center;
-  text-decoration: none;
-}
-#naviConcepts li .opendChildren {
-}
-#naviConcepts li .closedChildren {
-  background-color: #ddd;
-}
-#naviConcepts li a.current {
-  color: #f0d;
-}
+/* =========================================================   Navi========================================================= */#currentNaviSite,#currentNaviConcept {  display: block;  text-decoration: none;  height: 48px;  line-height: 48px;  cursor: pointer;  overflow: hidden;}#naviSites {  margin: 10px 0;  padding: 10px;  border: 1px solid #ccc;  background-color: #fff;}#naviSites ul {  margin: 0;  padding: 0;}#naviSites li {  margin: 0;  padding: 0;}#naviSites li .current {  color: #f0d;}#naviConcepts {  margin: 10px 0;  padding: 10px;  border: 1px solid #ccc;  background-color: #fff;}#naviConcepts ul {  margin: 0;  padding: 0 0 0 20px;}#naviConcepts li {  margin: 0;  padding: 0;}#naviConcepts li .icon {  display: inline-block;  width: 16px;  background-color: #eee;  text-align: center;  text-decoration: none;}#naviConcepts li .opendChildren {}#naviConcepts li .closedChildren {  background-color: #ddd;}#naviConcepts li a.current {  color: #f0d;}

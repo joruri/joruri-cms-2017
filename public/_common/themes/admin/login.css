@@ -68,7 +68,8 @@ h1 + span {
   padding: 0 0 20px;
 }
 #account,
-#password {
+#password,
+#email {
   width: 254px;
   padding: 8px 10px;
   border: 1px solid #bbb;
@@ -100,6 +101,11 @@ h1 + span {
 }
 .password_reminder a {
   color: #fff;
+}
+.notice,
+.message {
+  color: #BEE664;
+  font-weight: bold;
 }
 .copyright {
   padding: 20px 0px;

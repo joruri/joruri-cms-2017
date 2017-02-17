@@ -84,15 +84,13 @@ body {
 }
 #navi .selector li {
   position: relative;
-  display: inline-block;
   margin: 0;
   width: 100%;
-  height: 48px;
   background-color: #ddd;
   box-sizing: border-box;
 }
 #navi .selector li a {
-  padding: 0 0 0 40px;
+  padding: 0 5px 0 40px;
 }
 #navi .selector li a::before {
     position: absolute;
