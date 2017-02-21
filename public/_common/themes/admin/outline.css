@@ -225,7 +225,7 @@ body {
   display: inline-block;
   margin: 0px 2px;
   padding: 8px 18px;
-  background-color: #5CADB6;
+  background-color: #007882;
   border-radius: 3px;
   text-decoration: none;
   color: #fff;
@@ -233,7 +233,7 @@ body {
 #content .actionMenu a:hover,
 #content .actionMenu a:focus,
 #content .actionMenu a.current {
-  background-color: #FBA848;
+  background-color: #BE5000;
 }
 #content .navi {
   margin: 10px 0px;
