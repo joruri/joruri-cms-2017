@@ -14,15 +14,14 @@ p.form, p.managerForm {
   line-height: 1.6;
 }
 p.form {
-  background-color: #3C5082;
-  padding: 4px 10px;
-  color: #fff;
+  border-bottom: 1px solid #000;
+  color: #000;
 }
 p.managerForm {
-  background-color: #F58E7E;
-  padding: 4px 10px;
-  color: #fff;
+  border-bottom: 1px solid #bf1400;
+  color: #bf1400;
 }
+
 .inlineForm {
   margin: 0px 0px 2px 0px;
   padding: 2px;
@@ -30,15 +29,6 @@ p.managerForm {
 }
 form .note {
   color: #e00;
-}
-button {
-  margin: 0px;
-  padding: 8px 18px;
-  background-color: #A18E5C;
-  border: none;
-  border-radius: 3px;
-  text-decoration: none;
-  color: #fff;
 }
 
 /* Index
@@ -49,13 +39,12 @@ table.index {
 }
 table.index th {
   padding: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #bbb;
   background-color: #ddd;
   color: #000;
   font-weight: lighter;
   text-align: left;
   color: #000;
-  white-space: nowrap;
 }
 table.index td {
   padding: 5px 6px;
@@ -73,22 +62,21 @@ table.index tr.cycle td {
 --------------------------------------------------------- */
 table.show {
   width: 100%;
-  border-top: 1px solid #B6D5D8;
+  border: 0px solid #fff;
   border-collapse: separate;
   empty-cells: show;
-  margin: 0 0 20px !important;
 }
 table.show th {
-  width: 200px;
-  padding: 11px 15px;
-  border-bottom:1px solid #B6D5D8;
-  background-color: #E0EEEF;
-  white-space: nowrap;
+  width: 180px;
+  padding: 13px 5px 13px 15px;
+  border-top:5px solid #fff;
+  border-bottom:1px solid #ccc;
+  background-color: #ededed;
 }
 table.show td {
-  padding: 6px;
-  border-bottom:1px solid #B6D5D8;
-  background-color: #fff;
+  padding: 13px 5px 13px 15px;
+  border-top: 5px solid #fff;
+  border-bottom:1px solid #ccc; 
 }
 table.noDesign, table.noDesign th, table.noDesign td {
   border-width: 0px;
@@ -106,37 +94,26 @@ table.show td textarea {
 /* Form
 ------------------------------------- */
 div.submitters {
-  margin: 20px 0 0 0;
+  margin: 20px 0px 0px 0px;
   padding: 20px;
+  border: 1px solid #ccc;
   background-color: #ededed;
   text-align: center;
 }
 div.submitters input {
-  margin: 0px 5px;
-  padding: 8px 18px;
-  background-color: #5CADB6;
-  border: none;
-  border-radius: 3px;
-  text-decoration: none;
-  color: #fff;
+  margin: 0px 10px;
   width: 120px;
-}
-div.submitters input:hover {
-  background-color: #FBA848;
-}
-table.show input {
-  border: none;
-  background-color: #eee;
-  padding: 5px 6px;
 }
 table.show input.id {
   width: 240px;
+  ime-mode: disabled;
 }
 table.show input.name {
   width: 240px;
 }
 table.show input.nameEn {
   width: 240px;
+  ime-mode: disabled;
 }
 table.show input.title {
   width: 600px;
@@ -144,12 +121,15 @@ table.show input.title {
 table.show input.number {
   text-align: right;
   width: 100px;
+  ime-mode: disabled;
 }
 table.show input.email {
   width: 400px;
+  ime-mode: disabled;
 }
 table.show input.url {
   width: 400px;
+  ime-mode: disabled;
 }
 table.show input.date {
   width: 80px;
@@ -186,9 +166,6 @@ table.show td.cke_editor_wrapper .lowerMenu a {
 }
 table.show td.cke_editor_wrapper .lowerMenu object {
   vertical-align: bottom;
-}
-table.show td.cke_editor_item_body {
-  margin: 0 0 20px;
 }
 table.show td textarea.body {
   width: 99%;

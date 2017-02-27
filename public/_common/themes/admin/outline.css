@@ -2,13 +2,13 @@
     Outline.
 ========================================================= */
 body {
-  background-image: url(images/bg-system.png);
+
 }
 
 /* Container
 --------------------------------------------------------- */
 #container {
-  width: 90%;
+  width: 100%;
   height: 100%;
   min-width: 960px;
   margin: 0 auto;
@@ -18,11 +18,11 @@ body {
 --------------------------------------------------------- */
 #header {
   width: 100%;
-  height: 60px;
-  margin: 0 0 10px;
-  padding: 0px;
+  background-color: #e5e5e5;
+}
+#headerContainer {
+  height: 44px;
   background-color: #0A1E59;
-  border-radius: 0 0 5px 5px;
 }
  #header h1 {
   float: left;
@@ -30,16 +30,16 @@ body {
 }
 #header h1 a {
   display: block;
-  height: 60px;
+  height: 44px;
   text-decoration: none;
   font-size: 0;
   background-image: url(images/header-id.png);
   background-repeat: no-repeat;
-  background-position: 20px center;
+  background-position: 20px 12px;
 }
 #header .menu {
   float: right;
-  padding-top: 22px;
+  padding-top: 18px;
   text-align: right;
 }
 #header .menu .loginGroup,
@@ -67,60 +67,36 @@ body {
 /* Navi
 --------------------------------------------------------- */
 #navi {
-  height: 96px;
+  height: 64px;
+  padding: 10px 0 0 12px;
+  background-color: #e5e5e5;
 }
 #navi::after {
   content: "";
   display: table;
   clear: both;
 }
-#naviContainer {
-  background-color: #3C5082;
-  border-radius: 5px 5px 0 0;
-}
 #navi .selector {
   float: left;
-  width: 220px;
+  width: 200px;
+  margin: 0 20px 0 0;
 }
 #navi .selector li {
-  position: relative;
-  margin: 0;
-  width: 100%;
-  background-color: #ddd;
-  box-sizing: border-box;
+  margin: 0 0 10px;
 }
-#navi .selector li a {
-  padding: 0 5px 0 40px;
+#navi .selector .site select {
+  width: 200px;
+  margin: 6px 0px 0px 4px;
 }
-#navi .selector li a::before {
-    position: absolute;
-    top: 13px;
-    left: 13px;
-    width: 13px;
-    height: 12px;
-    content: "";
-    border-top: 2px solid #3C5082;
-    transform: rotate(125deg);
-}
-#navi .selector li a::after {
-    position: absolute;
-    top: 13px;
-    left: 15px;
-    width: 13px;
-    height: 13px;
-    content: "";
-    border-right: 2px solid #3C5082;
-    transform: rotate(145deg);
-}
-#navi .selector li:first-child {
-  border-bottom: 1px solid #aaa;
-  border-radius: 5px 0 0 0;
+#navi .selector .concept {
+  width: 200px;
+  margin: 2px 0px 0px 4px;
 }
 #navi .mainMenu {
   display: flex;
-  height: 48px;
+  height: 32px;
   overflow: hidden;
-  border-radius: 0 5px 0 0;
+  background-color: #3C5082;
 }
 #navi .mainMenu li {
   flex: 0 0 100px;
@@ -139,7 +115,7 @@ body {
   color: #fff;
   text-decoration: none;
   display: block;
-  line-height: 48px;
+  line-height: 32px;
 }
 #navi .mainMenu li a:hover {
   color: #FFCC00;
@@ -149,36 +125,30 @@ body {
 }
 #navi .contentMenu {
   display: flex;
-  height: 48px;
-  width: calc(100% - 250px);
-  background-color: #B6D5D8;
-  margin: 0 auto;
-  overflow: hidden;
-  border-radius: 5px 5px 0 0;
+  height: 32px;
+  background-color: #fff;
 }
 #navi .contentMenu li {
   flex: 0 0 auto;
+  margin: 8px 0;
+  padding: 0 20px;
+  border-right: 1px dotted #000;
   text-align: center;
-  background-color: #B6D5D8;
-  color: #3C5082;
-  margin: 0;
+  height: 16px;
 }
-#navi .contentMenu a {
+#navi .contentMenu li a {
   text-decoration: none;
   display: block;
-  padding: 0 15px;
-  line-height: 48px;
+  height: 24px;
 }
 #navi .contentMenu a.current {
-  background-color: #fff;
+  color: #CC3300;
 }
 
 
 /* Main
 --------------------------------------------------------- */
 #main {
-  background-color: #fff;
-  border-radius: 0 0 5px 5px;
 }
 
 /* Wrapper
@@ -189,8 +159,7 @@ body {
 /* Content
 --------------------------------------------------------- */
 #content {
-  margin: 0;
-  padding: 15px;
+  margin: 20px 12px 0px 12px;
 }
 #content h2 {
   margin: 15px 0px 15px 5px;
@@ -225,19 +194,34 @@ body {
   display: inline-block;
   margin: 0px 2px;
   padding: 8px 18px;
-  background-color: #007882;
-  border-radius: 3px;
+  border: 1px solid #bbb;
+  -webkit-box-shadow: #ddd 0px 1px 2px;
+  -moz-box-shadow: #ddd 0px 1px 2px;
+  box-shadow: #ddd 0px 1px 2px;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#fdfdfd));
+  background-image: -webkit-linear-gradient(#ffffff, #fdfdfd);
+  background-image: -moz-linear-gradient(#ffffff, #fdfdfd);
+  background-image: -ms-linear-gradient(#ffffff, #fdfdfd);
+  background-image: -o-linear-gradient(#ffffff, #fdfdfd);
+  background-image: linear-gradient(#ffffff, #fdfdfd);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#ffffff, endColorstr=#fdfdfd);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff', endColorstr='#fdfdfd')";
+  _background-color: #fff;
+  behavior: url(/_common/js/PIE.htc);
+  position: relative;
   text-decoration: none;
-  color: #fff;
+  color: #000;
 }
 #content .actionMenu a:hover,
 #content .actionMenu a:focus,
 #content .actionMenu a.current {
-  background-color: #BE5000;
+  background-color: #fce1de;
+  background-image: none !important;
 }
 #content .navi {
-  margin: 10px 0px;
+  margin: 10px 0px 10px 0px;
   padding: 0px 4px;
+  border: 1px solid #ccc;
   background-color: #ededed;
   line-height: 2.0;
 }
@@ -247,7 +231,7 @@ body {
   margin-bottom: 15px;
 }
 #contentHeader .navi {
-  padding: 4px 10px;
+  padding: 0px 10px;
 }
 #contentHeader .navi a {
   display: inline-block;
