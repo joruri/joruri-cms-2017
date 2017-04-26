@@ -1,4 +1,4 @@
-# ZOMEKI インストールマニュアル
+# Joruri CMS 2017 インストールマニュアル
 
 ## 1.想定環境
 
@@ -13,7 +13,7 @@
 
 ### 設定
 
-* ホスト名: zomeki.example.com
+* ホスト名: joruri.example.com
 
 ## 2.作業ユーザの変更
 
@@ -115,16 +115,16 @@ host    all             all             127.0.0.1/32            md5
 
     # systemctl start postgresql-9.5
 
-ZOMEKI用のユーザを作成します。
-※パスワードは任意の文字列を設定してください。（ここでは「zomekipass」とします。）
+Joruri用のユーザを作成します。
+※パスワードは任意の文字列を設定してください。（ここでは「joruripass」とします。）
 
-    # su - postgres -c "psql -c \"CREATE USER zomeki WITH CREATEDB ENCRYPTED PASSWORD 'zomekipass';\""
+    # su - postgres -c "psql -c \"CREATE USER joruri WITH CREATEDB ENCRYPTED PASSWORD 'joruripass';\""
 
-## 8.ZOMEKIのインストール
+## 8.Joruriのインストール
 
 専用ユーザを作成します。
 
-    # useradd -m zomeki
+    # useradd -m joruri
 
 必要なパッケージをインストールします。
 
@@ -134,36 +134,36 @@ ZOMEKI用のユーザを作成します。
     # rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
     # yum -y install --enablerepo=remi ImageMagick6-devel
 
-ZOMEKIをインストールします。
+Joruriをインストールします。
 
-    # git clone https://github.com/zomeki/zomeki3.git /var/www/zomeki
-    # chown -R zomeki:zomeki /var/www/zomeki
-    # su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle config build.pg --with-pg-config=/usr/pgsql-9.5/bin/pg_config'
-    # su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle install --path vendor/bundle --without development test'
+    # git clone https://github.com/joruri/joruri-cms-2017.git /var/www/joruri
+    # chown -R joruri:joruri /var/www/joruri
+    # su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle config build.pg --with-pg-config=/usr/pgsql-9.5/bin/pg_config'
+    # su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle install --path vendor/bundle --without development test'
 
-    # cp /var/www/zomeki/config/samples/logrotate /etc/logrotate.d/zomeki_logrotate
+    # cp /var/www/joruri/config/samples/logrotate /etc/logrotate.d/joruri_logrotate
 
-    # cp /var/www/zomeki/config/samples/reload_servers.sh /root/. && chmod 755 /root/reload_servers.sh
-    # ROOT_CRON_TXT='/var/www/zomeki/config/samples/root_cron.txt'
+    # cp /var/www/joruri/config/samples/reload_servers.sh /root/. && chmod 755 /root/reload_servers.sh
+    # ROOT_CRON_TXT='/var/www/joruri/config/samples/root_cron.txt'
     # crontab -l > $ROOT_CRON_TXT
     # grep -s reload_servers.sh $ROOT_CRON_TXT || echo '0,30 * * * * /root/reload_servers.sh' >> $ROOT_CRON_TXT
     # crontab $ROOT_CRON_TXT
 
-## 9.ZOMEKIの設定
+## 9.Joruriの設定
 
 設定ファイルのサンプルをコピーして変更します。
 
-    # su - zomeki -c 'cp -p /var/www/zomeki/config/original/*.yml /var/www/zomeki/config/'
-    # vi /var/www/zomeki/config/core.yml
+    # su - joruri -c 'cp -p /var/www/joruri/config/original/*.yml /var/www/joruri/config/'
+    # vi /var/www/joruri/config/core.yml
 ```
-uri: http://zomeki.example.com/    # すべて変更
+uri: http://joruri.example.com/    # すべて変更
 ```
 
 シークレットキーを設定します。
 
-    # su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle exec rake secret RAILS_ENV=production'
+    # su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake secret RAILS_ENV=production'
       (出力されたシークレットキーをコピーします)
-    # vi /var/www/zomeki/config/secrets.yml
+    # vi /var/www/joruri/config/secrets.yml
     ---
     production:
       secret_key_base: (コピーしたシークレットキーを貼り付けます)
@@ -171,17 +171,17 @@ uri: http://zomeki.example.com/    # すべて変更
 
 必要なデータベースを作ります。
 
-    # su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle exec rake db:setup RAILS_ENV=production'
+    # su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake db:setup RAILS_ENV=production'
 
 サンプルデータを登録します。
 
-    # su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle exec rake db:seed:demo RAILS_ENV=production'
+    # su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake db:seed:demo RAILS_ENV=production'
 
 
 設定ファイルを作成してリンクを作成します。
 
-    # su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle exec rake zomeki:configure RAILS_ENV=production'
-    # ln -s /var/www/zomeki/config/nginx/nginx.conf /etc/nginx/conf.d/zomeki.conf
+    # su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake zomeki:configure RAILS_ENV=production'
+    # ln -s /var/www/joruri/config/nginx/nginx.conf /etc/nginx/conf.d/joruri.conf
 
 デフォルトのnginx設定ファイルをリネームします。
     # mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.org
@@ -255,28 +255,28 @@ nginxを起動します。
 
 unicornを起動します。
 
-    # cp /var/www/zomeki/config/samples/unicorn.service /usr/lib/systemd/system/zomeki_unicorn.service
-    # systemctl start zomeki_unicorn && systemctl enable zomeki_unicorn
+    # cp /var/www/joruri/config/samples/unicorn.service /usr/lib/systemd/system/joruri_unicorn.service
+    # systemctl start joruri_unicorn && systemctl enable joruri_unicorn
 
 delayed_jobを起動します。
 
-    # cp /var/www/zomeki/config/samples/delayed_job.service /usr/lib/systemd/system/zomeki_delayed_job.service
-    # systemctl start zomeki_delayed_job && systemctl enable zomeki_delayed_job
+    # cp /var/www/joruri/config/samples/delayed_job.service /usr/lib/systemd/system/joruri_delayed_job.service
+    # systemctl start joruri_delayed_job && systemctl enable joruri_delayed_job
 
 
 ## 12.定期実行処理 の設定
 
-ユーザzomekiのcronに処理を追加します。
+ユーザjoruriのcronに処理を追加します。
 
-    # su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle exec whenever --update-crontab'
+    # su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec whenever --update-crontab'
 
 ## 13.動作確認
 
 インストールが完了しました。
 
-* 公開画面: http://zomeki.example.com/
-* 管理画面: http://zomeki.example.com/_system
+* 公開画面: http://joruri.example.com/
+* 管理画面: http://joruri.example.com/_system
 
 * 管理者（システム管理者）
-  - ユーザID: zomeki
-  - パスワード: zomeki
+  - ユーザID: joruri
+  - パスワード: joruri

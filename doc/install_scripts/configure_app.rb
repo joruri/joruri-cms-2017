@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 DONE_FLAG = "/tmp/#{$0}_done"
 
-puts '#### Configure ZOMEKI ####'
+puts '#### Configure Joruri ####'
 exit if File.exist?(DONE_FLAG)
 puts '-- PRESS ENTER KEY --'
 gets
@@ -12,23 +12,23 @@ require 'yaml/store'
 def centos
   puts "It's CentOS!"
 
-  system "su - zomeki -c 'cp -p /var/www/zomeki/config/original/*.yml /var/www/zomeki/config/'"
+  system "su - joruri -c 'cp -p /var/www/joruri/config/original/*.yml /var/www/joruri/config/'"
 
-  core_yml = '/var/www/zomeki/config/core.yml'
+  core_yml = '/var/www/joruri/config/core.yml'
   db = YAML::Store.new(core_yml)
   db.transaction do
     db['production']['uri'] = "http://#{`hostname`.chomp}/"
   end
 
-  system "su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle exec rake db:setup RAILS_ENV=production'"
-  system "su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle exec rake db:seed:demo RAILS_ENV=production'"
+  system "su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake db:setup RAILS_ENV=production'"
+  system "su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake db:seed:demo RAILS_ENV=production'"
 
-  system "su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle exec rake zomeki:configure RAILS_ENV=production'"
-  system 'ln -s /var/www/zomeki/config/nginx/nginx.conf /etc/nginx/conf.d/zomeki.conf'
+  system "su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake zomeki:configure RAILS_ENV=production'"
+  system 'ln -s /var/www/joruri/config/nginx/nginx.conf /etc/nginx/conf.d/joruri.conf'
   system 'mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.org'
 
-  secret = `su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle exec rake secret RAILS_ENV=production'`
-  File.open '/var/www/zomeki/config/secrets.yml', File::RDWR do |f|
+  secret = `su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake secret RAILS_ENV=production'`
+  File.open '/var/www/joruri/config/secrets.yml', File::RDWR do |f|
     f.flock File::LOCK_EX
 
     conf = f.read

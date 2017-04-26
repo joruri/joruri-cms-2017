@@ -34,7 +34,7 @@ def centos
 
   system 'systemctl start postgresql-9.5'
 
-  psql_c = %q!psql -c \"CREATE USER zomeki WITH CREATEDB ENCRYPTED PASSWORD 'zomekipass';\"!
+  psql_c = %q!psql -c \"CREATE USER joruri WITH CREATEDB ENCRYPTED PASSWORD 'joruripass';\"!
   system %Q!su - postgres -c "#{psql_c}"!
 end
 

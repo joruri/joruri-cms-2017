@@ -1,6 +1,6 @@
-ZOMEKI
+Joruri CMS 2017
 ==========
-ZOMEKI（ぞめき)は、自治体サイト向けに開発された国産オープンソースCMSです。
+Joruri CMS 2017 は、自治体サイト向けに開発された国産オープンソースCMSです。
 
 ## 環境
 
@@ -14,7 +14,7 @@ ZOMEKI（ぞめき)は、自治体サイト向けに開発された国産オー�
 | Rails     | 5.0            |
 
 ## デモ
-http://zomeki.jp/demo/
+http://joruri.org/demo/joruricms/
 
 ## インストール
 
@@ -25,7 +25,7 @@ http://zomeki.jp/demo/
   - [doc/INSTALL.md](doc/INSTALL.md)
 
 ### 自動スクリプト
-    export LANG=ja_JP.UTF-8; curl -fsSL https://raw.githubusercontent.com/zomeki/zomeki3/master/doc/install_scripts/prepare.sh | bash
+    export LANG=ja_JP.UTF-8; curl -fsSL https://raw.githubusercontent.com/joruri/joruri-cms-2017/master/doc/install_scripts/prepare.sh | bash
 
 ## ライセンス
 MIT License
