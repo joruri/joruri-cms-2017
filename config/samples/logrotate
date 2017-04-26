@@ -1,4 +1,4 @@
-/var/www/zomeki/log/*.log {
+/var/www/joruri/log/*.log {
   compress
   daily
   dateext
@@ -8,7 +8,7 @@
   rotate 7
 
   lastaction
-    pid=/var/www/zomeki/tmp/pids/unicorn.pid
+    pid=/var/www/joruri/tmp/pids/unicorn.pid
     test -s $pid && kill -USR1 "$(cat $pid)"
   endscript
   }
