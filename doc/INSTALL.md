@@ -5,7 +5,7 @@
 ### システム
 
 * OS: CentOS 7.2
-* Webサーバ: nginx 1.10
+* Webサーバ: nginx 1.12
 * Appサーバ: unicorn 5.1
 * Database: PostgreSQL 9.5
 * Ruby: 2.3
