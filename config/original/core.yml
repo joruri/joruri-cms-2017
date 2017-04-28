@@ -1,14 +1,14 @@
 development:
-  title: Joruri
+  title: じょうるり市
   uri: http://joruri.example.com/
   proxy: <%= ENV['http_proxy'] %>
 
 test:
-  title: Joruri
+  title: じょうるり市
   uri: http://joruri.example.com/
   proxy: <%= ENV['http_proxy'] %>
 
 production:
-  title: Joruri
+  title: じょうるり市
   uri: http://joruri.example.com/
   proxy: <%= ENV['http_proxy'] %>
