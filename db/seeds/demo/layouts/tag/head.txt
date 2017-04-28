@@ -1,2 +1,0 @@
-[[text/head-col1]]
-[[text/analytics]]

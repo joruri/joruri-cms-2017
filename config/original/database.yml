@@ -23,16 +23,16 @@ default: &default
 
 development:
   <<: *default
-  database: zomeki_development
+  database: joruri_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
   # the same name as the operating system user that initialized the database.
-  username: zomeki
+  username: joruri
 
   # The password associated with the postgres role (username).
-  password: zomekipass
+  password: joruripass
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
@@ -57,9 +57,9 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: zomeki_test
-  username: zomeki
-  password: zomekipass
+  database: joruri_test
+  username: joruri
+  password: joruripass
   host: localhost
 
 # As with config/secrets.yml, you never want to store sensitive information,
@@ -83,6 +83,6 @@ test:
 #
 production:
   <<: *default
-  database: zomeki_production
-  username: zomeki
-  password: <%= ENV['ZOMEKI_DATABASE_PASSWORD'] %>
+  database: joruri_production
+  username: joruri
+  password: <%= ENV['JORURI_DATABASE_PASSWORD'] %>

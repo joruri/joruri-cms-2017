@@ -1,7 +1,0 @@
-<div id="bnContact" class="piece">
-<div class="pieceContainer">
-<div class="pieceBody">
-<p><a href="/contact/">[[file/banner/bn-contact.gif]]</a></p>
-</div>
-</div>
-</div>

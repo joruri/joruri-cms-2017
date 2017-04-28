@@ -1,7 +1,7 @@
 #!/bin/bash
 DONE_FLAG="/tmp/$0_done"
 
-echo '#### Install ZOMEKI (kana, read) ####'
+echo '#### Install Joruri (kana, read) ####'
 if [ -f $DONE_FLAG ]; then exit; fi
 echo '-- PRESS ENTER KEY --'
 read KEY

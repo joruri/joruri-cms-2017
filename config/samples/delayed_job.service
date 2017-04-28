@@ -1,13 +1,13 @@
 [Unit]
-Description=delayed_job for ZOMEKI
+Description=delayed_job for Joruri
 After=postgresql-9.5.service
 
 [Service]
 Type=forking
-User=zomeki
-WorkingDirectory=/var/www/zomeki/
+User=joruri
+WorkingDirectory=/var/www/joruri/
 Environment=RAILS_ENV=production
-SyslogIdentifier=zomeki_delayed_job
+SyslogIdentifier=joruri_delayed_job
 ExecStart=/usr/local/rbenv/shims/bundle exec rake delayed_job:start
 ExecStop=/usr/local/rbenv/shims/bundle exec rake delayed_job:stop
 

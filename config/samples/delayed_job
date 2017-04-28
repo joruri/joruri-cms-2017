@@ -5,20 +5,20 @@
 
 RAILS_ENV=production
 SERVICE=delayed_job
-USER=zomeki
+USER=joruri
 
-RAILS_ROOT_DIR="/var/www/zomeki"
+RAILS_ROOT_DIR="/var/www/joruri"
 
 start()
 {
   echo "start ${SERVICE}"
-  su - zomeki -c "export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle exec rake delayed_job:start RAILS_ENV=${RAILS_ENV}"
+  su - joruri -c "export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake delayed_job:start RAILS_ENV=${RAILS_ENV}"
 }
 
 stop()
 {
   echo "stop ${SERVICE}"
-  su - zomeki -c "export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle exec rake delayed_job:stop RAILS_ENV=${RAILS_ENV}"
+  su - joruri -c "export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake delayed_job:stop RAILS_ENV=${RAILS_ENV}"
 }
 case "$1" in
   start)

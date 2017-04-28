@@ -1,7 +1,7 @@
 #!/bin/bash
 DONE_FLAG="/tmp/$0_done"
 
-echo '#### Install ZOMEKI ####'
+echo '#### Install Joruri ####'
 if [ -f $DONE_FLAG ]; then exit; fi
 echo '-- PRESS ENTER KEY --'
 read KEY
@@ -9,13 +9,13 @@ read KEY
 centos() {
   echo "It's CentOS!"
 
-  if [ -d /var/www/zomeki ]; then
-    echo 'ZOMEKI is already installed.'
+  if [ -d /var/www/joruri ]; then
+    echo 'Joruri is already installed.'
     touch $DONE_FLAG
     exit
   fi
 
-  id zomeki || useradd -m zomeki
+  id joruri || useradd -m joruri
 
   curl --silent --location https://rpm.nodesource.com/setup_4.x | bash -
   yum -y install libxml2-devel libxslt-devel openldap-devel nodejs patch
@@ -23,15 +23,15 @@ centos() {
   rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
   yum -y install --enablerepo=remi ImageMagick6-devel
 
-  git clone https://github.com/zomeki/zomeki3.git /var/www/zomeki
-  chown -R zomeki:zomeki /var/www/zomeki
-  su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle config build.pg --with-pg-config=/usr/pgsql-9.5/bin/pg_config'
-  su - zomeki -c 'export LANG=ja_JP.UTF-8; cd /var/www/zomeki && bundle install --path vendor/bundle --without development test'
+  git clone https://github.com/joruri/joruri-cms-2017.git /var/www/joruri
+  chown -R joruri:joruri /var/www/joruri
+  su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle config build.pg --with-pg-config=/usr/pgsql-9.5/bin/pg_config'
+  su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle install --path vendor/bundle --without development test'
 
-  cp /var/www/zomeki/config/samples/logrotate /etc/logrotate.d/zomeki_logrotate
+  cp /var/www/joruri/config/samples/logrotate /etc/logrotate.d/joruri_logrotate
 
-  cp /var/www/zomeki/config/samples/reload_servers.sh /root/. && chmod 755 /root/reload_servers.sh
-  ROOT_CRON_TXT='/var/www/zomeki/config/samples/root_cron.txt'
+  cp /var/www/joruri/config/samples/reload_servers.sh /root/. && chmod 755 /root/reload_servers.sh
+  ROOT_CRON_TXT='/var/www/joruri/config/samples/root_cron.txt'
   crontab -l > $ROOT_CRON_TXT
   grep -s reload_servers.sh $ROOT_CRON_TXT || echo '0,30 * * * * /root/reload_servers.sh' >> $ROOT_CRON_TXT
   crontab $ROOT_CRON_TXT
