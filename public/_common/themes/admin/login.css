@@ -1,5 +1,4 @@
 @charset "UTF-8";
-/* @import "style.css"; */
 
 /* =========================================================
    Login.
@@ -15,60 +14,47 @@ body {
   font-size: 90%;
   margin: 0px auto;
   padding: 0px;
-  background-image: url(./images/login_re.gif);
+  background-image: url(./images/bg-login.png);
   font-size: 80%;
   font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ　Ｐゴシック", sans-serif;
   line-height: 1;
 }
-input {
-  font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ　Ｐゴシック", sans-serif;
-}
-.form input {
-  width: 150px;
-}
-#header {
+#container {
+  position: relative;
   width: 100%;
-  height: 60px;
+  height: 100%;
 }
-#header h1 {
-  margin: 0px;
-  padding: 0px;
-  background-image: url(images/header_re.gif);
-  background-position: left top;
-  background-repeat: repeat-x;
-} 
 #main {
-  width: 375px;
-  height: auto;
-  margin: 150px auto;
+  position: absolute;
+  top: -100px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 460px;
+  height: 500px;
+  margin: auto;
+}
+h1 {
+  margin: 0;
+  text-align: center;
+}
+h1 + span {
+  display: block;
+  color: #fff;
+  text-align: center;
+}
+.version {
+  display: block;
+  color: #fff;
   text-align: center;
 }
 .box {
-  margin: 0px auto;
-  -webkit-box-shadow: #999 0px 0px 5px;
-  -moz-box-shadow: #999 0px 0px 5px;
-  box-shadow: #999 0px 0px 5px;
-  behavior: url(/_common/js/PIE.htc);
+  margin: 0 auto;
+  padding: 60px 0 20px;
   position: relative;
-  background-color: #ffffff;
   text-align: center;
-  color: #888;
   line-height: 1.5;
-}
-.box h2 {
-  height: 119px;
-  text-align: center;
-  margin: 0px auto 5px auto;
-}
-.box .version {
-  padding: 0px 0px 0px 0px;
-  font-size: 100%;
-  font-weight: lighter;
-  text-align: center;
-}
-.notice {
-  color: #090;
-  font-weight: bold;
+  background-color: #031845;
 }
 .alert {
   margin-bottom: 10px;
@@ -76,16 +62,15 @@ input {
   font-weight: bold;
 }
 .fields {
-  width: 275px;
+  width: 276px;
   text-align: center;
-  margin: 30px auto 0px auto;
-  padding: 0px 0px 20px 0px;
+  margin: 30px auto 0;
+  padding: 0 0 20px;
 }
 #account,
-#email,
 #password,
-#password_confirmation {
-  width: 253px;
+#email {
+  width: 254px;
   padding: 8px 10px;
   border: 1px solid #bbb;
   background-color: #f6f6f6;
@@ -94,13 +79,6 @@ input {
 }
 .fields input:first-child {
   margin-bottom: 10px;
-  ime-mode: disabled;
-}
-::-webkit-input-placeholder {
-    color: #999;
-}
-:-moz-placeholder {
-    color: #999;
 }
 .submitters {
   padding: 0px 0px 40px 0px;
@@ -109,18 +87,30 @@ input {
 .submitters .login {
   width: 276px;
   height: 47px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+  font-size: 120%;
+  padding: 1px 6px;
+  background-color: #5E76A8;
+  border: none;
 }
 .password_reminder {
   padding: 0px 20px 20px 20px;
   text-align: right;
 }
 .password_reminder a {
-  color: #333333;
+  color: #fff;
+}
+.notice,
+.message {
+  color: #BEE664;
+  font-weight: bold;
 }
 .copyright {
   padding: 20px 0px;
   text-align: center;
-  color: #888;
+  color: #c1c1c1;
 }
 .copyright img {
   padding-left: 10px;

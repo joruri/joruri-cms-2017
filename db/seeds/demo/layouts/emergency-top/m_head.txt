@@ -1,1 +1,0 @@
-<link rel="stylesheet" type="text/css" href="/_themes/base/layouts/emergency-mobile.css" />

@@ -1,0 +1,6 @@
+site:
+  title: Joruri
+  uri: http://joruri.example.com
+  proxy:
+  map_key:
+  prefix: new_site

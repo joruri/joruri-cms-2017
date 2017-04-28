@@ -1,6 +1,0 @@
-site:
-  title: ZOMEKI
-  uri: http://zomeki.example.com
-  proxy:
-  map_key:
-  prefix: new_site

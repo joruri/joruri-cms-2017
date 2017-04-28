@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+body {
+  width: 1200px !important;
+  margin: 0 auto;
+  background-color: #fff !important;
+  position: static !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  page-break-after: avoid;
+  border: 1px solid #fff;
+}
+p, h2, h3 {
+  orphans: 3;
+  widows: 3;
+}
+
+/* Don't show links that are fragment identifiers, or use the `javascript:` pseudo protocol .. taken from html5boilerplate */
+a[href^="#"]::after, a[href^="javascript:"]::after {
+  content: "";
+}
+
+/* Table */
+thead {
+  display: table-header-group;
+}
+img, tr {
+  page-break-inside: avoid;
+} 
+
+/* Hide various parts from the site */
+#cmsPreviewMark, #accessibilityTool, #pageTop {
+  display: none;
+}

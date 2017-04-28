@@ -13,7 +13,7 @@
       <%= password_field_tag :password, nil, placeholder: 'パスワード', title: 'パスワード' %>
     </div>
     <div class="submitters">
-      <%= image_submit_tag '/_common/themes/admin/images/bt_login.gif', alt: 'ログイン', class: 'login' %>
+      <%= submit_tag 'ログイン', alt: 'ログイン', class: 'login' %>
     </div>
     <div class="password_reminder"><%= link_to '>>パスワード変更', new_admin_password_reminder_path %></div>
   </div>

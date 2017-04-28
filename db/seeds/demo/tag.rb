@@ -1,25 +1,4 @@
-## ---------------------------------------------------------
-## cms/concepts
-
-c_site  = @site.concepts.where(parent_id: 0).first
-c_top   = @site.concepts.where(name: 'トップページ').first
-c_content = @site.concepts.where(name: 'コンテンツ').first
-
-## ---------------------------------------------------------
-## cms/contents
-l_tag       = create_cms_layout c_site, 'tag', '関連ワード'
-tag  = create_cms_content c_content, 'Tag::Tag', '関連ワード', 'tag'
-create_cms_node c_content, tag, 170, nil, l_tag, 'Tag::Tag', 'tags', '関連ワード', nil
-
-settings = Tag::Content::Setting.config(tag, 'date_style')
-settings.value = '%Y年%m月%d日 %H時%M分'
-settings.save
-
-
-Tag::Tag.create content_id: tag.id,
-  word: '入札'
-
-
-
-
-create_cms_piece c_site, tag, 'Tag::Tag', 'tag-list', '関連ワード一覧'
+Tag::Tag.create!([
+  {id: 2, content_id: 3, word: "サンプル", last_tagged_at: "2017-04-28 11:34:29"},
+  {id: 3, content_id: 3, word: "テスト", last_tagged_at: "2017-04-28 11:34:29"}
+])

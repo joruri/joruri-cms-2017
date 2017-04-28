@@ -1,0 +1,17 @@
+[Unit]
+Description=unicorn for Joruri
+After=postgresql-9.5.service
+
+[Service]
+Type=simple
+User=joruri
+WorkingDirectory=/var/www/joruri/
+Environment=RAILS_ENV=production
+SyslogIdentifier=joruri_unicorn
+PIDFile=/var/www/joruri/tmp/pids/unicorn.pid
+ExecStart=/usr/local/rbenv/shims/bundle exec unicorn_rails -c config/unicorn/production.rb -E production
+ExecStop=/usr/bin/kill -QUIT $MAINPID
+ExecReload=/bin/kill -USR2 $MAINPID
+
+[Install]
+WantedBy=multi-user.target

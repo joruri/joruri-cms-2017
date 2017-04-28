@@ -1,0 +1,14 @@
+development:
+  title: Joruri
+  uri: http://joruri.example.com/
+  proxy: <%= ENV['http_proxy'] %>
+
+test:
+  title: Joruri
+  uri: http://joruri.example.com/
+  proxy: <%= ENV['http_proxy'] %>
+
+production:
+  title: Joruri
+  uri: http://joruri.example.com/
+  proxy: <%= ENV['http_proxy'] %>

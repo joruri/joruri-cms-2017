@@ -1,2 +1,0 @@
-[[text/head-emergency]]
-[[text/analytics]]

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INSTALL_SCRIPTS_URL='https://raw.githubusercontent.com/zomeki/zomeki3/master/doc/install_scripts'
+INSTALL_SCRIPTS_URL='https://raw.githubusercontent.com/joruri/joruri-cms-2017/master/doc/install_scripts'
 
 echo '#### Prepare to install ####'
 
@@ -14,8 +14,8 @@ centos() {
 
   cd /usr/local/src
 
-  files=('install_ruby.sh' 'install_nginx.sh' 'install_postgresql.rb' 'install_zomeki.sh'
-         'configure_zomeki.rb' 'install_zomeki_kana_read.sh' 'start_servers.sh' 'install_cron.sh')
+  files=('install_ruby.sh' 'install_nginx.sh' 'install_postgresql.rb' 'install_app.sh'
+         'configure_app.rb' 'install_kana_read.sh' 'start_servers.sh' 'install_cron.sh')
 
   rm -f install_scripts.txt install_all.sh
   for file in ${files[@]}; do
@@ -33,19 +33,19 @@ cat <<'EOF' >> install_all.sh
 echo "
 -- インストールを完了しました。 --
 
-  公開画面: `ruby -ryaml -e "puts YAML.load_file('/var/www/zomeki/config/core.yml')['production']['uri']"`
+  公開画面: `ruby -ryaml -e "puts YAML.load_file('/var/www/joruri/config/core.yml')['production']['uri']"`
 
-  管理画面: `ruby -ryaml -e "puts YAML.load_file('/var/www/zomeki/config/core.yml')['production']['uri']"`_system
+  管理画面: `ruby -ryaml -e "puts YAML.load_file('/var/www/joruri/config/core.yml')['production']['uri']"`_system
 
     管理者（システム管理者）
-    ユーザID   : zomeki
-    パスワード : zomeki
+    ユーザID   : joruri
+    パスワード : joruri
 
-１．PostgreSQLのzomekiユーザはパスワードがzomekipassに設定されています。適宜変更してください。
-    postgres=# ALTER USER zomeki WITH ENCRYPTED PASSWORD 'newpass';
+１．PostgreSQLのjoruriユーザはパスワードがjoruripassに設定されています。適宜変更してください。
+    postgres=# ALTER USER joruri WITH ENCRYPTED PASSWORD 'newpass';
 
-２．OS の zomeki ユーザに cron が登録されています。
-    # crontab -u zomeki -l
+２．OS の joruri ユーザに cron が登録されています。
+    # crontab -u joruri -l
 "
 EOF
   chmod 755 install_all.sh

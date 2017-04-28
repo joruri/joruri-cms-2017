@@ -1,0 +1,15 @@
+[Unit]
+Description=delayed_job for Joruri
+After=postgresql-9.5.service
+
+[Service]
+Type=forking
+User=joruri
+WorkingDirectory=/var/www/joruri/
+Environment=RAILS_ENV=production
+SyslogIdentifier=joruri_delayed_job
+ExecStart=/usr/local/rbenv/shims/bundle exec rake delayed_job:start
+ExecStop=/usr/local/rbenv/shims/bundle exec rake delayed_job:stop
+
+[Install]
+WantedBy = multi-user.target
