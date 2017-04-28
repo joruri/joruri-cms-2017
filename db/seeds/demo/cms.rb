@@ -1197,7 +1197,7 @@ Cms::SiteSetting.create!([
   {id: 5, site_id: 1, name: "accessibility_check", value: "disabled", sort_no: nil}
 ])
 Cms::Site.create!([
-  {id: 1, state: "public", name: "じょうるり市", full_uri: "http://sample.cms2017.sitebridge.jp/", mobile_full_uri: "", node_id: 1, related_site: nil, map_key: nil, portal_group_state: "visible", portal_group_id: nil, portal_category_ids: nil, portal_business_ids: nil, portal_attribute_ids: nil, portal_area_ids: nil, body: "", site_image_id: nil, og_type: "", og_title: "", og_description: "", og_image: "", smart_phone_publication: "no", spp_target: "only_top", google_map_api_key: "AIzaSyCwzIMfvVX9MubV8jlLOY4Xq0XECSrJ654", admin_full_uri: "", smart_phone_layout: "pc"}
+  {id: 1, state: "public", name: "じょうるり市", full_uri: "http://sample.cms2017.sitebridge.jp/", mobile_full_uri: "", node_id: 1, related_site: nil, map_key: nil, portal_group_state: "visible", portal_group_id: nil, portal_category_ids: nil, portal_business_ids: nil, portal_attribute_ids: nil, portal_area_ids: nil, body: "", site_image_id: nil, og_type: "", og_title: "", og_description: "", og_image: "", smart_phone_publication: "no", spp_target: "only_top", google_map_api_key: "", admin_full_uri: "", smart_phone_layout: "pc"}
 ])
 Cms::Stylesheet.create!([
   {id: 1, concept_id: nil, site_id: 1, path: "css/site-color"}
