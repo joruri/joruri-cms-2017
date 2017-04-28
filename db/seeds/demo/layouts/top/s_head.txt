@@ -1,2 +1,0 @@
-[[text/head-smart-top]]
-[[text/analytics]]

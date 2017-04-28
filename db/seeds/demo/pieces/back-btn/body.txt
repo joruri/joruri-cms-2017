@@ -1,3 +1,0 @@
-<div class="back-btn">
-<a href="javascript:history.back();">戻る</a>
-</div>
