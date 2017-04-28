@@ -34,3 +34,6 @@ dst_path = Rails.root.join("sites")
 
 # publish data files
 Rake::Task['zomeki:cms:data_files:rebuild'].invoke
+
+# copy _common directory
+Rake::Task['zomeki:maintenance:common_dir:copy'].invoke
