@@ -1,3 +1,4 @@
+<%= init_ckeditor readOnly: true %>
 <table class="show">
   <tr>
     <th><%= @item.class.human_attribute_name :state %></th>
@@ -13,19 +14,19 @@
   </tr>
   <tr>
     <th><%= @item.class.human_attribute_name :summary %></th>
-    <td><%=raw @item.summary %></td>
+    <td class="cke_editor_wrapper"><%= text_area_tag :summary, @item.summary, class: 'ckeditor' %></td>
   </tr>
   <tr>
     <th><%= @item.class.human_attribute_name :description %></th>
-    <td><%=raw @item.description %></td>
+    <td class="cke_editor_wrapper"><%= text_area_tag :description, @item.description, class: 'ckeditor' %></td>
   </tr>
   <tr>
     <th><%= @item.class.human_attribute_name :receipt %></th>
-    <td><%=raw @item.receipt %></td>
+    <td class="cke_editor_wrapper"><%= text_area_tag :receipt, @item.receipt, class: 'ckeditor' %></td>
   </tr>
   <tr>
     <th><%= @item.locale(:sitemap_state) %></th>
-    <td><%= @item.class::SITEMAP_STATE_OPTIONS.detect{|o| o.last == @item.sitemap_state }.try(:first) %></td>
+    <td><%= @item.sitemap_state_text %></td>
   </tr>
   <tr>
     <th><%= @item.locale(:index_link) %></th>
@@ -38,6 +39,10 @@
   <tr>
     <th><%= @item.class.human_attribute_name :confirmation %></th>
     <td><%= @item.class::CONFIRMATION_OPTIONS.detect{|o| o.last == @item.confirmation }.try(:first) %></td>
+  </tr>
+  <tr>
+    <th><%= @item.class.human_attribute_name :mail_to %></th>
+    <td><%= @item.mail_to %></td>
   </tr>
 </table>
 

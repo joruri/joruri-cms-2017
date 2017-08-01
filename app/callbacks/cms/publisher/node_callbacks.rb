@@ -1,21 +1,19 @@
 class Cms::Publisher::NodeCallbacks < PublisherCallbacks
-  def after_save(node)
+  def enqueue(node)
     @node = node
-    enqueue if enqueue?
-  end
-
-  def enqueue(node = nil)
-    @node = node if node
+    return unless enqueue?
     enqueue_nodes
   end
 
   private
 
   def enqueue?
-    @node.name.present? && @node.state == 'public' && !@node.model.in?(%w(Cms::Page Cms::Directory Cms::SiteMap))
+    return unless super
+    @node.name.present? && [@node.state, @node.state_was].include?('public')
   end
 
   def enqueue_nodes
+    return if @node.model.in?(%w(Cms::Page Cms::Sitemap))
     Cms::Publisher.register(@node.site_id, @node)
   end
 end

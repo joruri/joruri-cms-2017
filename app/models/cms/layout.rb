@@ -1,20 +1,19 @@
 class Cms::Layout < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Base::Page::Publisher
   include Sys::Model::Rel::Creator
+  include Cms::Model::Site
   include Cms::Model::Rel::Site
   include Cms::Model::Rel::Concept
   include Cms::Model::Rel::Bracket
   include Cms::Model::Auth::Concept
 
-  belongs_to :status,  :foreign_key => :state, :class_name => 'Sys::Base::Status'
-
   after_save     Cms::Publisher::LayoutCallbacks.new, if: :changed?
   before_destroy Cms::Publisher::LayoutCallbacks.new
 
   validates :state, :title, presence: true
-  validates :name, presence: true, uniqueness: { scope: :concept_id },
-    format: { with: /\A[0-9a-zA-Z\-_]+\z/, if: "name.present?", message: :invalid_bracket_name }
+  validates :name, presence: true,
+                   uniqueness: { scope: :concept_id, case_sensitive: false },
+                   format: { with: /\A[0-9a-zA-Z\-_]+\z/, if: -> { name.present? }, message: :invalid_bracket_name }
 
   def states
     [['公開','public']]
@@ -40,13 +39,13 @@ class Cms::Layout < ApplicationRecord
     pieces = []
     piece_names.each do |name|
       if concept
-        piece = Cms::Piece.where(name: name, concept_id: concept).order(:id).first
+        piece = Cms::Piece.ci_match(name: name).where(concept_id: concept).order(:id).first
       end
       unless piece
-        piece = Cms::Piece.where(name: name, concept_id: self.concept).order(:id).first
+        piece = Cms::Piece.ci_match(name: name).where(concept_id: self.concept).order(:id).first
       end
       unless piece
-        piece = Cms::Piece.where(name: name, concept_id: nil).order(:id).first
+        piece = Cms::Piece.ci_match(name: name).where(concept_id: nil).order(:id).first
       end
       pieces << piece if piece
     end
@@ -90,22 +89,6 @@ class Cms::Layout < ApplicationRecord
     else
       body.html_safe
     end
-  end
-
-  def public_path
-    site.public_path + '/layout/' + name + '/style.css'
-  end
-
-  def public_uri # TODO dummy
-    '/layout/' + name + '/style.css'
-  end
-
-  def request_publish_data # TODO dummy
-    _res = {
-      :page_type => 'text/css',
-      :page_size => stylesheet.size,
-      :page_data => stylesheet,
-    }
   end
 
   def tamtam_css(request)

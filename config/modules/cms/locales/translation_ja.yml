@@ -7,6 +7,12 @@ ja:
       cms/site: "サイト"
       cms/site_basic_auth: "Basic認証"
 
+      tool/convert_download: "ダウンロード"
+      tool/convert_setting: "変換設定"
+      tool/convert_import: "書き込み"
+      tool/convert_doc: "変換記事"
+      tool/convert_link: "リンク変換"
+
     attributes:
       cms/concept:
         state: "状態"
@@ -32,20 +38,6 @@ ja:
         portal_group_business_ids: "業種"
         portal_group_attribute_ids: "属性"
         portal_group_area_ids: "地域"
-        setting_transfer_dest_user: "転送先ユーザー名"
-        setting_transfer_dest_host: "転送先サーバーホスト"
-        setting_transfer_dest_dir: "転送先サーバーディレクトリ"
-        setting_transfer_dest_domain: "転送先サイトURL"
-        setting_common_ssl: "共有SSL"
-        setting_admin_mail_sender: "管理者メール送信元アドレス"
-        setting_allowed_attachment_type: "添付ファイル/許可する種類"
-        setting_file_upload_max_size: "添付ファイル最大サイズ"
-        setting_file_upload_max_size: "添付ファイル最大サイズ"
-        setting_extension_upload_max_size: "拡張子別アップロードサイズ"
-        setting_link_check: "リンクチェック機能"
-        setting_accessibility_check: "アクセシビリティチェック機能"
-        setting_kana_talk: "ふりがな・音声"
-        setting_map_coordinate: "地図/デフォルト座標"
         og_type: タイプ
         og_title: タイトル
         og_description: 説明
@@ -54,6 +46,23 @@ ja:
         smart_phone_publication: スマートフォンを別に書き出す
         spp_target: 書き出し対象
         in_root_group_id: 最上位グループ
+        in_setting_site_transfer_dest_user: "転送先ユーザー名"
+        in_setting_site_transfer_dest_host: "転送先サーバーホスト"
+        in_setting_site_transfer_dest_dir: "転送先サーバーディレクトリ"
+        in_setting_site_transfer_dest_domain: "転送先サイトURL"
+        in_setting_site_common_ssl: "共有SSL"
+        in_setting_site_admin_mail_sender: "管理者メール送信元アドレス"
+        in_setting_site_allowed_attachment_type: "添付ファイル/許可する種類"
+        in_setting_site_file_upload_max_size: "添付ファイル最大サイズ"
+        in_setting_site_extension_upload_max_size: "拡張子別アップロードサイズ"
+        in_setting_site_link_check: "リンクチェック機能"
+        in_setting_site_link_check_hour: "リンクチェック開始時刻"
+        in_setting_site_link_check_domain_type: "リンクチェック対象ドメイン"
+        in_setting_site_link_check_exclusion: "リンクチェック対象外URL"
+        in_setting_site_accessibility_check: "アクセシビリティチェック機能"
+        in_setting_site_adobe_reader_link: "Adobe Acrobat Reader リンク"
+        in_setting_site_kana_talk: "ふりがな・音声"
+        in_setting_site_map_coordinate: "地図/デフォルト座標"
 
       cms/site_basic_auth_user:
         state: "状態"
@@ -213,3 +222,84 @@ ja:
       cms/model/tool/import:
         concept_id: "コンセプト"
         file: "ファイル"
+
+      tool/convert_download:
+        site_url: サイトURL
+        include_dir: 取得対象ディレクトリ
+        state: 状態
+        start_at: 開始日時
+        end_at: 終了日時
+        recursive_level: 再帰ダウンロード階層数
+        remark: 備考
+        message: メッセージ
+        created_at: 作成日時
+        updated_at: 更新日時
+
+      tool/convert_setting:
+        site_url: サイトURL
+        title_tag: タイトル対象タグ
+        body_tag: 本文対象タグ
+        updated_at_tag: 更新日対象タグ
+        updated_at_regexp: 更新日正規表現
+        published_at_tag: 公開日対象タグ
+        published_at_regexp: 公開日正規表現
+        creator_group_tag: 作成者グループタグ
+        creator_group_regexp: 作成者グループ正規表現
+        creator_group_from_url_regexp: 作成者グループURL正規表現
+        creator_group_relation_type: 作成者グループ照合方法
+        creator_group_relations: 作成者グループ読み替え
+        category_tag: カテゴリ対象タグ
+        category_regexp: カテゴリ正規表現
+        category_relations: カテゴリ読み替え
+        created_at: 作成日時
+        updated_at: 更新日時
+
+      tool/convert_import:
+        state: 状態
+        site_url: サイトURL
+        site_filename: ファイル名
+        content_id: コンテンツ
+        creator_group_id: 作成者グループ
+        overwrite: 上書きオプション
+        keep_filename: ファイル名オプション
+        start_at: 開始日時
+        end_at: 終了日時
+        message: メッセージ
+        total_num: 計
+        created_num: 作成
+        updated_num: 更新
+        nonupdated_num: 非更新
+        skipped_num: 非記事
+        link_total_num: リンク処理数
+        link_processed_num: リンク処理済数
+        created_at: 作成日時
+        updated_at: 更新日時
+
+      tool/convert_doc:
+        docable_type: 移行先記事クラス名
+        doc_content: 移行先記事コンテンツ
+        doc_name: 移行先記事名
+        doc_public_uri: 移行先URL
+        file_path: 移行元ファイルパス
+        uri_path: 移行元URL
+        site_url: サイトURL
+        title: タイトル
+        body: 本文
+        page_updated_at: 更新日
+        page_published_at: 公開日
+        page_group_code: 作成者グループ
+        page_category_names: カテゴリ
+        created_at: 作成日時
+        updated_at: 更新日時
+        published_at: 公開日時
+
+      tool/convert_link:
+        concept_id: コンセプト
+        linkable_id: 変換対象
+        linkable_type: 変換対象クラス
+        urls: 変換リンク
+        urls_size: 変換リンク数
+        before_body: 変換前
+        after_body: 変換後
+        created_at: 作成日時
+        updated_at: 更新日時

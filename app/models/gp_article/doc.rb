@@ -5,12 +5,20 @@ class GpArticle::Doc < ApplicationRecord
   include Sys::Model::Rel::EditableGroup
   include Sys::Model::Rel::File
   include Sys::Model::Rel::Task
+  include Cms::Model::Site
   include Cms::Model::Base::Page
   include Cms::Model::Base::Page::Publisher
   include Cms::Model::Base::Page::TalkTask
+  include Cms::Model::Base::Qrcode
+  include Cms::Model::Rel::Content
+  include Cms::Model::Rel::Concept
   include Cms::Model::Rel::Inquiry
   include Cms::Model::Rel::Map
   include Cms::Model::Rel::Bracket
+  include Cms::Model::Rel::Link
+  include Cms::Model::Rel::PublishUrl
+  include Cms::Model::Rel::SearchText
+  include Cms::Model::Rel::Importation
 
   include Cms::Model::Auth::Concept
   include Sys::Model::Auth::EditableGroup
@@ -18,35 +26,29 @@ class GpArticle::Doc < ApplicationRecord
   include GpArticle::Model::Rel::Doc
   include GpArticle::Model::Rel::Category
   include GpArticle::Model::Rel::Tag
+  include GpArticle::Model::Rel::RelatedDoc
   include Approval::Model::Rel::Approval
   include GpTemplate::Model::Rel::Template
-  include GpArticle::Model::Rel::RelatedDoc
-  include Cms::Model::Rel::PublishUrl
-  include Cms::Model::Rel::Link
 
   include StateText
-  include GpArticle::Docs::Preload
 
-  STATE_OPTIONS = [['下書き保存', 'draft'], ['承認依頼', 'approvable'], ['即時公開', 'public']]
+  self.linkable_columns = [:body, :mobile_body, :body_more]
+  self.searchable_columns = [:body]
+
   TARGET_OPTIONS = [['無効', ''], ['同一ウィンドウ', '_self'], ['別ウィンドウ', '_blank'], ['添付ファイル', 'attached_file']]
   EVENT_STATE_OPTIONS = [['表示', 'visible'], ['非表示', 'hidden']]
   MARKER_STATE_OPTIONS = [['表示', 'visible'], ['非表示', 'hidden']]
   OGP_TYPE_OPTIONS = [['article', 'article']]
   FEATURE_1_OPTIONS = [['表示', true], ['非表示', false]]
   FEATURE_2_OPTIONS = [['表示', true], ['非表示', false]]
-  QRCODE_OPTIONS = [['表示', 'visible'], ['非表示', 'hidden']]
 
   default_scope { where.not(state: 'archived') }
-  scope :public_state, -> { where(state: 'public') }
-  scope :mobile, ->(m) { m ? where(terminal_mobile: true) : where(terminal_pc_or_smart_phone: true) }
-  scope :display_published_after, ->(date) { where(arel_table[:display_published_at].gteq(date)) }
 
   # Content
   belongs_to :content, :foreign_key => :content_id, :class_name => 'GpArticle::Content::Doc'
   validates :content_id, :presence => true
 
   # Page
-  belongs_to :concept, :foreign_key => :concept_id, :class_name => 'Cms::Concept'
   belongs_to :layout, :foreign_key => :layout_id, :class_name => 'Cms::Layout'
 
   has_many :operation_logs, -> { where(item_model: 'GpArticle::Doc') },
@@ -80,188 +82,51 @@ class GpArticle::Doc < ApplicationRecord
 
   has_many :holds, :as => :holdable, :dependent => :destroy
 
-  before_save :set_name
-  before_save :set_published_at
-  before_save :replace_public
-  before_save :set_serial_no
-  after_destroy :close_page
-
-  attr_accessor :link_check_results, :in_ignore_link_check
-  attr_accessor :accessibility_check_results, :in_ignore_accessibility_check, :in_modify_accessibility_check
-
-  validates :title, :presence => true, :length => {maximum: 200}
-  validates :mobile_title, :length => {maximum: 200}
-  validates :body, :length => {maximum: 300000}
-  validates :mobile_body, :length => {maximum: 300000}
-  validates :state, :presence => true
-  validates :filename_base, :presence => true
-
-  validate :name_validity, if: -> { name.present? }
-  validate :node_existence
-  validate :event_dates_range
-  validate :body_limit_for_mobile
-  validate :validate_accessibility_check, if: -> { !state_draft? && errors.blank? }
-  validate :validate_broken_link_existence, if: -> { !state_draft? && errors.blank? }
-
   after_initialize :set_defaults
-  after_save :set_display_attributes
+  before_save :set_name
+  before_save :set_serial_no
+  before_save :set_published_at
+  before_save :set_display_attributes
+  before_save :replace_public
 
   after_save     GpArticle::Publisher::DocCallbacks.new, if: :changed?
   before_destroy GpArticle::Publisher::DocCallbacks.new
 
+  after_save     Cms::SearchIndexerCallbacks.new, if: :changed?
+  before_destroy Cms::SearchIndexerCallbacks.new
+
+  attr_accessor :link_check_results, :in_ignore_link_check
+  attr_accessor :accessibility_check_results, :in_ignore_accessibility_check, :in_modify_accessibility_check
+
+  validates :title, presence: true, length: { maximum: 200 }
+  validates :mobile_title, length: { maximum: 200 }
+  validates :body, length: { maximum: Zomeki.config.application['gp_article.body_limit'].to_i }
+  validates :mobile_body, length: { maximum: Zomeki.config.application['gp_article.body_limit'].to_i }
+  validates :body_more, length: { maximum: Zomeki.config.application['gp_article.body_limit'].to_i }
+  validates :state, presence: true
+  validates :filename_base, presence: true
+  validates :body_for_mobile, byte_length: { maximum: Zomeki.config.application['gp_article.body_limit_for_mobile'].to_i,
+                                             message: :too_long_byte_for_mobile,
+                                             attribute: -> { mobile_body.present? ? :mobile_body : :body } }
+
+  validate :name_validity, if: -> { name.present? }
+  validate :event_dates_range
+  validate :validate_accessibility_check, if: -> { !state_draft? && errors.blank? }
+  validate :validate_broken_link_existence, if: -> { !state_draft? && errors.blank? }
+
+  validates_with Cms::ContentNodeValidator, if: -> { state_approvable? },
+                                           message: '記事コンテンツのディレクトリが作成されていないため、承認依頼が行えません。'
+  validates_with Cms::ContentNodeValidator, if: -> { state_public? },
+                                           message: '記事コンテンツのディレクトリが作成されていないため、即時公開が行えません。'
+
+  scope :public_state, -> { where(state: 'public') }
+  scope :mobile, ->(m) { m ? where(terminal_mobile: true) : where(terminal_pc_or_smart_phone: true) }
+  scope :display_published_after, ->(date) { where(arel_table[:display_published_at].gteq(date)) }
   scope :visible_in_list, -> { where(feature_1: true) }
-  scope :event_scheduled_between, ->(start_date, end_date, category_ids) {
-    rel = all
-    rel = rel.where(arel_table[:event_ended_on].gteq(start_date)) if start_date.present?
-    rel = rel.where(arel_table[:event_started_on].lt(end_date + 1)) if end_date.present?
+  scope :event_scheduled_between, ->(start_date, end_date, category_ids = nil) {
+    rel = dates_intersects(:event_started_on, :event_ended_on, start_date.try(:beginning_of_day), end_date.try(:end_of_day))
     rel = rel.categorized_into_event(category_ids) if category_ids.present?
     rel
-  }
-  scope :content_and_criteria, ->(content, criteria) {
-    rel = all
-    rel = rel.where(arel_table[:content_id].eq(content.id)) if content
-
-    rel = rel.with_target(criteria[:target]) if criteria[:target].present?
-    rel = rel.with_target_state(criteria[:target_state]) if criteria[:target_state].present?
-
-    [:state, :event_state, :marker_state].each do |key|
-      rel = rel.where(key => criteria[key]) if criteria[key].present?
-    end
-
-    if criteria[:creator_user_name].present?
-      rel = rel.operated_by_user_name('create', criteria[:creator_user_name])
-    end
-
-    if criteria[:creator_group_id].present?
-      rel = rel.operated_by_group('create', criteria[:creator_group_id])
-    end
-
-    if criteria[:category_ids].present? && (category_ids = criteria[:category_ids].select(&:present?)).present?
-      rel = rel.categorized_into_all(category_ids)
-    end
-
-    if criteria[:user_operation].present?
-      rel = rel.operated_by_user_name(criteria[:user_operation], criteria[:user_name]) if criteria[:user_name].present?
-      rel = rel.operated_by_group(criteria[:user_operation], criteria[:user_group_id]) if criteria[:user_group_id].present?
-    end
-
-    if criteria[:date_column].present? && criteria[:date_operation].present?
-      dates = criteria[:dates].to_a.map { |date| date.present? ? (Date.parse(date) rescue nil) : nil }.compact
-      rel = rel.search_date_column(criteria[:date_column], criteria[:date_operation], dates)
-    end
-
-    if criteria[:assocs].present?
-      criteria[:assocs].select(&:present?).each { |assoc| rel = rel.joins(assoc.to_sym) }
-    end
-
-    if criteria[:tasks].present?
-      criteria[:tasks].select(&:present?).each { |task| rel = rel.with_task_name(task) }
-    end
-
-    if criteria[:texts].present?
-      criteria[:texts].select(&:present?).each do |column|
-        rel = rel.where.not(arel_table[column].eq('')).where.not(arel_table[column].eq(nil))
-      end
-    end
-
-    search_columns = [:name, :title, :body, :subtitle, :summary, :mobile_title, :mobile_body]
-    rel = rel.search_with_logical_query(*search_columns, criteria[:free_word]) if criteria[:free_word].present?
-    rel = rel.where(serial_no: criteria[:serial_no]) if criteria[:serial_no].present?
-
-    rel
-  }
-  scope :with_target, ->(target, user = Core.user) {
-    case target
-    when 'user'
-      creators = Sys::Creator.arel_table
-      approval_requests = Approval::ApprovalRequest.arel_table
-      assignments = Approval::Assignment.arel_table
-      joins(:creator).eager_load(:approval_requests => [:approval_flow => [:approvals => :assignments]])
-      .where(
-        creators[:user_id].eq(user.id)
-        .or(approval_requests[:user_id].eq(user.id)
-                        .or(assignments[:user_id].eq(user.id)))
-      )
-    when 'group'
-      editable
-    when 'all'
-      all
-    else
-      none
-    end
-  }
-  scope :with_target_state, ->(target_state) {
-    case target_state
-    when 'processing'
-      where(state: %w(draft approvable approved prepared))
-    when 'public'
-      where(state: 'public')
-    when 'finish'
-      where(state: 'finish')
-    when 'all'
-      all
-    else
-      none
-    end
-  }
-  scope :operated_by_user_name, ->(action, user_name) {
-    case action
-    when 'create'
-      users = Sys::User.arel_table
-      joins(creator: :user).where([
-        users[:name].matches("%#{user_name}%"),
-        users[:name_en].matches("%#{user_name}%")
-      ].reduce(:or))
-    else
-      operation_logs = Sys::OperationLog.arel_table
-      users = Sys::User.arel_table
-      joins(operation_logs: :user)
-        .where(operation_logs[:action].eq(action))
-        .where([
-          users[:name].matches("%#{user_name}%"),
-          users[:name_en].matches("%#{user_name}%")
-        ].reduce(:or))
-    end
-  }
-  scope :operated_by_group, ->(action, group_id) {
-    case action
-    when 'create'
-      creators = Sys::Creator.arel_table
-      joins(:creator).where(creators[:group_id].eq(group_id))
-    else
-      operation_logs = Sys::OperationLog.arel_table
-      users_groups = Sys::UsersGroup.arel_table
-      joins(operation_logs: { user: :users_groups })
-        .where(operation_logs[:action].eq(action))
-        .where(users_groups[:group_id].eq(group_id))
-    end
-  }
-  scope :search_date_column, ->(column, operation, dates = nil) {
-    dates = Array.wrap(dates)
-    case operation
-    when 'today'
-      today = Date.today
-      with_date_between(column, today, today)
-    when 'this_week'
-      today = Date.today
-      with_date_between(column, today.beginning_of_week, today.end_of_week)
-    when 'last_week'
-      last_week = 1.week.ago
-      with_date_between(column, last_week.beginning_of_week, last_week.end_of_week)
-    when 'equal'
-      with_date_between(column, dates[0], dates[0]) if dates[0]
-    when 'before'
-      where(arel_table[column].lteq(dates[0].end_of_day)) if dates[0]
-    when 'after'
-      where(arel_table[column].gteq(dates[0].beginning_of_day)) if dates[0]
-    when 'between'
-      with_date_between(column, dates[0], dates[1]) if dates[0] && dates[1]
-    else
-      none
-    end
-  }
-  scope :with_date_between, ->(column, date1, date2) {
-    where(arel_table[column].in(date1.beginning_of_day..date2.end_of_day))
   }
   scope :categorized_into, ->(category_ids) {
     cats = GpCategory::Categorization.arel_table
@@ -300,13 +165,6 @@ class GpArticle::Doc < ApplicationRecord
     "#{content.public_path}/_smartphone#{public_uri(without_filename: true)}#{filename_base}.html"
   end
 
-  def organization_content_related?
-    organization_content = content.organization_content_group
-    return organization_content &&
-      organization_content.article_related? &&
-      organization_content.related_article_content_id == content.id
-  end
-
   def organization_group
     return @organization_group if defined? @organization_group
     @organization_group =
@@ -319,10 +177,10 @@ class GpArticle::Doc < ApplicationRecord
 
   def public_uri(without_filename: false, with_closed_preview: false)
     uri =
-      if organization_content_related? && organization_group
+      if content.organization_content_related? && organization_group
         "#{organization_group.public_uri}docs/#{name}/"
-      elsif with_closed_preview && content.doc_node
-        "#{content.doc_node.public_uri}#{name}/"
+      elsif with_closed_preview && content.main_node
+        "#{content.main_node.public_uri}#{name}/"
       elsif !with_closed_preview && content.public_node
         "#{content.public_node.public_uri}#{name}/"
       end
@@ -332,7 +190,7 @@ class GpArticle::Doc < ApplicationRecord
 
   def public_full_uri(without_filename: false)
     uri =
-      if organization_content_related? && organization_group
+      if content.organization_content_related? && organization_group
         "#{organization_group.public_full_uri}docs/#{name}/"
       elsif content.public_node
         "#{content.public_node.public_full_uri}#{name}/"
@@ -345,7 +203,7 @@ class GpArticle::Doc < ApplicationRecord
     base_uri = public_uri(without_filename: true, with_closed_preview: true)
     return nil if base_uri.blank?
 
-    site ||= ::Page.site
+    site ||= content.site
     params = params.map{|k, v| "#{k}=#{v}" }.join('&')
     filename = without_filename || filename_base == 'index' ? '' : "#{filename_base}.html"
     page_flag = mobile ? 'm' : smart_phone ? 's' : ''
@@ -359,19 +217,6 @@ class GpArticle::Doc < ApplicationRecord
       %Q(#{public_uri}file_contents/)
     else
       %Q(#{content.admin_uri}/#{id}/file_contents/)
-    end
-  end
-
-  def state_options
-    options = if Core.user.has_auth?(:manager) || content.save_button_states.include?('public')
-                STATE_OPTIONS
-              else
-                STATE_OPTIONS.reject{|so| so.last == 'public' }
-              end
-    if content.approval_related?
-      options
-    else
-      options.reject{|o| o.last == 'approvable' }
     end
   end
 
@@ -396,56 +241,7 @@ class GpArticle::Doc < ApplicationRecord
   end
 
   def state_closed?
-    state == 'finish'
-  end
-
-  def close
-    @save_mode = :close
-    self.state = 'finish' if self.state_public?
-    return false unless save(:validate => false)
-    close_page
-    return true
-  end
-
-  def close_page(options={})
-    return true if will_replace?
-    return false unless super
-    publishers.destroy_all unless publishers.empty?
-    if p = public_path
-      FileUtils.rm_rf(::File.dirname(public_path)) unless p.blank?
-    end
-    if p = public_smart_phone_path
-      FileUtils.rm_rf(::File.dirname(public_smart_phone_path)) unless p.blank?
-    end
-    return true
-  end
-
-  def publish(content)
-    @save_mode = :publish
-    self.state = 'public' unless self.state_public?
-    return false unless save(:validate => false)
-    publish_page(content, path: public_path, uri: public_uri)
-    publish_files
-    publish_qrcode
-  end
-
-  def rebuild(content, options={})
-    if options[:dependent] == :smart_phone
-      return false unless self.content.site.publish_for_smart_phone?
-      return false unless self.content.site.spp_all?
-    end
-
-    return false unless self.state_public?
-    @save_mode = :publish
-    publish_page(content, options)
-    #TODO: スマートフォン向けファイル書き出し要再検討
-    @public_files_path = "#{::File.dirname(public_smart_phone_path)}/file_contents" if options[:dependent] == :smart_phone
-    @public_qrcode_path = "#{::File.dirname(public_smart_phone_path)}/qrcode.png" if options[:dependent] == :smart_phone
-    result = publish_files
-    publish_qrcode
-    @public_files_path = nil if options[:dependent] == :smart_phone
-    @public_qrcode_path = nil if options[:dependent] == :smart_phone
-    return result
+    state == 'closed'
   end
 
   def external_link?
@@ -501,7 +297,7 @@ class GpArticle::Doc < ApplicationRecord
     when :replace
       new_doc.prev_edition = self
       self.tasks.each do |task|
-        new_doc.tasks.build(site_id: task.site_id, name: task.name, process_at: task.process_at)
+        new_doc.tasks.build(site_id: task.site_id, name: task.name, process_at: task.process_at) if task.state_queued?
       end
       new_doc.creator_attributes = { group_id: creator.group_id, user_id: creator.user_id }
     else
@@ -521,7 +317,6 @@ class GpArticle::Doc < ApplicationRecord
       new_doc.related_docs.build(name: rd.name, content_id: rd.content_id)
     end
 
-
     inquiries.each_with_index do |inquiry, i|
       attrs = inquiry.attributes
       attrs[:id] = nil
@@ -536,36 +331,36 @@ class GpArticle::Doc < ApplicationRecord
       end
     end
 
-    new_doc.save!
+    importations.each do |importation|
+      new_doc.importations.build(importation.attributes.slice('source_url'))
+    end
 
-    files.each do |f|
-      new_attributes = f.attributes
-      new_attributes[:id] = nil
-      Sys::File.new(new_attributes).tap do |new_file|
-        new_file.file = Sys::Lib::File::NoUploadedFile.new(f.upload_path, :mime_type => new_file.mime_type)
+    transaction do
+      new_doc.save!
+
+      files.each do |f|
+        new_attributes = f.attributes
+        new_attributes[:id] = nil
+        new_file = Sys::File.new(new_attributes)
+        new_file.file = Sys::Lib::File::NoUploadedFile.new(f.upload_path, mime_type: new_file.mime_type)
         new_file.file_attachable = new_doc
         new_file.save
       end
+
+      new_doc.categories = self.categories
+      new_doc.event_categories = self.event_categories
+      new_doc.marker_categories = self.marker_categories
+      new_doc.categorizations.each do |new_c|
+        self_c = self.categorizations.where(category_id: new_c.category_id, categorized_as: new_c.categorized_as).first
+        new_c.update_column(:sort_no, self_c.sort_no)
+      end
     end
 
-    new_doc.categories = self.categories
-    new_doc.event_categories = self.event_categories
-    new_doc.marker_categories = self.marker_categories
-    new_doc.categorizations.each do |new_c|
-      self_c = self.categorizations.where(category_id: new_c.category_id, categorized_as: new_c.categorized_as).first
-      new_c.update_column(:sort_no, self_c.sort_no)
-    end
     return new_doc
   end
 
-  def editable?
-    result = super
-    return result unless result.nil? # See "Sys::Model::Auth::EditableGroup"
-    return approval_participators.include?(Core.user)
-  end
-
   def publishable?
-    super || approval_participators.include?(Core.user)
+    state.in?(%w(approved prepared)) && (editable? || approval_participators.include?(Core.user))
   end
 
   def formated_display_published_at
@@ -577,65 +372,54 @@ class GpArticle::Doc < ApplicationRecord
   end
 
   def default_map_position
-    [content.setting_extra_value(:map_relation, :lat_lng), content.site.setting_site_map_coordinate].lazy.each do |pos|
+    [content.map_coordinate, content.site.map_coordinate].lazy.each do |pos|
       p = pos.to_s.split(',').map(&:strip)
       return p if p.size == 2
     end
     super
   end
 
-  def links_in_body(all=false)
-    extract_links(self.body, all)
-  end
-
-  def check_links_in_body
-    check_links(links_in_body)
-  end
-
-  def links_in_mobile_body(all=false)
-    extract_links(self.mobile_body, all)
-  end
-
-  def links_in_string(str, all=false)
-    extract_links(str, all)
-  end
-
-  def backlinks
-    return self.class.none unless state_public? || state_closed?
-    return self.class.none if public_uri.blank?
-    links.klass.where(links.table[:url].matches("%#{self.public_uri(without_filename: true).sub(/\/$/, '')}%"))
-      .where(linkable_type: self.class.name)
-  end
-
-  def backlinked_docs
-    return [] if backlinks.blank?
-    self.class.where(id: backlinks.pluck(:linkable_id))
+  def extract_links
+    extracted_links = super
+    if template
+      rich_text_items = template.items.select { |item| item.item_type == 'rich_text' }
+      rich_text_items.each do |item|
+        links = Util::Link.extract_links(template_values[item.name])
+        links.each { |link| link[:column] = :template_values }
+        extracted_links += links
+      end
+    end
+    extracted_links
   end
 
   def check_accessibility
-    Util::AccessibilityChecker.check(body)
+    results = Util::AccessibilityChecker.check(body)
+    if template
+      rich_text_items = template.items.select { |item| item.item_type == 'rich_text' }
+      rich_text_items.each do |item|
+        results += Util::AccessibilityChecker.check(template_values[item.name])
+      end
+    end
+    results
   end
 
   def modify_accessibility
     self.body = Util::AccessibilityChecker.modify(body)
+    if template
+      rich_text_items = template.items.select { |item| item.item_type == 'rich_text' }
+      rich_text_items.each do |item|
+        template_values[item.name] = Util::AccessibilityChecker.modify(template_values[item.name])
+      end
+    end
   end
 
   def replace_words_with_dictionary
-    dic = content.setting_value(:word_dictionary)
-    return if dic.blank?
+    return if content.word_dictionary.blank?
 
-    words = []
-    dic.split(/\r\n|\n/).each do |line|
-      next if line !~ /,/
-      data = line.split(/,/)
-      words << [data[0].strip, data[1].strip]
-    end
-
-    if body.present?
-      words.each {|src, dst| self.body = body.gsub(src, dst) }
-    end
-    if mobile_body.present?
-      words.each {|src, dst| self.mobile_body = mobile_body.gsub(src, dst) }
+    dic = Cms::Admin::WordDictionaryService.new(content.word_dictionary)
+    [:body, :mobile_body].each do |column|
+      text = read_attribute(column)
+      self[column] = dic.replace(text) if text.present?
     end
   end
 
@@ -652,12 +436,6 @@ class GpArticle::Doc < ApplicationRecord
 
   def will_be_replaced?
     next_edition && state_public?
-  end
-
-  def qrcode_visible?
-    return false unless content && content.qrcode_related?
-    return false unless self.qrcode_state == 'visible'
-    return true
   end
 
   def og_type_text
@@ -684,37 +462,12 @@ class GpArticle::Doc < ApplicationRecord
     FEATURE_2_OPTIONS.detect{|o| o.last == self.feature_2 }.try(:first).to_s
   end
 
-  def qrcode_state_text
-    QRCODE_OPTIONS.detect{|o| o.last == self.qrcode_state }.try(:first).to_s
-  end
-
-  def public_files_path
-    return @public_files_path if @public_files_path
-    "#{::File.dirname(public_path)}/file_contents"
-  end
-
-
-  def qrcode_path
-    return @public_qrcode_path if @public_qrcode_path
-    "#{::File.dirname(public_path)}/qrcode.png"
-  end
-
-  def qrcode_uri(preview: false)
-    if preview
-      "#{preview_uri(without_filename: true)}qrcode.png"
-    else
-      "#{public_uri(without_filename: true)}qrcode.png"
-    end
+  def qrcode_visible?
+    super && content && content.qrcode_related?
   end
 
   def event_state_visible?
     event_state == 'visible'
-  end
-
-  def send_broken_link_notification
-    backlinked_docs.each do |doc|
-      GpArticle::Admin::Mailer.broken_link_notification(self, doc).deliver_now
-    end
   end
 
   def lang_text
@@ -797,25 +550,14 @@ class GpArticle::Doc < ApplicationRecord
   end
 
   def set_display_attributes
-    self.update_column(:display_published_at, self.published_at) unless self.display_published_at
-    self.update_column(:display_updated_at, self.updated_at) if self.display_updated_at.blank? || !self.keep_display_updated_at
+    self.display_published_at = published_at if display_published_at.nil?
+    self.display_updated_at = updated_at if display_updated_at.nil? || !keep_display_updated_at
   end
 
   def set_serial_no
     return if self.serial_no.present?
     seq = Util::Sequencer.next_id('gp_article_doc_serial_no', version: self.content_id, site_id: content.site_id)
     self.serial_no = seq
-  end
-
-  def node_existence
-    unless content.public_node
-      case state
-      when 'public'
-        errors.add(:base, '記事コンテンツのディレクトリが作成されていないため、即時公開が行えません。')
-      when 'approvable'
-        errors.add(:base, '記事コンテンツのディレクトリが作成されていないため、承認依頼が行えません。')
-      end
-    end
   end
 
   def validate_platform_dependent_characters
@@ -833,54 +575,19 @@ class GpArticle::Doc < ApplicationRecord
     errors.add(:event_ended_on, "が#{self.class.human_attribute_name :event_started_on}を過ぎています。") if self.event_ended_on < self.event_started_on
   end
 
-  def extract_links(html, all)
-    links = Nokogiri::HTML.parse(html).css('a[@href]')
-                          .map { |a| { body: a.text, url: a.attribute('href').value } }
-    return links if all
-    links.select do |link|
-      uri = Addressable::URI.parse(link[:url])
-      !uri.absolute? || uri.scheme.to_s.downcase.in?(%w(http https))
-    end
-  rescue => evar
-    warn_log evar.message
-    return []
-  end
-
-  def check_links(links)
-    links.map{|link|
-      uri = Addressable::URI.parse(link[:url])
-      url = unless uri.absolute?
-              next unless uri.path =~ /^\//
-              "#{content.site.full_uri.sub(/\/$/, '')}#{uri.path}"
-            else
-              uri.to_s
-            end
-      res = Util::LinkChecker.check_url(url)
-      {body: link[:body], url: url, status: res[:status], reason: res[:reason], result: res[:result]}
-    }.compact
-  end
-
   def validate_broken_link_existence
-    return if content.site.setting_site_link_check != 'enabled'
+    return unless content.site.link_check_enabled?
     return if in_ignore_link_check == '1'
 
-    results = check_links_in_body
+    results = check_links
     if results.any? {|r| !r[:result] }
       self.link_check_results = results
       errors.add(:base, 'リンクチェック結果を確認してください。')
     end
   end
 
-  def publish_qrcode
-    return true unless self.state_public?
-    return true unless self.qrcode_visible?
-    return true if Zomeki.config.application['sys.clean_statics']
-    Util::Qrcode.create(self.public_full_uri, self.qrcode_path)
-    return true
-  end
-
   def validate_accessibility_check
-    return if content.site.setting_site_accessibility_check != 'enabled'
+    return unless content.site.accessibility_check_enabled?
 
     modify_accessibility if in_modify_accessibility_check == '1'
     results = check_accessibility
@@ -890,16 +597,71 @@ class GpArticle::Doc < ApplicationRecord
     end
   end
 
-  def body_limit_for_mobile
-    limit = Zomeki.config.application['gp_article.body_limit_for_mobile'].to_i
-    current_size = self.body_for_mobile.bytesize
-    if current_size > limit
-      target = self.mobile_body.present? ? :mobile_body : :body
-      errors.add(target, "が携帯向け容量制限#{limit}バイトを超えています。（現在#{current_size}バイト）")
-    end
-  end
-
   def replace_public
     prev_edition.destroy if state_public? && prev_edition
+  end
+
+  concerning :Publication do
+    included do
+      after_destroy :close_page
+
+      define_model_callbacks :publish_files
+      after_publish_files Cms::FileTransferCallbacks.new([:public_path, :public_smart_phone_path], recursive: true)
+    end
+
+    def publish
+      self.state = 'public' unless state_public?
+      transaction do
+        return false unless save(validate: false)
+        run_callbacks :publish_files do
+          rebuild
+        end
+      end
+    end
+
+    def rebuild
+      return false unless state_public?
+      return true unless terminal_pc_or_smart_phone
+
+      rendered = Cms::Admin::RenderService.new(content.site).render_public(public_uri)
+      return true unless publish_page(rendered, path: public_path)
+      publish_files
+      publish_qrcode
+
+      if content.site.use_kana?
+        rendered = Cms::Lib::Navi::Kana.convert(rendered, content.site_id)
+        publish_page(rendered, path: "#{public_path}.r", dependent: :ruby)
+      end
+
+      if content.site.publish_for_smart_phone?
+        rendered = Cms::Admin::RenderService.new(content.site).render_public(public_uri, agent_type: :smart_phone)
+        publish_page(rendered, path: public_smart_phone_path, dependent: :smart_phone)
+        publish_smart_phone_files
+        publish_smart_phone_qrcode
+      end
+
+      rebuild_search_texts
+
+      return true
+    end
+
+    def close
+      self.state = 'closed' if self.state_public?
+      transaction do
+        return false unless save(validate: false)
+        close_page
+        close_files
+      end
+      return true
+    end
+
+    def close_page(options={})
+      return true if will_replace?
+      return false unless super
+
+      paths = [public_path, public_smart_phone_path].select(&:present?)
+      paths.each { |path| FileUtils.rm_rf(::File.dirname(path)) if path.present? }
+      return true
+    end
   end
 end

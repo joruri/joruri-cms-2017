@@ -1,7 +1,10 @@
 class GpCalendar::Content::Setting < Cms::ContentSetting
   set_config :gp_category_content_category_type_id,
     name: 'カテゴリ種別',
-    options: lambda { GpCategory::Content::CategoryType.where(site_id: Core.site.id).map { |ct| [ct.name, ct.id] } }
+    options: lambda { GpCategory::Content::CategoryType.where(site_id: Core.site.id).map { |ct| [ct.name, ct.id] } },
+    default_extra_values: {
+      category_type_ids: []
+    }
   set_config :date_style,
     name: '日付形式',
     comment: '<strong>年：</strong>%Y <strong>月：</strong>%m <strong>日：</strong>%d <strong>曜日：</strong>%A <strong>曜日（省略）：</strong>%a',
@@ -28,9 +31,6 @@ class GpCalendar::Content::Setting < Cms::ContentSetting
   set_config :default_image,
     name: '初期画像',
     comment: '（例 /images/sample.jpg ）'
-  set_config :show_qreki,
-    name: '旧暦表示',
-    options: [["表示する", 1], ["表示しない", 0]]
 
   belongs_to :content, foreign_key: :content_id, class_name: 'GpCalendar::Content::Event'
 
@@ -38,26 +38,12 @@ class GpCalendar::Content::Setting < Cms::ContentSetting
     ex = extra_values
     case name
     when 'gp_category_content_category_type_id'
-      ex[:category_type_ids] = params[:category_types].map(&:to_i).uniq
+      ex[:category_type_ids] = params[:category_type_ids].to_a.map(&:to_i).uniq
     end
     super(ex)
-  end
-
-
-  def category_ids
-    extra_values[:category_ids] || []
   end
 
   def category_type_ids
     extra_values[:category_type_ids] || []
   end
-
-  def categories
-    GpCategory::Category.where(id: category_ids)
-  end
-
-  def category_types
-    GpCategory::CategoryType.where(id: category_type_ids)
-  end
-
 end

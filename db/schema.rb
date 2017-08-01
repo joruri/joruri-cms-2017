@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170410050624) do
+ActiveRecord::Schema.define(version: 20170719063710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -324,6 +324,26 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.integer  "entry_count"
   end
 
+  create_table "cms_file_transfers", force: :cascade do |t|
+    t.integer  "site_id"
+    t.string   "state"
+    t.string   "path"
+    t.boolean  "recursive"
+    t.integer  "priority"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["site_id"], name: "index_cms_file_transfers_on_site_id", using: :btree
+  end
+
+  create_table "cms_importations", force: :cascade do |t|
+    t.string   "importable_type"
+    t.integer  "importable_id"
+    t.string   "source_url"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["importable_type", "importable_id"], name: "index_cms_importations_on_importable_type_and_importable_id", using: :btree
+  end
+
   create_table "cms_inquiries", force: :cascade do |t|
     t.string   "state"
     t.datetime "created_at"
@@ -384,6 +404,10 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "site_id"
+    t.string   "result_state"
+    t.datetime "checked_at"
+    t.index ["link_checkable_id", "link_checkable_type"], name: "index_cms_link_check_logs_on_link_checkable_id_and_type", using: :btree
+    t.index ["result_state"], name: "index_cms_link_check_logs_on_result_state", using: :btree
   end
 
   create_table "cms_link_checks", force: :cascade do |t|
@@ -399,8 +423,10 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.integer  "linkable_id"
     t.string   "body"
     t.string   "url"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "linkable_column"
+    t.index ["linkable_id", "linkable_type"], name: "index_cms_links_on_linkable_id_and_linkable_type", using: :btree
   end
 
   create_table "cms_map_markers", force: :cascade do |t|
@@ -551,6 +577,28 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.index ["site_id"], name: "index_cms_publishers_on_site_id", using: :btree
   end
 
+  create_table "cms_search_indexers", force: :cascade do |t|
+    t.integer  "site_id"
+    t.string   "indexable_type"
+    t.integer  "indexable_id"
+    t.string   "state"
+    t.integer  "priority"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["indexable_type", "indexable_id"], name: "index_cms_search_indexers_on_indexable_type_and_indexable_id", using: :btree
+    t.index ["site_id"], name: "index_cms_search_indexers_on_site_id", using: :btree
+  end
+
+  create_table "cms_search_texts", force: :cascade do |t|
+    t.string   "searchable_type"
+    t.integer  "searchable_id"
+    t.string   "searchable_column"
+    t.text     "body"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["searchable_type", "searchable_id"], name: "index_cms_search_texts_on_searchable_type_and_searchable_id", using: :btree
+  end
+
   create_table "cms_site_basic_auth_users", force: :cascade do |t|
     t.string   "state"
     t.integer  "site_id"
@@ -629,6 +677,7 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.string   "talk_processable_type"
     t.integer  "talk_processable_id"
     t.integer  "site_id"
+    t.index ["site_id"], name: "index_cms_talk_tasks_on_site_id", using: :btree
     t.index ["talk_processable_type", "talk_processable_id"], name: "index_cms_talk_tasks_on_talk_processable", using: :btree
   end
 
@@ -1189,6 +1238,7 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.boolean  "confirmation"
     t.string   "sitemap_state"
     t.string   "index_link"
+    t.string   "mail_to"
     t.index ["content_id"], name: "index_survey_forms_on_content_id", using: :btree
   end
 
@@ -1388,6 +1438,7 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.integer  "item_id"
     t.string   "item_name"
     t.integer  "site_id"
+    t.index ["site_id"], name: "index_sys_operation_logs_on_site_id", using: :btree
   end
 
   create_table "sys_plugins", force: :cascade do |t|
@@ -1435,6 +1486,7 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.text     "message"
     t.integer  "site_id"
     t.jsonb    "script_options", default: {}
+    t.index ["site_id"], name: "index_sys_processes_on_site_id", using: :btree
   end
 
   create_table "sys_publishers", force: :cascade do |t|
@@ -1445,6 +1497,7 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.string   "content_hash"
     t.integer  "publishable_id"
     t.string   "publishable_type"
+    t.index ["path"], name: "index_sys_publishers_on_path", using: :btree
     t.index ["publishable_type", "publishable_id"], name: "index_sys_publishers_on_publishable_type_and_publishable_id", using: :btree
   end
 
@@ -1505,7 +1558,12 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.integer  "processable_id"
     t.string   "processable_type"
     t.integer  "site_id"
+    t.string   "state"
+    t.string   "job_id"
+    t.integer  "provider_job_id"
     t.index ["processable_type", "processable_id"], name: "index_sys_tasks_on_processable_type_and_processable_id", using: :btree
+    t.index ["site_id"], name: "index_sys_tasks_on_site_id", using: :btree
+    t.index ["state"], name: "index_sys_tasks_on_state", using: :btree
   end
 
   create_table "sys_temp_texts", force: :cascade do |t|
@@ -1633,6 +1691,8 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.text     "doc_public_uri"
     t.string   "page_updated_at"
     t.string   "page_group_code"
+    t.string   "page_published_at"
+    t.text     "page_category_names"
     t.index ["content_id"], name: "index_tool_convert_docs_on_content_id", using: :btree
     t.index ["docable_id", "docable_type"], name: "index_tool_convert_docs_on_docable_id_and_docable_type", using: :btree
     t.index ["uri_path"], name: "index_tool_convert_docs_on_uri_path", using: :btree
@@ -1670,6 +1730,8 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "keep_filename"
+    t.integer  "creator_group_id"
+    t.text     "log"
   end
 
   create_table "tool_convert_links", force: :cascade do |t|
@@ -1695,7 +1757,12 @@ ActiveRecord::Schema.define(version: 20170410050624) do
     t.text     "category_tag"
     t.text     "category_regexp"
     t.integer  "creator_group_relation_type"
-    t.text     "creator_group_url_relations"
+    t.text     "creator_group_relations"
+    t.text     "published_at_tag"
+    t.text     "published_at_regexp"
+    t.text     "creator_group_tag"
+    t.text     "creator_group_regexp"
+    t.text     "category_relations"
     t.index ["site_url"], name: "index_tool_convert_settings_on_site_url", using: :btree
   end
 

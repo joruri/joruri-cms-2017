@@ -2,9 +2,15 @@ class Cms::Content < ApplicationRecord
   include Sys::Model::Base
   include Cms::Model::Base::Content
   include Sys::Model::Rel::Creator
+  include Cms::Model::Site
   include Cms::Model::Rel::Site
   include Cms::Model::Rel::Concept
   include Cms::Model::Auth::Concept
+
+  REBUILDABLE_MODELS = ['AdBanner::Banner', 'BizCalendar::Place', 'Feed::Feed',
+                        'Gnav::MenuItem', 'GpArticle::Doc', 'GpCalendar::Event', 'GpCategory::CategoryType',
+                        'Map::Marker', 'Organization::Group', 'Rank::Rank',
+                        'Survey::Form', 'Tag::Tag']
 
   has_many :settings, -> { order(:sort_no) },
     :foreign_key => :content_id, :class_name => 'Cms::ContentSetting', :dependent => :destroy
@@ -14,16 +20,23 @@ class Cms::Content < ApplicationRecord
     :dependent => :destroy
 
   # conditional
+  has_one :main_node, -> { order(:id) }, foreign_key: :content_id, class_name: 'Cms::Node'
   has_many :public_nodes, -> { public_state }, foreign_key: :content_id, class_name: 'Cms::Node'
   has_many :public_pieces, -> { public_state }, foreign_key: :content_id, class_name: 'Cms::Piece'
 
   validates :concept_id, :state, :model, :name, presence: true
   validates :code, presence: true,
-                   uniqueness: { scope: [:site_id] },
+                   uniqueness: { scope: [:site_id], case_sensitive: false },
                    format: { with: /\A[0-9a-zA-Z\-_]+\z/, if: "name.present?", message: :invalid_bracket_name }
 
   before_create :set_default_settings_from_configs
   after_save :save_settings
+
+  scope :rebuildable_models, -> { where(model: REBUILDABLE_MODELS) }
+
+  def inherited_concept
+    main_node.try!(:inherited_concept) || concept
+  end
 
   def readable?
     Core.user.has_priv?(:read, item: concept)

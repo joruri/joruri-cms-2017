@@ -32,14 +32,14 @@ class Cms::Admin::PreviewController < Cms::Controller::Admin::Base
 
     elsif path =~ /^\/_themes\//
       entry = Sys::Storage::Entry.from_path("#{Core.site.public_path}#{path}")
-      return http_error(404) unless entry.exists?
+      return http_error(404) if entry.nil? || !entry.exists?
       return send_file(entry.path, type: entry.mime_type, filename: entry.name, disposition: 'inline')
 
     else
       node = Core.search_node(path)
       opt  = Rails.application.routes.recognize_path(node)
 
-      if opt[:controller] == 'exception'
+      if opt[:controller] == 'cms/public/exception'
         file_path = File.join(Page.site.public_path, path)
         if File.exist?(file_path) && File.ftype(file_path) == 'file'
           return send_file(file_path, type: ::Storage.mime_type(path), filename: ::File.basename(path), disposition: 'inline')
@@ -86,7 +86,8 @@ private
     %w(href src).each do |attr|
       doc.css(%Q![#{attr}]!).each do |node|
         next if node[attr].blank?
-        uri = Addressable::URI.parse(node[attr])
+        uri = Addressable::URI.parse(node[attr]) rescue nil
+        next if uri.nil?
         if uri.relative? && uri.path !~ %r|/_common/| && node[attr] !~ %r|\A#| && node[attr] !~ %r|\A\/\/| && node[attr] =~ %r|\A\/|
           node[attr] = "#{preview_uri}#{node[attr]}"
         end

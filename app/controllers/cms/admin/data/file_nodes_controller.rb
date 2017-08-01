@@ -1,6 +1,5 @@
 class Cms::Admin::Data::FileNodesController < Cms::Controller::Admin::Base
   include Sys::Controller::Scaffold::Base
-  include Sys::Controller::Scaffold::Publication
 
   def pre_dispatch
     return error_auth unless Core.user.has_auth?(:creator)
@@ -18,7 +17,7 @@ class Cms::Admin::Data::FileNodesController < Cms::Controller::Admin::Base
   end
 
   def show
-    @item = Cms::DataFileNode.readable.find(params[:id])
+    @item = Cms::DataFileNode.find(params[:id])
     return error_auth unless @item.readable?
 
     _show @item

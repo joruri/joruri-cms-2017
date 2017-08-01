@@ -4,8 +4,8 @@ class Cms::Site < ApplicationRecord
 
   include Sys::Model::Rel::Creator
   include Sys::Model::Auth::Manager
+  include Cms::Model::Site
   include Cms::Model::Rel::DataFile
-  include Sys::Model::Rel::FileTransfer
   include Cms::Model::Rel::SiteSetting
 
   include StateText
@@ -15,8 +15,6 @@ class Cms::Site < ApplicationRecord
   SMART_PHONE_PUBLICATION_OPTIONS = [['書き出さない', 'no'], ['書き出す', 'yes']]
   SPP_TARGET_OPTIONS = [['トップページのみ書き出す', 'only_top'], ['すべて書き出す', 'all']]
 
-  belongs_to :status, :foreign_key => :state,
-    :class_name => 'Sys::Base::Status'
   has_many :concepts, -> { order(:sort_no, :name, :id) }, :foreign_key => :site_id,
     :class_name => 'Cms::Concept', :dependent => :destroy
   has_many :contents, -> { order(:sort_no, :name, :id) }, :foreign_key => :site_id,
@@ -32,8 +30,6 @@ class Cms::Site < ApplicationRecord
   has_many :nodes, :dependent => :destroy
   has_many :messages, class_name: 'Sys::Message', dependent: :destroy
   has_many :operation_logs, class_name: 'Sys::OperationLog'
-  has_many :transferred_files, class_name: 'Sys::TransferredFile'
-  has_many :transferable_files, class_name: 'Sys::TransferableFile'
   belongs_to :root_node, foreign_key: :node_id, class_name: 'Cms::Node'
 
   # conditional relations
@@ -41,6 +37,8 @@ class Cms::Site < ApplicationRecord
     class_name: 'Cms::Concept'
   has_many :public_root_concepts, -> { where(level_no: 1, state: 'public').order(:sort_no, :name, :id) },
     class_name: 'Cms::Concept'
+  has_many :public_sitemap_nodes, -> { where(state: 'public', model: 'Cms::Sitemap').order(:name) },
+    class_name: 'Cms::Node'
   has_many :emergency_layout_settings, class_name: 'Cms::SiteSetting::EmergencyLayout'
 
   validates :state, :name, presence: true
@@ -54,8 +52,8 @@ class Cms::Site < ApplicationRecord
   attr_accessor :site_image, :del_site_image
   attr_accessor :in_root_group_id
 
-  after_save { save_cms_data_file(:site_image, :site_id => id) }
-  after_destroy { destroy_cms_data_file(:site_image) }
+  after_save :save_cms_data_file
+  after_destroy :destroy_cms_data_file
 
   before_validation :fix_full_uri
   before_destroy :block_last_deletion
@@ -68,6 +66,7 @@ class Cms::Site < ApplicationRecord
   after_save :make_node
   after_save :copy_common_directory
 
+  scope :in_site, ->(site) { where(id: site) }
   scope :matches_to_domain, ->(domain) {
     where([
       arel_table[:full_uri].matches("http://#{domain}%"),
@@ -155,10 +154,7 @@ class Cms::Site < ApplicationRecord
   end
 
   def full_ssl_uri
-    return nil unless use_common_ssl?
-    url  = Sys::Setting.setting_extra_value(:common_ssl, :common_ssl_uri)
-    url += "_ssl/#{format('%04d', id)}/"
-    return url
+    "#{Sys::Setting.common_ssl_uri}_ssl/#{format('%04d', id)}/"
   end
 
   def main_admin_uri
@@ -242,7 +238,11 @@ class Cms::Site < ApplicationRecord
     SPP_TARGET_OPTIONS.detect{|o| o.last == spp_target }.try(:first).to_s
   end
 
-  def publish_for_smart_phone?
+  def publish_for_smart_phone?(node = nil)
+    smart_phone_publication? && (spp_all? || (spp_only_top? && node && node.respond_to?(:top_page?) && node.top_page?))
+  end
+
+  def smart_phone_publication?
     smart_phone_publication == 'yes'
   end
 
@@ -278,30 +278,6 @@ class Cms::Site < ApplicationRecord
     "#{::File.dirname(public_path)}/.htpasswd"
   end
 
-  def basic_auth_user_enabled?
-    basic_auth_users.root_location.enabled.exists?
-  end
-
-  def system_basic_auth_user_enabled?
-    basic_auth_users.system_location.enabled.exists?
-  end
-
-  def directory_basic_auth_user_enabled?(directory)
-    basic_auth_users.directory_location.enabled.where(target_location: directory).exists?
-  end
-
-  def basic_auth_enabled?
-    ::File.exists?(basic_auth_htpasswd_path)
-  end
-
-  def system_basic_auth_enabled?
-    ::File.exists?("#{basic_auth_htpasswd_path}_system")
-  end
-
-  def directory_basic_auth_enabled?(directory)
-    ::File.exists?("#{basic_auth_htpasswd_path}_#{directory}")
-  end
-
   def basic_auth_state_enabled?
     settings.where(name: 'basic_auth_state', value: 'enabled').exists?
   end
@@ -316,14 +292,6 @@ class Cms::Site < ApplicationRecord
     self.load_site_settings
     self.in_setting_site_basic_auth_state = 'disabled'
     self.save
-  end
-
-  def use_kana?
-    setting_site_kana_talk.in?(%w(enabled kana_only))
-  end
-
-  def use_talk?
-    setting_site_kana_talk == 'enabled'
   end
 
   protected
@@ -403,6 +371,14 @@ class Cms::Site < ApplicationRecord
     else
       site_belongings.create(group_id: in_root_group_id)
     end
+  end
+
+  def save_cms_data_file(name = nil, params = nil)
+    super(:site_image, site_id: id)
+  end
+
+  def destroy_cms_data_file(name = nil, params = nil)
+    super(:site_image)
   end
 
   class << self

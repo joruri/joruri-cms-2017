@@ -1,14 +1,14 @@
 class Cms::DataFileNode < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Base::Page
   include Sys::Model::Rel::Creator
+  include Cms::Model::Site
   include Cms::Model::Rel::Site
   include Cms::Model::Rel::Concept
   include Cms::Model::Auth::Concept::Creator
 
   has_many :files, :foreign_key => :node_id, :class_name => 'Cms::DataFile', :primary_key => :id
 
-  validates :name, presence: true, uniqueness: { scope: :concept_id }
+  validates :name, presence: true, uniqueness: { scope: :concept_id, case_sensitive: false }
   validate :validate_name
 
   after_save     Cms::Publisher::BracketeeCallbacks.new, if: :changed?
@@ -33,14 +33,14 @@ class Cms::DataFileNode < ApplicationRecord
     end
   end
 
+  def changed_bracket_names
+    names = [name, name_was].select(&:present?).uniq
+    names.map { |name| files.map { |file| "file/#{name}/#{file.name}" } }.flatten
+  end
+
 private
   def remove_files
     files.each {|file| file.destroy }
     return true
-  end
-
-  def changed_bracket_names
-    names = [name, name_was].select(&:present?).uniq
-    names.map { |name| files.map { |file| "file/#{name}/#{file.name}" } }.flatten
   end
 end

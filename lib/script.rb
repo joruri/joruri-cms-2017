@@ -16,7 +16,7 @@ class Script
   end
 
   def self.run(path, options = {})
-    @@kill     = 3.hours.to_i
+    @@kill     = options.delete(:kill) || 3.hours.to_i
     @@path     = path
     @@proc     = nil
     @@time     = nil
@@ -120,7 +120,6 @@ class Script
   rescue => e
     self.error "#{item.class}##{item.id}: #{e}"
     error_log e
-    error_log e.backtrace.join("\n")
   end
 
   protected
@@ -138,7 +137,6 @@ class Script
     self.log e
     self.log e.backtrace.slice(0, 20).join("\n")
     error_log e
-    error_log e.backtrace.join("\n")
   ensure
     self.unlock
   end

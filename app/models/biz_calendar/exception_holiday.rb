@@ -1,6 +1,7 @@
 class BizCalendar::ExceptionHoliday < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
+  include Cms::Model::Site
   include Cms::Model::Auth::Content
 
   include StateText
@@ -9,13 +10,17 @@ class BizCalendar::ExceptionHoliday < ApplicationRecord
 
   belongs_to :place,  :foreign_key => :place_id, :class_name => 'BizCalendar::Place'
 
+  delegate :content, to: :place
+
   validates :state, :start_date, :end_date, presence: true
   validate :dates_range
   
   after_initialize :set_defaults
 
-  after_save     Cms::Publisher::ContentRelatedCallbacks.new, if: :changed?
-  before_destroy Cms::Publisher::ContentRelatedCallbacks.new
+  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
+
+  define_site_scope :place
 
   scope :public_state, ->{ where(state: 'public') }
   scope :search_with_params, ->(params = {}) {
@@ -63,10 +68,6 @@ class BizCalendar::ExceptionHoliday < ApplicationRecord
           end
 
     return rel
-  end
-
-  def content
-    place.content
   end
 
   def state_public?

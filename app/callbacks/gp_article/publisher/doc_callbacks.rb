@@ -1,16 +1,7 @@
 class GpArticle::Publisher::DocCallbacks < PublisherCallbacks
-  def after_save(doc)
+  def enqueue(doc)
     @doc = doc
-    enqueue if enqueue?
-  end
-
-  def before_destroy(doc)
-    @doc = doc
-    enqueue if enqueue?
-  end
-
-  def enqueue(doc = nil)
-    @doc = doc if doc
+    return unless enqueue?
     enqueue_pieces
     enqueue_nodes
     enqueue_organizations
@@ -18,19 +9,19 @@ class GpArticle::Publisher::DocCallbacks < PublisherCallbacks
     enqueue_calendars
     enqueue_maps
     enqueue_tags
+    enqueue_relatee_docs
   end
 
   private
 
   def enqueue?
-    @doc.name.present? && @doc.state.in?(%w(public finish))
+    return unless super
+    @doc.name.present? && @doc.state.in?(%w(public closed))
   end
 
   def enqueue_pieces
     pieces = @doc.content.public_pieces.sort { |p| p.model == 'GpArticle::RecentTab' ? 1 : 9 }
-    pieces.each do |piece|
-      Cms::Publisher::PieceCallbacks.new.enqueue(piece)
-    end
+    Cms::Publisher::PieceCallbacks.new.enqueue(pieces)
   end
 
   def enqueue_nodes
@@ -49,7 +40,7 @@ class GpArticle::Publisher::DocCallbacks < PublisherCallbacks
           end
         { target_date: changed_dates.uniq.sort.map { |d| d.strftime('%Y-%m-%d') } }
       end
-    Cms::Publisher.register(@doc.content.site_id, @doc.content.public_nodes.select(:id, :parent_id, :name), extra_flag)
+    Cms::Publisher.register(@doc.content.site_id, @doc.content.public_nodes, extra_flag)
   end
 
   def enqueue_organizations
@@ -62,9 +53,7 @@ class GpArticle::Publisher::DocCallbacks < PublisherCallbacks
 
     if changed_ogs.present?
       Cms::Publisher.register(@doc.content.site_id, changed_ogs)
-      organization_content.public_pieces.each do |piece|
-        Cms::Publisher::PieceCallbacks.new.enqueue(piece)
-      end
+      Cms::Publisher::PieceCallbacks.new.enqueue(organization_content.public_pieces)
     end
   end
 
@@ -78,9 +67,7 @@ class GpArticle::Publisher::DocCallbacks < PublisherCallbacks
 
     if changed_cats.present?
       Cms::Publisher.register(@doc.content.site_id, changed_cats)
-      category_content.public_pieces_for_doc_list.each do |piece|
-        Cms::Publisher::PieceCallbacks.new.enqueue(piece)
-      end
+      Cms::Publisher::PieceCallbacks.new.enqueue(category_content.public_pieces_for_doc_list)
     end
   end
 
@@ -98,12 +85,10 @@ class GpArticle::Publisher::DocCallbacks < PublisherCallbacks
       min_date = changed_dates.min.beginning_of_month
       max_date = changed_dates.max.beginning_of_month
 
-      Cms::Publisher.register(@doc.content.site_id, calendar_content.public_nodes.select(:id, :parent_id, :name),
+      Cms::Publisher.register(@doc.content.site_id, calendar_content.public_nodes,
                               target_min_date: min_date.strftime('%Y-%m-%d'),
                               target_max_date: max_date.strftime('%Y-%m-%d'))
-      calendar_content.public_pieces.each do |piece|
-        Cms::Publisher::PieceCallbacks.new.enqueue(piece)
-      end
+      Cms::Publisher::PieceCallbacks.new.enqueue(calendar_content.public_pieces)
     end
   end
 
@@ -119,10 +104,8 @@ class GpArticle::Publisher::DocCallbacks < PublisherCallbacks
     changed_markers.uniq!
 
     if changed_markers.present?
-      Cms::Publisher.register(@doc.content.site_id, map_content.public_nodes.select(:id, :parent_id, :name))
-      map_content.public_pieces.each do |piece|
-        Cms::Publisher::PieceCallbacks.new.enqueue(piece)
-      end
+      Cms::Publisher.register(@doc.content.site_id, map_content.public_nodes)
+      Cms::Publisher::PieceCallbacks.new.enqueue(map_content.public_pieces)
     end
   end
 
@@ -138,9 +121,11 @@ class GpArticle::Publisher::DocCallbacks < PublisherCallbacks
 
     if changed_tags.present?
       Cms::Publisher.register(@doc.content.site_id, changed_tags)
-      tag_content.public_pieces.each do |piece|
-        Cms::Publisher::PieceCallbacks.new.enqueue(piece)
-      end
+      Cms::Publisher::PieceCallbacks.new.enqueue(tag_content.public_pieces)
     end
+  end
+
+  def enqueue_relatee_docs
+    Cms::Publisher.register(@doc.content.site_id, @doc.public_relatee_docs)
   end
 end

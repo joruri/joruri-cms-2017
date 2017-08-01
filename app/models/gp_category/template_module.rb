@@ -1,5 +1,7 @@
 class GpCategory::TemplateModule < ApplicationRecord
   include Sys::Model::Base
+  include Cms::Model::Site
+  include Cms::Model::Rel::Content
   include Cms::Model::Auth::Content
 
   WRAPPER_TAG_OPTIONS = [['li', 'li'], ['article', 'article'], ['section', 'section']]
@@ -26,7 +28,7 @@ class GpCategory::TemplateModule < ApplicationRecord
   after_save     GpCategory::Publisher::TemplateModuleCallbacks.new, if: :changed?
   before_destroy GpCategory::Publisher::TemplateModuleCallbacks.new
 
-  validates :name, presence: true, uniqueness: { scope: :content_id },
+  validates :name, presence: true, uniqueness: { scope: :content_id, case_sensitive: false },
                    format: { with: /\A[0-9A-Za-z\-_]+\z/, if: -> { name.present? } }
   validates :title, presence: true
 

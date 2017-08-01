@@ -1,23 +1,20 @@
 class Organization::Publisher::GroupCallbacks < PublisherCallbacks
-  def after_save(group)
+  def enqueue(group)
     @group = group
-    enqueue if enqueue?
-  end
-
-  def before_destroy(group)
-    @group = group
-    enqueue if enqueue?
-  end
-
-  def enqueue(group = nil)
-    @group = group if group
+    return unless enqueue?
+    enqueue_pieces
     enqueue_groups
   end
 
   private
 
   def enqueue?
-    true
+    return unless super
+    [@group.state, @group.state_was].include?('public')
+  end
+
+  def enqueue_pieces
+    Cms::Publisher::PieceCallbacks.new.enqueue(@group.content.public_pieces)
   end
 
   def enqueue_groups

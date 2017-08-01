@@ -1,6 +1,7 @@
 class BizCalendar::BussinessHour < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
+  include Cms::Model::Site
   include Cms::Model::Auth::Content
   include BizCalendar::Model::Base::Date
 
@@ -15,6 +16,8 @@ class BizCalendar::BussinessHour < ApplicationRecord
 
   belongs_to :place,  :foreign_key => :place_id, :class_name => 'BizCalendar::Place'
 
+  delegate :content, to: :place
+
   validates :state, :business_hours_start_time, :business_hours_end_time, :end_type, presence: true
   validate :dates_range
   validate :repeat_setting
@@ -22,8 +25,10 @@ class BizCalendar::BussinessHour < ApplicationRecord
 
   after_initialize :set_defaults
 
-  after_save     Cms::Publisher::ContentRelatedCallbacks.new, if: :changed?
-  before_destroy Cms::Publisher::ContentRelatedCallbacks.new
+  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
+
+  define_site_scope :place
 
   scope :public_state, -> { where(state: 'public') }
   scope :search_with_params, ->(params = {}) {
@@ -192,10 +197,6 @@ class BizCalendar::BussinessHour < ApplicationRecord
     @repeat_dates = _dates.select {|d| d >= sdate } if sdate
 
     return sdate.blank? ? @all_repeat_dates : @repeat_dates
-  end
-
-  def content
-    place.content
   end
 
   def state_public?

@@ -1,6 +1,7 @@
 class Reception::Applicant < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
+  include Cms::Model::Site
   include Cms::Model::Auth::Content
 
   STATE_OPTIONS = [['申込','applied'],['受付','received'],['キャンセル','canceled']]
@@ -12,6 +13,9 @@ class Reception::Applicant < ApplicationRecord
 
   belongs_to :open
   has_one :applicant_token, dependent: :destroy
+
+  delegate :course, to: :open
+  delegate :content, to: :course
 
   before_save :set_applied_at
 
@@ -33,6 +37,8 @@ class Reception::Applicant < ApplicationRecord
   validate :validate_capacity_for_admin, if: :in_register_from_admin
   validate :validate_capacity_for_public, if: :in_register_from_public
 
+  define_site_scope :open
+
   scope :received_state, -> { where(state: 'received') }
   scope :canceled_state, -> { where(state: 'canceled') }
   scope :search_with_criteria, ->(criteria) {
@@ -43,14 +49,6 @@ class Reception::Applicant < ApplicationRecord
     end
     rel
   }
-
-  def content
-    course.content
-  end
-
-  def course
-    open.course
-  end
 
   def state_text
     STATE_OPTIONS.rassoc(state).try(:first)

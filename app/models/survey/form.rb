@@ -1,16 +1,19 @@
 class Survey::Form < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
+  include Sys::Model::Rel::EditableGroup
   include Sys::Model::Rel::Task
+  include Cms::Model::Site
+  include Cms::Model::Base::Sitemap
+  include Cms::Model::Rel::Content
   include Cms::Model::Auth::Content
+  include Sys::Model::Auth::EditableGroup
 
   include Approval::Model::Rel::Approval
 
   include StateText
 
-  STATE_OPTIONS = [['下書き保存', 'draft'], ['承認依頼', 'approvable'], ['即時公開', 'public']]
   CONFIRMATION_OPTIONS = [['あり', true], ['なし', false]]
-  SITEMAP_STATE_OPTIONS = [['表示', 'visible'], ['非表示', 'hidden']]
   INDEX_LINK_OPTIONS = [['表示', 'visible'], ['非表示', 'hidden']]
 
   default_scope { order("#{self.table_name}.sort_no IS NULL, #{self.table_name}.sort_no") }
@@ -28,41 +31,14 @@ class Survey::Form < ApplicationRecord
   validates :state, presence: true
   validates :name, presence: true, uniqueness: { scope: :content_id }, format: { with: /\A[-\w]*\z/ }
   validates :title, presence: true
+  validates :mail_to, format: { with: /\A.+@.+\z/ }, if: -> { mail_to.present? }
 
   after_initialize :set_defaults
 
-  after_save     Cms::Publisher::ContentRelatedCallbacks.new, if: :changed?
-  before_destroy Cms::Publisher::ContentRelatedCallbacks.new
+  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
 
   scope :public_state, -> { where(state: 'public') }
-
-  def self.all_with_content_and_criteria(content, criteria)
-    forms = self.arel_table
-
-    rel = self.where(forms[:content_id].eq(content.id))
-    rel = rel.where(forms[:state].eq(criteria[:state])) if criteria[:state].present?
-
-    if criteria[:touched_user_id].present? || criteria[:editable].present?
-      creators = Sys::Creator.arel_table
-      rel = rel.joins(:creator)
-    end
-
-    if criteria[:touched_user_id].present?
-      operation_logs = Sys::OperationLog.arel_table
-      rel = rel.eager_load(:operation_logs).where(operation_logs[:user_id].eq(criteria[:touched_user_id])
-                                                .or(creators[:user_id].eq(criteria[:touched_user_id])))
-    end
-
-    if criteria[:approvable].present?
-      approval_requests = Approval::ApprovalRequest.arel_table
-      assignments = Approval::Assignment.arel_table
-      rel = rel.joins(:approval_requests => [:approval_flow => [:approvals => :assignments]])
-               .where(approval_requests[:user_id].eq(Core.user.id)
-                      .or(assignments[:user_id].eq(Core.user.id))).distinct
-    end
-
-    return rel
-  end
 
   def public_questions
     questions.public_state
@@ -80,20 +56,6 @@ class Survey::Form < ApplicationRecord
     return nil
   end
 
-  def open?
-    now = Time.now
-    return false if opened_at && opened_at > now
-    return false if closed_at && closed_at < now
-    return true
-  end
-
-  def state_options
-    options = STATE_OPTIONS.clone
-    options.reject!{|o| o.last == 'public' } unless Core.user.has_auth?(:manager)
-    options.reject!{|o| o.last == 'approvable' } unless content.approval_related?
-    return options
-  end
-
   def state_draft?
     state == 'draft'
   end
@@ -106,8 +68,16 @@ class Survey::Form < ApplicationRecord
     state == 'approved'
   end
 
+  def state_prepared?
+    state == 'prepared'
+  end
+
   def state_public?
     state == 'public'
+  end
+
+  def state_closed?
+    state == 'closed'
   end
 
   def duplicate
@@ -133,15 +103,22 @@ class Survey::Form < ApplicationRecord
     return item
   end
 
+  def publishable?
+    (state_approved? || state_prepared?) && (editable? || approval_participators.include?(Core.user))
+  end
+
+  def closable?
+    state_public? && editable?
+  end
+
   def publish
-    return unless state_approved?
-    approval_requests.destroy_all
-    update_column(:state, 'public')
+    return if !state_approved? && !state_prepared?
+    update_attributes(state: 'public')
   end
 
   def close
     return unless state_public?
-    update_column(:state, 'closed')
+    update_attributes(state: 'closed')
   end
 
   def public_uri(with_closed_preview: false)
@@ -162,10 +139,6 @@ class Survey::Form < ApplicationRecord
     "#{site.main_admin_uri}#{path}"
   end
 
-  def sitemap_visible?
-    self.sitemap_state == 'visible'
-  end
-
   def index_visible?
     self.index_link != 'hidden'
   end
@@ -173,9 +146,7 @@ class Survey::Form < ApplicationRecord
   private
 
   def set_defaults
-    self.state        = STATE_OPTIONS.first.last        if self.has_attribute?(:state) && self.state.nil?
     self.confirmation = CONFIRMATION_OPTIONS.first.last if self.has_attribute?(:confirmation) && self.confirmation.nil?
-    self.sitemap_state = SITEMAP_STATE_OPTIONS.first.last if self.has_attribute?(:sitemap_state) && self.sitemap_state.nil?
     self.index_link   = INDEX_LINK_OPTIONS.first.last   if self.has_attribute?(:index_link) && self.index_link.nil?
     self.sort_no      = 10 if self.has_attribute?(:sort_no) && self.sort_no.nil?
   end
