@@ -180,7 +180,7 @@ uri: http://joruri.example.com/    # すべて変更
 
 設定ファイルを作成してリンクを作成します。
 
-    # su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake zomeki:configure RAILS_ENV=production'
+    # su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake joruri:configure RAILS_ENV=production'
     # ln -s /var/www/joruri/config/nginx/nginx.conf /etc/nginx/conf.d/joruri.conf
 
 デフォルトのnginx設定ファイルをリネームします。
