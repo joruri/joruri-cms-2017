@@ -2,25 +2,15 @@
 ## ---------------------------------------------------------
 ## load config
 
-begin
-  load "#{Rails.root}/db/seeds/reset.rb"
-  @create_base = true
-  core_uri   = Util::Config.load :core, :uri
-  core_title = Util::Config.load :core, :title
-  map_key    = Util::Config.load :core, :map_key
+# reset
+load "db/seeds/reset.rb"
 
-  @site = Cms::Site.create!(
-    :state              => 'public',
-    :name               => core_title,
-    :full_uri           => core_uri,
-    :google_map_api_key => map_key,
-    :portal_group_state => 'visible'
-  )
+@site = Cms::Site.create!(
+  :state              => 'public',
+  :name               => Util::Config.load(:core, :uri),
+  :full_uri           => Util::Config.load(:core, :title),
+  :google_map_api_key => Util::Config.load(:core, :map_key)
+)
 
-  load "#{Rails.root}/db/seeds/initialize/base.rb"
-  puts "-- seed/demo success."
-rescue => e
-  puts "----------"
-  puts e.to_s
-  puts e.backtrace.join("\n")
-end
+load "db/seeds/initialize/base.rb"
+puts "-- db:seed success."
