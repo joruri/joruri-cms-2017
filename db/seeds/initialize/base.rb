@@ -22,7 +22,7 @@ cms_group = Sys::Group.new(
   :web_state => 'closed',
   :ldap      => 0,
   :code      => "001",
-  :name      => 'ぞめき',
+  :name      => 'じょうるり',
   :name_en   => 'cms'
 )
 cms_group.save(validate: false)
@@ -32,8 +32,8 @@ first_user = Sys::User.create!(
   :ldap     => 0,
   :auth_no  => 5,
   :name     => 'システム管理者',
-  :account  => "zomeki",
-  :password => 'zomeki'
+  :account  => "joruri",
+  :password => 'joruri'
 )
 
 Sys::UsersGroup.create!(group: cms_group, user: first_user)
