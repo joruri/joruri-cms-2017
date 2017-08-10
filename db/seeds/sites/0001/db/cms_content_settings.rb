@@ -190,7 +190,7 @@ EOS
   content_id: @cms_contents_1.id,
   name: "map_relation",
   value: <<EOS.chomp,
-enabled
+disabled
 EOS
   extra_value: <<EOS.chomp,
 --- !ruby/hash:ActiveSupport::HashWithIndifferentAccess
@@ -461,10 +461,12 @@ category_type_ids:
 - #{@gp_category_category_types_2.id}
 - #{@gp_category_category_types_1.id}
 - #{@gp_category_category_types_3.id}
+- #{@gp_category_category_types_4.id}
 visible_category_type_ids:
 - #{@gp_category_category_types_2.id}
 - #{@gp_category_category_types_1.id}
 - #{@gp_category_category_types_3.id}
+- #{@gp_category_category_types_4.id}
 default_category_type_id: #{@gp_category_category_types_0.id}
 default_category_id: #{@gp_category_categories_0.id}
 
