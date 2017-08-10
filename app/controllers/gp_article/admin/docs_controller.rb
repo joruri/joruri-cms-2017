@@ -7,6 +7,11 @@ class GpArticle::Admin::DocsController < Cms::Controller::Admin::Base
   before_action :hold_document, only: [:edit]
   before_action :check_intercepted, only: [:update]
 
+  before_action :index_options, only: [:index], if: -> { params[:options] }
+  before_action :user_options, only: [:index], if: -> { params[:user_options] }
+
+  keep_params :target, :target_state, :target_public
+
   def pre_dispatch
     @content = GpArticle::Content::Doc.find(params[:content])
     return error_auth unless Core.user.has_priv?(:read, item: @content.concept)
@@ -16,16 +21,13 @@ class GpArticle::Admin::DocsController < Cms::Controller::Admin::Base
   end
 
   def index
-    return index_options if params[:options]
-    return user_options if params[:user_options]
-
     criteria = doc_criteria
-    @items = GpArticle::Doc.distinct.content_and_criteria(@content, criteria)
-                           .order(updated_at: :desc)
-                           .preload(:prev_edition, :content, creator: [:user, :group])
+    @items = GpArticle::DocsFinder.new(@content.docs, Core.user).search(criteria).distinct
+                                  .order(updated_at: :desc)
+                                  .preload(:prev_edition, :content, creator: [:user, :group])
 
     if params[:csv]
-      return export_csv(@items, GpArticle::Model::Criteria.new(criteria))
+      return export_csv(@items, GpArticle::Doc::Criteria.new(criteria))
     else
       @items = @items.paginate(page: params[:page], per_page: 30)
     end
@@ -65,12 +67,13 @@ class GpArticle::Admin::DocsController < Cms::Controller::Admin::Base
       @items = @items.where(users[:id].eq(params[:user_id])) if params[:user_id]
     end
 
-    render 'index_options', layout: false
+    @items = @items.map { |item| [view_context.truncate(item.title, length: 50), item.id] }
+    render html: view_context.options_for_select([nil] + @items), layout: false
   end
 
   def user_options
-    @parent = Sys::Group.find(params[:group_id])
-    render 'user_options', layout: false
+    @group = Sys::Group.find(params[:group_id])
+    render html: view_context.options_from_collection_for_select(@group.users, :id, :name), layout: false
   end
 
   def show
@@ -93,7 +96,7 @@ class GpArticle::Admin::DocsController < Cms::Controller::Admin::Base
     @item.replace_words_with_dictionary
 
     if params[:link_check_in_body]
-      @item.link_check_results = @item.check_links_in_body
+      @item.link_check_results = @item.check_links
       return render :new
     end
 
@@ -104,7 +107,7 @@ class GpArticle::Admin::DocsController < Cms::Controller::Admin::Base
     end
 
     new_state = params.keys.detect{|k| k =~ /^commit_/ }.try(:sub, /^commit_/, '')
-    @item.state = new_state if new_state.present? && @item.class::STATE_OPTIONS.any?{|v| v.last == new_state }
+    @item.state = new_state if new_state.present? && @content.state_options.any?{|v| v.last == new_state }
 
     location = ->(d){ edit_gp_article_doc_url(@content, d) } if @item.state_draft?
     _create(@item, location: location) do
@@ -129,7 +132,7 @@ class GpArticle::Admin::DocsController < Cms::Controller::Admin::Base
     @item.replace_words_with_dictionary
 
     if params[:link_check_in_body]
-      @item.link_check_results = @item.check_links_in_body
+      @item.link_check_results = @item.check_links
       return render :edit
     end
 
@@ -140,7 +143,7 @@ class GpArticle::Admin::DocsController < Cms::Controller::Admin::Base
     end
 
     new_state = params.keys.detect{|k| k =~ /^commit_/ }.try(:sub, /^commit_/, '')
-    @item.state = new_state if new_state.present? && @item.class::STATE_OPTIONS.any?{|v| v.last == new_state }
+    @item.state = new_state if new_state.present? && @content.state_options.any?{|v| v.last == new_state }
 
     location = url_for(action: 'edit') if @item.state_draft?
     _update(@item, location: location) do
@@ -157,34 +160,16 @@ class GpArticle::Admin::DocsController < Cms::Controller::Admin::Base
 
   def destroy
     _destroy(@item) do
-      @item.send_broken_link_notification if @content.notify_broken_link? && @item.backlinks.present?
+      send_broken_link_notification
     end
-  end
-
-  def publish_ruby(item)
-    uri = item.public_uri
-    uri = (uri =~ /\?/) ? uri.gsub(/\?/, 'index.html.r?') : "#{uri}index.html.r"
-    path = "#{item.public_path}.r"
-    item.publish_page(render_public_as_string(uri, site: item.content.site), path: path, dependent: :ruby)
   end
 
   def publish
-    @item.update_attribute(:state, 'public')
-
-    _publish(@item) do
-      publish_ruby(@item)
-      @item.rebuild(render_public_as_string(@item.public_uri, site: @item.content.site, agent_type: :smart_phone),
-                    path: @item.public_smart_phone_path, dependent: :smart_phone)
-    end
-
+    _publish(@item)
   end
 
   def publish_by_update(item)
-    return unless item.terminal_pc_or_smart_phone
-    if item.publish(render_public_as_string(item.public_uri, site: item.content.site))
-      publish_ruby(item)
-      item.rebuild(render_public_as_string(item.public_uri, site: item.content.site, agent_type: :smart_phone),
-                   path: item.public_smart_phone_path, dependent: :smart_phone)
+    if item.publish
       flash[:notice] = '公開処理が完了しました。'
     else
       flash[:alert] = '公開処理に失敗しました。'
@@ -193,7 +178,7 @@ class GpArticle::Admin::DocsController < Cms::Controller::Admin::Base
 
   def close(item)
     _close(@item) do
-      @item.send_broken_link_notification if @content.notify_broken_link? && @item.backlinks.present?
+      send_broken_link_notification
     end
   end
 
@@ -209,11 +194,18 @@ class GpArticle::Admin::DocsController < Cms::Controller::Admin::Base
     if @item.approvers.include?(Core.user)
       @item.approve(Core.user) do
         @item.update_columns(
-          state: (@item.tasks.where(name: 'publish').exists? ? 'prepared' : 'approved'),
+          state: (@item.queued_tasks.where(name: 'publish').exists? ? 'prepared' : 'approved'),
           recognized_at: Time.now
         )
-        @item.set_queues
+        @item.enqueue_tasks
         Sys::OperationLog.log(request, item: @item)
+
+        if @item.state_approved? && @content.publish_after_approved?
+          @item.publish
+          Sys::OperationLog.log(request, item: @item, do: 'publish')
+        end
+
+        @item.send_approved_notification_mail
       end
     end
     redirect_to url_for(:action => :show), notice: '承認処理が完了しました。'
@@ -267,6 +259,15 @@ class GpArticle::Admin::DocsController < Cms::Controller::Admin::Base
 
   def release_document
     @item.holds.destroy_all
+  end
+
+  def send_broken_link_notification
+    return unless @content.notify_broken_link?
+    if @item.state_public? || @item.state_closed?
+      @item.backlinked_items.each do |doc|
+        GpArticle::Admin::Mailer.broken_link_notification(@item, doc).deliver_now
+      end
+    end
   end
 
   private

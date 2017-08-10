@@ -20,11 +20,13 @@ class GpArticle::Content::Setting < Cms::ContentSetting
     form_type: :radio_buttons,
     options: [['使用する', 'enabled'], ['使用しない', 'disabled']],
     default_value: 'enabled',
-    default_extra_values: { feature_1: 'true' }
+    default_extra_values: {
+      feature_1: 'true'
+    }
   set_config :save_button_states, menu: :form,
     name: '即時公開ボタン',
     form_type: :check_boxes,
-    options: GpArticle::Doc::STATE_OPTIONS.reject { |o| o.last != 'public' },
+    options: GpArticle::Content::Doc::STATE_OPTIONS.reject { |o| o.last != 'public' },
     default_value: ['public']
   set_config :inquiry_setting, menu: :form,
     name: '連絡先',
@@ -35,6 +37,7 @@ class GpArticle::Content::Setting < Cms::ContentSetting
     },
     default_value: 'enabled',
     default_extra_values: {
+      state: 'hidden',
       inquiry_title: 'お問い合わせ',
       inquiry_style: '@name@@address@@tel@@fax@@email_link@'
     }
@@ -50,6 +53,14 @@ class GpArticle::Content::Setting < Cms::ContentSetting
     name: "本文/単語変換辞書",
     form_type: :text,
     lower_text: "CSV形式（例　対象文字,変換後文字 ）"
+  set_config :map_setting, menu: :form,
+    name: '地図設定',
+    form_type: :radio_buttons,
+    options: [['使用する', 'enabled'], ['使用しない', 'disabled']],
+    default_value: 'enabled',
+    default_extra_values: {
+      lat_lng: ''
+    }
 
   # menu: :index
   set_config :pagination_label, menu: :index,
@@ -71,9 +82,10 @@ class GpArticle::Content::Setting < Cms::ContentSetting
     default_extra_values: {
       doc_list_style: 'by_date',
       doc_list_number: 30,
+      doc_list_period: nil,
       doc_publish_more_pages: 10,
       doc_weekly_style: '%Y年%m月%d日',
-      doc_monthly_style: '%Y年%m月',
+      doc_monthly_style: '%Y年%m月'
     }
   set_config :docs_order, menu: :index,
     name: '記事一覧表示順',
@@ -88,7 +100,9 @@ class GpArticle::Content::Setting < Cms::ContentSetting
       wrapper_tag_options: [['li', 'li'], ['article', 'article']]
     },
     default_value: '@title_link@(@publish_date@ @group@)',
-    default_extra_values: { wrapper_tag: 'li' }
+    default_extra_values: {
+      wrapper_tag: 'li'
+    }
   set_config :date_style, menu: :index,
     name: "#{GpArticle::Doc.model_name.human}日時形式",
     comment: I18n.t('comments.date_style').html_safe,
@@ -102,21 +116,30 @@ class GpArticle::Content::Setting < Cms::ContentSetting
     form_type: :radio_buttons,
     options: [['表示する', 'enabled'], ['表示しない', 'disabled']],
     default_value: 'disabled',
-    default_extra_values: { feed_docs_number: '10' }
+    default_extra_values: {
+      feed_docs_number: '10',
+      feed_docs_period: nil
+    }
 
   # menu: :page
   set_config :basic_setting, menu: :page,
     name: 'レイアウト設定',
     options: lambda { Core.site.public_concepts_for_option.to_a },
-    lower_text: "未設定の場合、記事ディレクトリの設定が記事へ反映されます"
+    lower_text: "未設定の場合、記事ディレクトリの設定が記事へ反映されます",
+    default_extra_values: {
+      default_layout_id: nil
+    }
   set_config :serial_no_settings, menu: :page,
     name: '記事番号表示',
     form_type: :radio_buttons,
     options: [['使用する', 'enabled'], ['使用しない', 'disabled']],
-    default_value: 'disabled'
+    default_value: 'disabled',
+    default_extra_values: {
+      title: ''
+    }
   set_config :display_dates, menu: :page,
     name: '記事日時表示',
-    options: [['公開日', 'published_at'], ['最終更新日', 'updated_at']],
+    options: [['公開日', 'published_at'], ['更新日', 'updated_at']],
     form_type: :check_boxes,
     default_value: ['published_at', 'updated_at']
   set_config :rel_docs_style, menu: :page,
@@ -132,7 +155,9 @@ class GpArticle::Content::Setting < Cms::ContentSetting
       default_state_options: [['表示', 'visible'], ['非表示', 'hidden']]
     },
     default_value: 'disabled',
-    default_extra_values: { state: 'hidden' }
+    default_extra_values: {
+      state: 'hidden'
+    }
 
   # menu: :manage
   set_config :broken_link_notification, menu: :manage,
@@ -144,33 +169,60 @@ class GpArticle::Content::Setting < Cms::ContentSetting
   # menu: :relation
   set_config :gp_category_content_category_type_id, menu: :relation,
     name: 'カテゴリ',
-    options: lambda { GpCategory::Content::CategoryType.where(site_id: Core.site.id).map { |ct| [ct.name, ct.id] } }
+    options: lambda { GpCategory::Content::CategoryType.where(site_id: Core.site.id).map { |ct| [ct.name, ct.id] } },
+    default_extra_values: {
+      category_type_ids: [],
+      visible_category_type_ids: [],
+      default_category_type_id: nil,
+      default_category_id: nil
+    }
   set_config :map_relation, menu: :relation,
     name: '地図',
     form_type: :radio_buttons,
     options: [['使用する', 'enabled'], ['使用しない', 'disabled']],
-    default_value: 'enabled'
+    default_value: 'disabled',
+    default_extra_values: {
+      map_content_id: nil,
+      marker_icon_category: 'disabled'
+    }
   set_config :tag_relation, menu: :relation,
     name: '関連ワード',
     form_type: :radio_buttons,
     options: [['使用する', 'enabled'], ['使用しない', 'disabled']],
-    default_value: 'enabled'
+    default_value: 'disabled',
+    default_extra_values: {
+      tag_content_tag_id: nil
+    }
   set_config :approval_relation, menu: :relation,
     name: '承認フロー',
     form_type: :radio_buttons,
     options: [['使用する', 'enabled'], ['使用しない', 'disabled']],
-    default_value: 'enabled'
+    extra_options: {
+      publish_after_approved_options: [['使用する', 'enabled'], ['使用しない', 'disabled']]
+    },
+    default_value: 'disabled',
+    default_extra_values: {
+      approval_content_id: nil,
+      publish_after_approved: 'disabled'
+    }
   set_config :calendar_relation, menu: :relation,
     name: 'カレンダー',
     form_type: :radio_buttons,
     options: [['使用する', 'enabled'], ['使用しない', 'disabled']],
-    default_value: 'enabled'
+    default_value: 'disabled',
+    default_extra_values: {
+      calendar_content_id: nil
+    }
   set_config :organization_content_group_id, menu: :relation,
     name: '組織',
     options: lambda { Organization::Content::Group.where(site_id: Core.site.id).map { |g| [g.name, g.id] } }
   set_config :gp_template_content_template_id, menu: :relation,
     name: 'テンプレート',
-    options: lambda { GpTemplate::Content::Template.where(site_id: Core.site.id).map { |t| [t.name, t.id] } }
+    options: lambda { GpTemplate::Content::Template.where(site_id: Core.site.id).map { |t| [t.name, t.id] } },
+    default_extra_values: {
+      template_ids: [],
+      default_template_id: nil
+    }
 
   belongs_to :content, foreign_key: :content_id, class_name: 'GpArticle::Content::Doc'
 
@@ -179,22 +231,32 @@ class GpArticle::Content::Setting < Cms::ContentSetting
 
   validate :validate_doc_list_pagination, if: -> { name == 'doc_list_pagination' }
 
+  def value_name
+    case name
+    when 'basic_setting'
+      Cms::Layout.find_by(id: default_layout_id).try!(:concept_name_and_title)
+    else
+      super
+    end
+  end
+
   def extra_values=(params)
     ex = extra_values
     case name
     when 'gp_category_content_category_type_id'
-      ex[:category_type_ids] = (params[:category_types] || []).map {|ct| ct.to_i }
-      ex[:visible_category_type_ids] = (params[:visible_category_types] || []).map {|ct| ct.to_i }
-      ex[:default_category_type_id] = params[:default_category_type].to_i
-      ex[:default_category_id] = params[:default_category].to_i
+      ex[:category_type_ids] = params[:category_type_ids].to_a.map(&:to_i)
+      ex[:visible_category_type_ids] = params[:visible_category_type_ids].to_a.map(&:to_i)
+      ex[:default_category_type_id] = params[:default_category_type_id].to_i
+      ex[:default_category_id] = params[:default_category_id].to_i
     when 'basic_setting'
       ex[:default_layout_id] = params[:default_layout_id].to_i
     when 'calendar_relation'
       ex[:calendar_content_id] = params[:calendar_content_id].to_i
     when 'map_relation'
       ex[:map_content_id] = params[:map_content_id].to_i
-      ex[:lat_lng] = params[:lat_lng]
       ex[:marker_icon_category] = params[:marker_icon_category]
+    when 'map_setting'
+      ex[:lat_lng] = params[:lat_lng]
     when 'inquiry_setting'
       ex[:state] = params[:state]
       ex[:display_fields] = params[:display_fields] || []
@@ -202,6 +264,7 @@ class GpArticle::Content::Setting < Cms::ContentSetting
       ex[:inquiry_style] = params[:inquiry_style]
     when 'approval_relation'
       ex[:approval_content_id] = params[:approval_content_id].to_i
+      ex[:publish_after_approved] = params[:publish_after_approved]
     when 'gp_template_content_template_id'
       ex[:template_ids] = params[:template_ids].to_a.map(&:to_i)
       ex[:default_template_id] = params[:default_template_id].to_i
@@ -224,6 +287,7 @@ class GpArticle::Content::Setting < Cms::ContentSetting
     when 'doc_list_pagination'
       ex[:doc_list_style]    = params[:doc_list_style]
       ex[:doc_list_number]   = params[:doc_list_number]
+      ex[:doc_list_period]   = params[:doc_list_period]
       ex[:doc_weekly_style] = params[:doc_weekly_style]
       ex[:doc_monthly_style] = params[:doc_monthly_style]
       ex[:doc_publish_more_pages] = params[:doc_publish_more_pages]
@@ -263,10 +327,6 @@ class GpArticle::Content::Setting < Cms::ContentSetting
 
   def default_template_id
     extra_values[:default_template_id] || 0
-  end
-
-  def default_layout_id
-    extra_values[:default_layout_id] || 0
   end
 
   private

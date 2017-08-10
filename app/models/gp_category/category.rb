@@ -2,16 +2,16 @@ class GpCategory::Category < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
   include Sys::Model::Tree
+  include Cms::Model::Site
   include Cms::Model::Auth::Content
   include Cms::Model::Base::Page
   include Cms::Model::Base::Page::Publisher
   include Cms::Model::Base::Page::TalkTask
+  include Cms::Model::Base::Sitemap
 
   include StateText
-  include GpCategory::Categories::Preload
 
   STATE_OPTIONS = [['公開', 'public'], ['非公開', 'closed']]
-  SITEMAP_STATE_OPTIONS = [['表示', 'visible'], ['非表示', 'hidden']]
   DOCS_ORDER_OPTIONS = [['上位設定を継承', ''],
                         ['公開日（降順）', 'display_published_at DESC, published_at DESC'], ['公開日（昇順）', 'display_published_at ASC, published_at ASC'],
                         ['更新日（降順）', 'display_updated_at DESC, updated_at DESC'], ['更新日（昇順）', 'display_updated_at ASC, updated_at ASC']]
@@ -51,6 +51,10 @@ class GpCategory::Category < ApplicationRecord
   has_many :public_children, -> { public_state },
     :foreign_key => :parent_id, :class_name => self.name
 
+  delegate :content, to: :category_type
+  delegate :site, to: :content
+  delegate :site_id, to: :content
+
   after_initialize :set_defaults
 
   before_validation :set_attributes_from_parent
@@ -62,12 +66,9 @@ class GpCategory::Category < ApplicationRecord
   scope :public_state, -> { where(state: 'public') }
 
   after_update :move_published_files
-  after_update :clean_published_files
   after_destroy :clean_published_files
 
-  def content
-    category_type.content
-  end
+  define_site_scope :category_type
 
   def descendants(categories=[])
     categories << self
@@ -76,12 +77,11 @@ class GpCategory::Category < ApplicationRecord
   end
 
   def descendants_ids
-    preload_assocs(:descendants_assocs)
-    descendants.map {|c| c.id }
+    descendants_with_preload.map(&:id)
   end
 
   def descendants_with_preload
-    preload_assocs(:descendants_assocs)
+    GpCategory::CategoriesPreloader.new(self).preload(:descendants)
     descendants
   end
 
@@ -93,12 +93,11 @@ class GpCategory::Category < ApplicationRecord
   end
 
   def public_descendants_ids
-    preload_assocs(:public_descendants_assocs)
-    public_descendants.map {|c| c.id }
+    public_descendants_with_preload.map(&:id)
   end
 
   def public_descendants_with_preload
-    preload_assocs(:public_descendants_assocs)
+    GpCategory::CategoriesPreloader.new(self).preload(:public_descendants)
     public_descendants
   end
 
@@ -148,10 +147,6 @@ class GpCategory::Category < ApplicationRecord
     docs.order(inherited_docs_order).mobile(::Page.mobile?).public_state
   end
 
-  def sitemap_visible?
-    self.sitemap_state == 'visible'
-  end
-
   def public_path
     return '' if (path = category_type.public_path).blank?
     "#{path}#{path_from_root_category}/"
@@ -199,7 +194,6 @@ class GpCategory::Category < ApplicationRecord
 
   def set_defaults
     self.state         = STATE_OPTIONS.first.last         if self.has_attribute?(:state) && self.state.nil?
-    self.sitemap_state = SITEMAP_STATE_OPTIONS.first.last if self.has_attribute?(:sitemap_state) && self.sitemap_state.nil?
     self.docs_order    = DOCS_ORDER_OPTIONS.first.last    if self.has_attribute?(:docs_order) && self.docs_order.nil?
     self.sort_no = 10 if self.has_attribute?(:sort_no) && self.sort_no.nil?
   end
@@ -243,6 +237,20 @@ class GpCategory::Category < ApplicationRecord
     order_text.split(',').each_with_object({}) do |order, hash|
       key, value = order.strip.split(' ')
       hash.merge!(key => value)
+    end
+  end
+
+  class << self
+    def public_docs_for_template_module(category, template_module, mobile: false)
+      category_ids = case template_module.module_type
+                     when 'docs_1', 'docs_3', 'docs_5', 'docs_7', 'docs_8'
+                       category.public_descendants_ids
+                     when 'docs_2', 'docs_4', 'docs_6'
+                       [category.id]
+                     end
+      docs = GpArticle::Doc.categorized_into(category_ids).except(:order).mobile(mobile).public_state
+      docs = docs.where(content_id: template_module.gp_article_content_ids) if template_module.gp_article_content_ids.present?
+      docs
     end
   end
 end

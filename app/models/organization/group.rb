@@ -1,15 +1,16 @@
 class Organization::Group < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
+  include Cms::Model::Site
   include Cms::Model::Base::Page::Publisher
-
+  include Cms::Model::Base::Page::TalkTask
+  include Cms::Model::Base::Sitemap
+  include Cms::Model::Rel::Content
   include Cms::Model::Auth::Content
 
   include StateText
-  include Organization::Groups::Preload
 
   STATE_OPTIONS = [['公開', 'public'], ['非公開', 'closed']]
-  SITEMAP_STATE_OPTIONS = [['表示', 'visible'], ['非表示', 'hidden']]
   DOCS_ORDER_OPTIONS = [['上位設定を継承', ''],
                         ['公開日（降順）', 'display_published_at DESC, published_at DESC'],
                         ['公開日（昇順）', 'display_published_at ASC, published_at ASC'],
@@ -37,8 +38,8 @@ class Organization::Group < ApplicationRecord
   validate :name_uniqueness_in_siblings
 
   scope :public_state, -> { where(state: 'public') }
-  scope :with_layout, ->(layout_id) {
-    conds = [:layout_id, :more_layout_id].map { |c| arel_table[c].eq(layout_id) }
+  scope :with_layout, ->(layout_ids) {
+    conds = [:layout_id, :more_layout_id].map { |c| arel_table[c].in(layout_ids) }
     where(conds.reduce(:or))
   }
 
@@ -57,10 +58,6 @@ class Organization::Group < ApplicationRecord
 
   def public_children
     children.public_state
-  end
-
-  def sitemap_state_text
-    SITEMAP_STATE_OPTIONS.detect{|o| o.last == self.sitemap_state }.try(:first).to_s
   end
 
   def docs_order_text
@@ -127,12 +124,6 @@ class Organization::Group < ApplicationRecord
     Cms::Lib::BreadCrumbs.new(crumbs)
   end
 
-  def rebuild(content, options={})
-    return false unless self.public?
-    @save_mode = :publish
-    publish_page(content, options)
-  end
-
   def public_smart_phone_path
     return '' unless public_uri
     "#{content.site.public_path}/_smartphone#{public_uri}"
@@ -152,7 +143,6 @@ class Organization::Group < ApplicationRecord
 
   def set_defaults
     self.state = STATE_OPTIONS.first.last if self.has_attribute?(:state) && self.state.nil?
-    self.sitemap_state = SITEMAP_STATE_OPTIONS.first.last if self.has_attribute?(:sitemap_state) && self.sitemap_state.nil?
     self.docs_order = '' if self.has_attribute?(:docs_order) && self.docs_order.nil?
     self.sort_no = 10 if self.has_attribute?(:sort_no) && self.sort_no.nil?
   end

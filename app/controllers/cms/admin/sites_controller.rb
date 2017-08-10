@@ -41,7 +41,7 @@ class Cms::Admin::SitesController < Cms::Controller::Admin::Base
     @item.attributes = site_params
     _update @item do
       update_configs
-      FileUtils.rm_rf Pathname.new(@item.public_smart_phone_path).children if ::File.exist?(@item.public_smart_phone_path) && !@item.publish_for_smart_phone?
+      FileUtils.rm_rf Pathname.new(@item.public_smart_phone_path).children if ::File.exist?(@item.public_smart_phone_path) && !@item.smart_phone_publication?
     end
   end
 
@@ -67,7 +67,8 @@ class Cms::Admin::SitesController < Cms::Controller::Admin::Base
     params.require(:item).permit(
       :body, :full_uri, :mobile_full_uri, :admin_full_uri,
       :name, :og_description, :og_image, :og_title, :og_type, :related_site,
-      :smart_phone_layout, :smart_phone_publication, :spp_target, :site_image, :del_site_image, :google_map_api_key,
+      :smart_phone_layout, :smart_phone_publication, :spp_target, :mobile_feature,
+      :site_image, :del_site_image, :google_map_api_key,
       :in_root_group_id,
       :creator_attributes => [:id, :group_id, :user_id]
     )

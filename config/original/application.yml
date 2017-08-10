@@ -5,21 +5,19 @@ sys:
   # 承認者候補に他所属の管理者を表示
   recognizers_include_admin: false
 
-  # 静的ファイルの書き出しを無効化
-  clean_statics: false
-
-  # 書き出しファイル転送設定
-  log_closed_page: false
-  transfer_to_publish: false
-  transfer_opts: "-rlptvz --delete"
-  transfer_opt_exclude: "config/rsync/public_exclude.lst"
-  transfer_opt_include: "config/rsync/public_include.lst"
-  transfer_opt_remote_shell: "ssh -p 22"
-
   # ファイルからのテキスト抽出
   file_text_extraction: false
 
 cms:
+  # 静的ファイルの書き出し
+  file_publisher: true
+
+  # ファイル転送機能
+  file_transfer: false
+
+  # 検索インデックス機能
+  search_indexer: false
+
   # ページ数付きページ書き出し数
   publish_more_pages: 10
 
@@ -45,6 +43,8 @@ cms:
   default_map_coordinate: "34.074598,134.551411"
 
 gp_article:
+  # 本文文字数制限
+  body_limit: 500000
   # 携帯用内容制限[Bytes]
   body_limit_for_mobile: 163840
 

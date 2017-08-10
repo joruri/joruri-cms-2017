@@ -1,5 +1,6 @@
 class Survey::Question < ApplicationRecord
   include Sys::Model::Base
+  include Cms::Model::Site
   include Cms::Model::Auth::Content
 
   include StateText
@@ -15,17 +16,17 @@ class Survey::Question < ApplicationRecord
   belongs_to :form
   validates :form_id, presence: true
 
+  delegate :content, to: :form
+
   validates :state, presence: true
   validates :title, presence: true
   validates :sort_no, presence: true
 
   after_initialize :set_defaults
 
-  scope :public_state, -> { where(state: 'public') }
+  define_site_scope :form
 
-  def content
-    form.content
-  end
+  scope :public_state, -> { where(state: 'public') }
 
   def form_options_for_select
     form_options.gsub("\r\n", "\n").gsub("\r", "\n").split("\n")

@@ -2,6 +2,7 @@ class Reception::Open < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
   include Sys::Model::Rel::Task
+  include Cms::Model::Site
   include Cms::Model::Auth::Content
 
   include StateText
@@ -11,15 +12,19 @@ class Reception::Open < ApplicationRecord
   belongs_to :course
   has_many :applicants, dependent: :destroy
 
-  after_save :save_tasks
+  delegate :content, to: :course
 
-  after_save     Cms::Publisher::ContentRelatedCallbacks.new, if: :changed?
-  before_destroy Cms::Publisher::ContentRelatedCallbacks.new
+  before_save :prepare_expire_task
+
+  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
 
   validates :title, presence: true
   validates :open_on, presence: true
   validates :start_at, presence: true
   validates :end_at, presence: true
+
+  define_site_scope :course
 
   scope :public_state, -> { where(state: 'public' ) }
   scope :order_by_open_at, -> { order(:open_on, :start_at, :end_at) }
@@ -36,10 +41,6 @@ class Reception::Open < ApplicationRecord
       courses[:capacity].gt(arel_table[:received_applicants_count]),
     ].reduce(:or))
   }
-
-  def content
-    course.content
-  end
 
   def open_at_text
     if open_on && start_at && end_at
@@ -63,6 +64,10 @@ class Reception::Open < ApplicationRecord
 
   def state_public?
     state == 'public'
+  end
+
+  def state_closed?
+    state == 'closed'
   end
 
   def available_period?(time = Time.now)
@@ -90,9 +95,7 @@ class Reception::Open < ApplicationRecord
   end
 
   def expire
-    # to publish piece
-    self.updated_at = Time.now
-    save
+    Cms::Publisher::ContentCallbacks.new(belonged: true).enqueue(self)
   end
 
   def update_received_applicants_count
@@ -101,11 +104,13 @@ class Reception::Open < ApplicationRecord
 
   private
 
-  def save_tasks
+  def prepare_expire_task
     return if !state_public? || !expired_at
 
-    task = tasks.where(name: 'expire').first_or_initialize
+    task = Sys::Task.where(processable: self, name: 'expire').first_or_initialize
+    task.state = 'queued'
+    task.site_id = content.site_id
     task.process_at = expired_at
-    task.save
+    self.tasks_attributes = task.attributes
   end
 end

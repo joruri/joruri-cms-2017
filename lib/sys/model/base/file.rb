@@ -5,7 +5,17 @@ module Sys::Model::Base::File
                           ['480px', '480'],['640px', '640'], ['800px', '800'], ['1280px', '1280'],
                           ['1600px', '1600'], ['1920px', '1920']]
 
+  @@_maxsize = 50 # MegaBytes
+  @@_thumbnail_size = { width: 120, height: 90 }
+
+  attr_accessor :file, :allowed_type, :image_resize
+
   included do
+    include Sys::Model::Auth::Free
+    include Sys::Model::TextExtraction
+
+    alias :path :upload_path
+
     validates :file, presence: true, unless: :skip_upload?
     validates :name, :title, presence: true
     validate :validate_file_name
@@ -14,20 +24,10 @@ module Sys::Model::Base::File
     after_save :upload_internal_file
     after_destroy :remove_internal_file
 
-    alias :path :upload_path
-    include Sys::Model::TextExtraction
+    define_model_callbacks :save_files, :remove_files
+    after_save_files Cms::FileTransferCallbacks.new(:upload_path, recursive: true)
+    after_remove_files Cms::FileTransferCallbacks.new(:upload_path, recursive: true)
   end
-
-  class_methods do
-    def readable; all; end
-    def editable; all; end
-    def deletable; all; end
-  end
-
-  @@_maxsize = 50 # MegaBytes
-  @@_thumbnail_size = { width: 120, height: 90 }
-
-  attr_accessor :file, :allowed_type, :image_resize
 
   def skip_upload(skip=true)
     @skip_upload = skip
@@ -111,7 +111,7 @@ module Sys::Model::Base::File
   def validate_upload_file
     return true if file.blank?
 
-    maxsize = @maxsize || Core.site.try(:setting_site_file_upload_max_size) || 5
+    maxsize = @maxsize || Core.site.try(:file_upload_max_size) || 5
 
     if Core.site
       ext = ::File.extname(name.to_s).downcase
@@ -190,22 +190,6 @@ module Sys::Model::Base::File
     id_file = options[:type] ? options[:type].to_s : format('%07d', id)
     id_file += '.dat'
     Rails.root.join("#{site_dir}/upload/#{md_dir}/#{id_dir}/#{id_file}").to_s
-  end
-
-  def readable?
-    true
-  end
-
-  def creatable?
-    true
-  end
-
-  def editable?
-    true
-  end
-
-  def deletable?
-    true
   end
 
   def image_file?
@@ -352,20 +336,19 @@ module Sys::Model::Base::File
 
   ## filter/aftar_save
   def upload_internal_file
-    Util::File.put(upload_path, :data => @file_content, :mkdir => true) unless @file_content.nil?
-
-    if @thumbnail_image
-      thumb_path = ::File.dirname(upload_path) + "/thumb.dat"
-      Util::File.put(thumb_path, :data => @thumbnail_image.to_blob, :mkdir => true)
+    run_callbacks :save_files do
+      Util::File.put(upload_path, data: @file_content, mkdir: true) unless @file_content.nil?
+      Util::File.put(upload_path(type: :thumb), data: @thumbnail_image.to_blob, mkdir: true) if @thumbnail_image
+      true
     end
-
-    return true
   end
 
   ## filter/aftar_destroy
   def remove_internal_file
-    FileUtils.remove_entry_secure(upload_path) if ::File.exist?(upload_path)
-    FileUtils.remove_entry_secure(upload_path(type: :thumb)) if ::File.exist?(upload_path(type: :thumb))
-    return true
+    run_callbacks :remove_files do
+      FileUtils.remove_entry_secure(upload_path) if ::File.exist?(upload_path)
+      FileUtils.remove_entry_secure(upload_path(type: :thumb)) if ::File.exist?(upload_path(type: :thumb))
+      true
+    end
   end
 end

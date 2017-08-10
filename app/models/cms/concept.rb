@@ -3,6 +3,8 @@ class Cms::Concept < ApplicationRecord
   include Sys::Model::Rel::Creator
   include Sys::Model::Tree
   include Sys::Model::Base::Page
+  include Cms::Model::Site
+  include Cms::Model::Rel::Site
   include Cms::Model::Auth::Site
 
   include StateText
@@ -12,7 +14,6 @@ class Cms::Concept < ApplicationRecord
   has_many :public_children, -> { where(state: 'public').order(:sort_no) },
     foreign_key: :parent_id, class_name: self.name
 
-  belongs_to :site
   belongs_to :parent, foreign_key: :parent_id, class_name: self.name
 
   has_many :layouts, -> { order(:name) },
@@ -58,6 +59,12 @@ class Cms::Concept < ApplicationRecord
     end
 
     rel.order(:sort_no)
+  end
+
+  def readable_descendants(site = Core.site, user = Core.user, concepts = [])
+    concepts << self
+    readable_children(site, user).each { |c| c.readable_descendants(site, user, concepts) }
+    concepts
   end
 
   def self.find_by_path(path)

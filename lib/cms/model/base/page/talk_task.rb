@@ -1,14 +1,16 @@
 require 'digest/md5'
 module Cms::Model::Base::Page::TalkTask
-  def self.included(mod)
-    mod.has_many :talk_tasks, class_name: 'Cms::TalkTask', dependent: :destroy, as: :talk_processable
-    mod.after_save :delete_talk_tasks
+  extend ActiveSupport::Concern
+
+  included do
+    has_many :talk_tasks, class_name: 'Cms::TalkTask', dependent: :destroy, as: :talk_processable
+    #after_save :delete_talk_tasks
   end
 
   def publish_page(content, options = {})
     return false unless super
     return true if options[:dependent].to_s =~ %r{smart_phone$}
-    pub = publishers.where(dependent: options[:dependent] ? options[:dependent].to_s : nil).first
+    pub = publishers.where(dependent: options[:dependent].to_s).first
     return true unless pub
     return true if pub.path !~ /\.html\z/
     return true unless pub.site.use_talk?
@@ -31,6 +33,12 @@ module Cms::Model::Base::Page::TalkTask
       task.site_id      = pub.site_id
       task.save
     end
+    return true
+  end
+
+  def close_page(options = {})
+    return false unless super
+    talk_tasks.destroy_all
     return true
   end
 

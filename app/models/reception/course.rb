@@ -2,6 +2,8 @@ class Reception::Course < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
   include Sys::Model::Rel::File
+  include Cms::Model::Site
+  include Cms::Model::Rel::Content
   include Cms::Model::Auth::Content
   include GpCategory::Model::Rel::Category
 
@@ -18,8 +20,8 @@ class Reception::Course < ApplicationRecord
   before_save :set_defaults
   after_save :set_name
 
-  after_save     Cms::Publisher::ContentRelatedCallbacks.new, if: :changed?
-  before_destroy Cms::Publisher::ContentRelatedCallbacks.new
+  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
 
   validates :title, presence: true
   validates :name, exclusion: { in: %w(categories) }
@@ -96,10 +98,6 @@ class Reception::Course < ApplicationRecord
     "#{content.public_path}#{public_uri}/index.html"
   end
 
-  def public_files_path
-    "#{::File.dirname(public_path)}/file_contents"
-  end
-
   def bread_crumbs(node)
     crumbs = []
 
@@ -135,6 +133,11 @@ class Reception::Course < ApplicationRecord
 
   def applicable?
     opens.any?(&:applicable?)
+  end
+
+  def fee=(val)
+    val = val.delete(',') if val.is_a?(String)
+    super
   end
 
   private

@@ -10,6 +10,8 @@ class GpCalendar::Content::Event < Cms::Content
   has_many :events, foreign_key: :content_id, class_name: 'GpCalendar::Event', dependent: :destroy
   has_many :holidays, foreign_key: :content_id, class_name: 'GpCalendar::Holiday', dependent: :destroy
 
+  after_create :create_default_holidays
+
   def public_events
     events.public_state
   end
@@ -18,33 +20,27 @@ class GpCalendar::Content::Event < Cms::Content
     holidays.public_state
   end
 
+  def piece_target_nodes
+    public_nodes.where(model: %w(GpCalendar::Event GpCalendar::CalendarStyledEvent))
+  end
+
   def category_content_id
     setting_value(:gp_category_content_category_type_id).to_i
   end
 
-  def categories
-    setting = GpCalendar::Content::Setting.find_by(id: settings.find_by(name: 'gp_category_content_category_type_id').try(:id))
-    return GpCategory::Category.none unless setting
-    setting.categories
-  end
-
-  def categories_for_option
-    categories.map {|c| [c.title, c.id] }
-  end
-
-  def public_categories
-    categories.public_state
-  end
-
   def category_types
-    setting = GpCalendar::Content::Setting.find_by(id: settings.find_by(name: 'gp_category_content_category_type_id').try(:id))
-    return GpCategory::CategoryType.none unless setting
-    setting.category_types
+    category_type_ids = setting_extra_value(:gp_category_content_category_type_id, :category_type_ids).to_a
+    GpCategory::CategoryType.where(id: category_type_ids)
+  end
+
+  def public_category_types
+    category_types.public_state
   end
 
   def category_type_categories(category_type)
     category_type_id = (category_type.kind_of?(GpCategory::CategoryType) ? category_type.id : category_type.to_i )
-    categories.select {|c| c.category_type_id == category_type_id }
+    category_type = category_types.detect {|ct| ct.id == category_type_id }
+    category_type ? category_type.public_root_categories : GpCategory::Category.none
   end
 
   def category_type_categories_for_option(category_type, include_descendants: true)
@@ -106,5 +102,11 @@ class GpCalendar::Content::Event < Cms::Content
                     .where(content_id: doc_content_ids, event_state: 'visible')
                     .event_scheduled_between(start_date, end_date, categories)
     end
+  end
+
+  private
+
+  def create_default_holidays
+    GpCalendar::DefaultHolidayJob.perform_now(id)
   end
 end

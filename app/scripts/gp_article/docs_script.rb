@@ -1,4 +1,4 @@
-class GpArticle::DocsScript < Cms::Script::Publication
+class GpArticle::DocsScript < PublicationScript
   def publish
     uri = @node.public_uri.to_s
     path = @node.public_path.to_s
@@ -46,61 +46,46 @@ class GpArticle::DocsScript < Cms::Script::Publication
     docs = @node.content.public_docs.where(id: params[:target_doc_id])
     docs.find_each do |doc|
       ::Script.progress(doc) do
-        uri = doc.public_uri
-        path = doc.public_path
-        if doc.publish(render_public_as_string(uri, site: doc.content.site))
-          uri_ruby = (uri =~ /\?/) ? uri.gsub(/\?/, 'index.html.r?') : "#{uri}index.html.r"
-          path_ruby = "#{path}.r"
-          doc.publish_page(render_public_as_string(uri_ruby, site: doc.content.site), path: path_ruby, dependent: :ruby)
-          doc.publish_page(render_public_as_string(uri, site: doc.content.site, agent_type: :smart_phone),
-                      path: doc.public_smart_phone_path, dependent: :smart_phone)
-        end
+        doc.rebuild
       end
     end
+
+    Cms::FileTransferCallbacks.new([:public_path, :public_smart_phone_path], recursive: true).after_publish_files(@node)
   end
 
-  def publish_by_task
-    if (item = params[:item]) && (item.state_approved? || item.state_prepared?)
+  def publish_by_task(item)
+    if (item.state_approved? || item.state_prepared?)
       ::Script.current
       info_log "-- Publish: #{item.class}##{item.id}"
 
-      uri = item.public_uri.to_s
-      path = item.public_path.to_s
-
-      # Renew edition before render_public_as_string
-      item.update_attribute(:state, 'public')
-
-      if item.publish(render_public_as_string(uri, site: item.content.site))
-        Sys::OperationLog.script_log(:item => item, :site => item.content.site, :action => 'publish')
+      if item.publish
+        Sys::OperationLog.script_log(item: item, site: item.content.site, action: 'publish')
       else
-        raise item.errors.full_messages
+        raise "#{item.class}##{item.id}: failed to publish"
       end
 
-      if item.published? || !::File.exist?("#{path}.r")
-        uri_ruby = (uri =~ /\?/) ? uri.gsub(/\?/, 'index.html.r?') : "#{uri}index.html.r"
-        path_ruby = "#{path}.r"
-        item.publish_page(render_public_as_string(uri_ruby, site: item.content.site),
-                          path: path_ruby, dependent: :ruby)
-      end
-
-      info_log %Q!OK: Published to "#{path}"!
-      params[:task].destroy
+      info_log 'OK: Published'
       ::Script.success
+      return true
+    elsif item.state_public?
+      return true
     end
   end
 
-  def close_by_task
-    if (item = params[:item]) && item.state_public?
+  def close_by_task(item)
+    if item.state_public?
       ::Script.current
       info_log "-- Close: #{item.class}##{item.id}"
 
-      item.close
-
-      Sys::OperationLog.script_log(:item => item, :site => item.content.site, :action => 'close')
+      if item.close
+        Sys::OperationLog.script_log(item: item, site: item.content.site, action: 'close')
+      end
 
       info_log 'OK: Finished'
-      params[:task].destroy
       ::Script.success
+      return true
+    elsif item.state_closed?
+      return true
     end
   end
 end

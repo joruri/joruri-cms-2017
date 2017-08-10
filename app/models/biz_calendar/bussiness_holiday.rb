@@ -1,6 +1,7 @@
 class BizCalendar::BussinessHoliday < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
+  include Cms::Model::Site
   include Cms::Model::Auth::Content
   include BizCalendar::Model::Base::Date
 
@@ -16,6 +17,8 @@ class BizCalendar::BussinessHoliday < ApplicationRecord
   belongs_to :place,  :foreign_key => :place_id, :class_name => 'BizCalendar::Place'
   belongs_to :type,   :foreign_key => :type_id,  :class_name => 'BizCalendar::HolidayType'
 
+  delegate :content, to: :place
+
   validates :state, :type_id, presence: true
   validate :dates_range
   validate :repeat_setting
@@ -23,10 +26,12 @@ class BizCalendar::BussinessHoliday < ApplicationRecord
 
   after_initialize :set_defaults
 
-  after_save     Cms::Publisher::ContentRelatedCallbacks.new, if: :changed?
-  before_destroy Cms::Publisher::ContentRelatedCallbacks.new
+  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
 
   attr_accessor :repeat_num
+
+  define_site_scope :place
 
   scope :public_state, -> { where(state: 'public') }
   scope :search_with_params, ->(params = {}) {
@@ -109,10 +114,6 @@ class BizCalendar::BussinessHoliday < ApplicationRecord
           end
 
     return rel
-  end
-
-  def content
-    place.content
   end
 
   def state_public?

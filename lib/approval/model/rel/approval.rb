@@ -5,11 +5,26 @@ module Approval::Model::Rel::Approval
 
   included do
     has_many :approval_requests, class_name: 'Approval::ApprovalRequest', as: :approvable, dependent: :destroy
+
+    after_save :save_approval_requests
+
     with_options if: -> { state_approvable? } do
       validate :validate_approval_requests
       validate :validate_approval_assignments
-      after_save :save_approval_requests
     end
+
+    scope :creator_or_approvables, ->(user = Core.user) {
+      creators = Sys::Creator.arel_table
+      approval_requests = Approval::ApprovalRequest.arel_table
+      assignments = Approval::Assignment.arel_table
+      selected_assignments = Approval::Assignment.arel_table.alias('selected_assignments_approval_approval_requests')
+      all.joins(:creator)
+         .left_joins(approval_requests: [approval_flow: [approvals: :assignments],  selected_assignments: []])
+         .where([creators[:user_id].eq(user.id),
+                 approval_requests[:user_id].eq(user.id),
+                 assignments[:user_id].eq(user.id),
+                 selected_assignments[:user_id].eq(user.id)].reduce(:or))
+    }
   end
 
   def approvers
@@ -33,7 +48,7 @@ module Approval::Model::Rel::Approval
         when 'progress'
           send_approval_request_mail
         when 'finish'
-          send_approved_notification_mail
+          #send_approved_notification_mail
         end
       end
     end

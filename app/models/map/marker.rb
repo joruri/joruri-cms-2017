@@ -1,6 +1,8 @@
 class Map::Marker < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::File
+  include Cms::Model::Site
+  include Cms::Model::Rel::Content
   include Cms::Model::Auth::Content
   include GpCategory::Model::Rel::Category
 
@@ -8,9 +10,13 @@ class Map::Marker < ApplicationRecord
 
   STATE_OPTIONS = [['公開', 'public'], ['非公開', 'closed']]
 
+  attr_accessor :doc # Not saved to database
+
   # Content
   belongs_to :content, :foreign_key => :content_id, :class_name => 'Map::Content::Marker'
   validates :content_id, :presence => true
+
+  belongs_to :icon_category, :class_name => 'GpCategory::Category'
 
   # Proper
   validates_presence_of :state
@@ -21,14 +27,12 @@ class Map::Marker < ApplicationRecord
 
   after_initialize :set_defaults
   before_save :set_name
+  before_destroy :close_files
 
-  after_save     Cms::Publisher::ContentRelatedCallbacks.new, if: :changed?
-  before_destroy Cms::Publisher::ContentRelatedCallbacks.new
+  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
 
   scope :public_state, -> { where(state: 'public') }
-
-  belongs_to :icon_category, :class_name => 'GpCategory::Category'
-  attr_accessor :doc # Not saved to database
 
   def public_uri
     return '' unless content.public_node
@@ -45,19 +49,14 @@ class Map::Marker < ApplicationRecord
     "#{content.public_node.public_path}#{name}/"
   end
 
-  def public_file_path
-    return '' if public_path.blank? || files.empty?
-    "#{public_path}file_contents/#{files.first.name}"
-  end
-
   def public_smart_phone_path
     return '' unless content.public_node
     "#{content.public_node.public_smart_phone_path}#{name}/"
   end
 
-  def public_smart_phone_file_path
-    return '' if public_smart_phone_path.blank? || files.empty?
-    "#{public_smart_phone_path}file_contents/#{files.first.name}"
+  def publish_files
+    super
+    publish_smart_phone_files if content.site.publish_for_smart_phone?
   end
 
   private

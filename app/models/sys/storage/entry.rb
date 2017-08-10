@@ -12,6 +12,9 @@ class Sys::Storage::Entry
 
   after_initialize :set_defaults
 
+  after_save_files Cms::FileTransferCallbacks.new([:path, :path_was])
+  after_remove_files Cms::FileTransferCallbacks.new([:path, :path_was])
+
   with_options if: -> { path.present? } do
     validate :validate_base_dir
     validate :validate_existence
@@ -115,8 +118,8 @@ class Sys::Storage::Entry
     items = []
     if directory_entry?
       ::Storage.entries(path).each do |entry_name|
-        entry_path = ::File.join(path, entry_name)
-        items << self.class.from_path(entry_path)
+        item = self.class.from_path(::File.join(path, entry_name))
+        items << item if item
       end
       items.sort_by! { |item| [item.entry_type, item.name] }
     end
@@ -144,7 +147,7 @@ class Sys::Storage::Entry
     changes_applied
     return true
   rescue => e
-    error_log e
+    error_log e.to_s
     errors.add(:base, e)
     return false
   end
@@ -155,7 +158,7 @@ class Sys::Storage::Entry
     end
     return true
   rescue => e
-    error_log e
+    error_log e.to_s
     errors.add(:base, e)
     return false
   end

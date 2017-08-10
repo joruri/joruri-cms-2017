@@ -1,7 +1,9 @@
 class Tag::Tag < ApplicationRecord
   include Sys::Model::Base
-
-  include Tag::Tags::Preload
+  include Cms::Model::Site
+  include Cms::Model::Base::Page::Publisher
+  include Cms::Model::Base::Page::TalkTask
+  include Cms::Model::Rel::Content
 
   # Content
   belongs_to :content, :foreign_key => :content_id, :class_name => 'Tag::Content::Tag'
@@ -11,10 +13,6 @@ class Tag::Tag < ApplicationRecord
   has_and_belongs_to_many :docs, -> { order(display_published_at: :desc, published_at: :desc) },
     :class_name => 'GpArticle::Doc', :join_table => 'gp_article_docs_tag_tags',
     :after_add => :update_last_tagged_at, :after_remove => :update_last_tagged_at
-
-  def public_uri=(uri)
-    @public_uri = uri
-  end
 
   def public_uri
     return @public_uri if @public_uri
@@ -30,13 +28,6 @@ class Tag::Tag < ApplicationRecord
   def public_smart_phone_path
     return '' if public_uri.blank?
     "#{content.public_path}/_smartphone#{public_uri}"
-  end
-
-  def preview_uri(site: ::Page.site, mobile: ::Page.mobile?, params: {})
-    return nil unless public_uri
-    params = params.map{|k, v| "#{k}=#{v}" }.join('&')
-    path = "_preview/#{format('%04d', site.id)}#{mobile ? 'm' : ''}#{public_uri}#{params.present? ? "?#{params}" : ''}"
-    "#{site.main_admin_uri}#{path}"
   end
 
   def bread_crumbs(tag_node)

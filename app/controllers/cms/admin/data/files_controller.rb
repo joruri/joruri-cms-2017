@@ -40,7 +40,7 @@ class Cms::Admin::Data::FilesController < Cms::Controller::Admin::Base
   end
 
   def show
-    @item = Cms::DataFile.readable.find(params[:id])
+    @item = Cms::DataFile.find(params[:id])
     return error_auth unless @item.readable?
     _show @item
   end
@@ -57,7 +57,7 @@ class Cms::Admin::Data::FilesController < Cms::Controller::Admin::Base
     @item.site_id = Core.site.id
     @item.state   = 'public'
     @item.image_resize = params[:image_resize]
-    @item.allowed_type = Core.site.setting_site_allowed_attachment_type
+    @item.allowed_type = Core.site.allowed_attachment_type
     _create @item do
       @item.publish if @item.state == 'public'
     end
@@ -68,7 +68,7 @@ class Cms::Admin::Data::FilesController < Cms::Controller::Admin::Base
     @item.attributes = data_file_params
     @item.node_id    = nil if @item.concept_id_changed?
     @item.image_resize = params[:image_resize]
-    @item.allowed_type = Core.site.setting_site_allowed_attachment_type
+    @item.allowed_type = Core.site.allowed_attachment_type
     old_name = @item.name_changed? ? Cms::DataFile.find(params[:id]).try(:escaped_name) : nil
 
     @item.skip_upload if @item.file.blank?
@@ -84,8 +84,8 @@ class Cms::Admin::Data::FilesController < Cms::Controller::Admin::Base
   end
 
   def download
-    @file = Cms::DataFile.readable.find(params[:id])
-    return error_auth unless @file
+    @file = Cms::DataFile.find(params[:id])
+    return error_auth unless @file.readable?
 
     send_file @file.upload_path, :type => @file.mime_type, :filename => @file.name, :disposition => 'inline'
   end

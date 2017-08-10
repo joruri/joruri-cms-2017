@@ -1,9 +1,11 @@
 class GpArticle::Content::Doc < Cms::Content
   default_scope { where(model: 'GpArticle::Doc') }
 
-  has_one :public_node, -> { public_state.where(model: 'GpArticle::Doc').order(:id) },
+  STATE_OPTIONS = [['下書き保存', 'draft'], ['承認依頼', 'approvable'], ['即時公開', 'public']]
+
+  has_one :main_node, -> { where(model: 'GpArticle::Doc').order(:id) },
     foreign_key: :content_id, class_name: 'Cms::Node'
-  has_one :doc_node, -> { where(model: 'GpArticle::Doc').order(:id) },
+  has_one :public_node, -> { public_state.where(model: 'GpArticle::Doc').order(:id) },
     foreign_key: :content_id, class_name: 'Cms::Node'
   has_one :public_archives_node, -> { public_state.where(model: 'GpArticle::Archive').order(:id) },
     foreign_key: :content_id, class_name: 'Cms::Node'
@@ -20,7 +22,7 @@ class GpArticle::Content::Doc < Cms::Content
   # draft, approvable, approved, public
   def preview_docs
     table = docs.arel_table
-    docs.mobile(::Page.mobile?).where(table[:state].not_eq('finish'))
+    docs.mobile(::Page.mobile?).where(table[:state].not_eq('closed'))
   end
 
   # public
@@ -36,6 +38,13 @@ class GpArticle::Content::Doc < Cms::Content
     if organization_content_group_setting
       @organization_content_group ||= organization_content_group_setting.organization_content_group
     end
+  end
+
+  def organization_content_related?
+    organization_content = organization_content_group
+    organization_content &&
+      organization_content.article_related? &&
+      organization_content.related_article_content_id == content.id
   end
 
   def gp_category_content_category_type
@@ -110,6 +119,19 @@ class GpArticle::Content::Doc < Cms::Content
     setting_value(:save_button_states) || []
   end
 
+  def state_options(user = Core.user)
+    options = if user.has_auth?(:manager) || save_button_states.include?('public')
+                STATE_OPTIONS
+              else
+                STATE_OPTIONS.reject{|so| so.last == 'public' }
+              end
+    if approval_related?
+      options
+    else
+      options.reject{|o| o.last == 'approvable' }
+    end
+  end
+
   def display_dates(key)
     (setting_value(:display_dates) || []).include?(key.to_s)
   end
@@ -166,6 +188,10 @@ class GpArticle::Content::Doc < Cms::Content
 
   def approval_related?
     setting_value(:approval_relation) == 'enabled'
+  end
+
+  def publish_after_approved?
+    setting_extra_value(:approval_relation, :publish_after_approved) == 'enabled'
   end
 
   def template_available?
@@ -252,6 +278,10 @@ class GpArticle::Content::Doc < Cms::Content
     setting_extra_value(:doc_list_pagination, :doc_list_number).to_i
   end
 
+  def doc_list_period
+    setting_extra_value(:doc_list_pagination, :doc_list_period)
+  end
+
   def doc_publish_more_pages
     setting_extra_value(:doc_list_pagination, :doc_publish_more_pages).to_i
   end
@@ -322,5 +352,17 @@ class GpArticle::Content::Doc < Cms::Content
 
   def attachment_thumbnail_size
     setting_value(:attachment_thumbnail_size)
+  end
+
+  def map_enabled?
+    setting_value(:map_setting) == 'enabled'
+  end
+
+  def map_coordinate
+    setting_extra_value(:map_setting, :lat_lng)
+  end
+
+  def word_dictionary
+    setting_value(:word_dictionary)
   end
 end

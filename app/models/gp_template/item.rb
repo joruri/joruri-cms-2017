@@ -1,5 +1,6 @@
 class GpTemplate::Item < ApplicationRecord
   include Sys::Model::Base
+  include Cms::Model::Site
   include Cms::Model::Auth::Content
 
   include StateText
@@ -13,13 +14,18 @@ class GpTemplate::Item < ApplicationRecord
   belongs_to :template
   validates :template_id, presence: true
 
+  delegate :content, to: :template
+
   validates :state, presence: true
 
   validates :title, presence: true
-  validates :name, presence: true, uniqueness: { scope: :template_id }, format: { with: /\A[-\w]*\z/ }
+  validates :name, presence: true, uniqueness: { scope: :template_id, case_sensitive: false },
+                   format: { with: /\A[-\w]*\z/ }
   validates :item_type, presence: true
 
   after_initialize :set_defaults
+
+  define_site_scope :template
 
   scope :public_state, -> { where(state: 'public') }
 
@@ -29,10 +35,6 @@ class GpTemplate::Item < ApplicationRecord
 
   def state_closed?
     state == 'closed'
-  end
-
-  def content
-    template.content
   end
 
   def item_options_for_select

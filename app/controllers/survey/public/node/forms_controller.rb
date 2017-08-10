@@ -22,15 +22,9 @@ class Survey::Public::Node::FormsController < Cms::Controller::Public::Base
   end
 
   def show
-    answered_url = case Core.mode
-      when 'preview'
-        @form.preview_uri
-      else
-        "#{@content.site.full_uri.sub(/\/+$/, '')}#{@content.public_node.public_uri}#{@form.name}"
-      end
     @form_answer = @form.form_answers.build(
-      answered_url: answered_url,
-      answered_url_title: @form.title,
+      answered_url: Page.uri,
+      answered_url_title: Page.title,
       remote_addr: request.remote_ip,
       user_agent: request.user_agent
     )
@@ -95,12 +89,16 @@ class Survey::Public::Node::FormsController < Cms::Controller::Public::Base
 
   def send_mail_and_redirect_to_finish
     ## send mail to admin
-    Survey::Public::Mailer.survey_receipt(form_answer: @form_answer, from: @content.mail_from, to: @content.mail_to)
-            .deliver_now if @content.mail_from.present? && @content.mail_to.present?
+    if @content.mail_from.present? && (mail_to = @form.mail_to.presence || @content.mail_to).present?
+      Survey::Public::Mailer.survey_receipt(form_answer: @form_answer, from: @content.mail_from, to: mail_to)
+                            .deliver_now
+    end
 
     ## send mail to answer
-    Survey::Public::Mailer.survey_auto_reply(form_answer: @form_answer, from: @content.mail_from, to: @form_answer.reply_to)
-            .deliver_now if @content.auto_reply? && @content.mail_from.present? && @form_answer.reply_to.present?
+    if @content.auto_reply? && @content.mail_from.present? && @form_answer.reply_to.present?
+      Survey::Public::Mailer.survey_auto_reply(form_answer: @form_answer, from: @content.mail_from, to: @form_answer.reply_to)
+                            .deliver_now
+    end
 
     prms = "?piece=#{@piece.try(:id)}&u=#{CGI.escape @current_url}&t=#{CGI.escape @current_url_title}"
     if Core.request_uri =~ /^\/_ssl\/([0-9]+).*/

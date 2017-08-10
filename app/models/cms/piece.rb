@@ -1,11 +1,11 @@
 class Cms::Piece < ApplicationRecord
   include Sys::Model::Base
   include Cms::Model::Base::Piece
-  include Cms::Model::Base::Page::Publisher
   include Sys::Model::Rel::Creator
+  include Cms::Model::Site
   include Cms::Model::Rel::Site
   include Cms::Model::Rel::Concept
-  include Cms::Model::Rel::Content
+  include Cms::Model::Rel::ContentModel
   include Sys::Model::Rel::ObjectRelation
   include Cms::Model::Rel::Bracket
   include Cms::Model::Rel::Bracketee
@@ -19,14 +19,14 @@ class Cms::Piece < ApplicationRecord
   attr_accessor :setting_save_skip
 
   validates :state, :model, :name, :title, presence: true
-  validates :name, uniqueness: { scope: :concept_id, if: %Q(!replace_page?) },
-    format: { with: /\A[0-9a-zA-Z\-_]+\z/, if: "name.present?", message: :invalid_bracket_name }
+  validates :name, uniqueness: { scope: :concept_id, case_sensitive: false, if: -> { !replace_page? } },
+                   format: { with: /\A[0-9a-zA-Z\-_]+\z/, if: -> { name.present? }, message: :invalid_bracket_name }
 
   after_save :save_settings
   after_save :replace_new_piece
 
-  after_save     Cms::Publisher::BracketeeCallbacks.new, if: :changed?
-  before_destroy Cms::Publisher::BracketeeCallbacks.new
+  after_save     Cms::Publisher::PieceCallbacks.new, if: :changed?
+  before_destroy Cms::Publisher::PieceCallbacks.new
 
   scope :public_state, -> { where(state: 'public') }
 

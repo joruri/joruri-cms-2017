@@ -1,5 +1,6 @@
 class Survey::FormAnswer < ApplicationRecord
   include Sys::Model::Base
+  include Cms::Model::Site
 
   apply_simple_captcha
 
@@ -11,6 +12,8 @@ class Survey::FormAnswer < ApplicationRecord
   has_many :answers, -> { order(:id) }, dependent: :destroy
 
   validate :validate_base
+
+  define_site_scope :form
 
   def question_answers=(qa)
     qa.each do |key, value|
@@ -30,6 +33,19 @@ class Survey::FormAnswer < ApplicationRecord
       answers.each {|a| return a.content if a.question_id == q.id }
     end
     nil
+  end
+
+  def answered_full_uri
+    uri = Addressable::URI.parse(answered_url)
+    return answered_url unless uri
+
+    if uri.absolute?
+      answered_url
+    elsif uri.path =~ %r{^/_ssl} && form.site.full_ssl_uri.present?
+      Addressable::URI.join(form.site.full_ssl_uri, answered_url).to_s
+    else
+      Addressable::URI.join(form.site.full_uri, answered_url).to_s
+    end
   end
 
   private

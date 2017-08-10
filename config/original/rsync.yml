@@ -1,0 +1,17 @@
+development:
+  bin: rsync
+  opts: -lptzv --delete -e "ssh -p 22"
+  dests:
+    - path: joruri@192.168.0.0:/var/www/joruri/
+
+test:
+  bin: rsync
+  opts: -lptzv --delete -e "ssh -p 22"
+  dests:
+    - path: joruri@192.168.0.0:/var/www/joruri/
+
+production:
+  bin: rsync
+  opts: -lptzv --delete -e "ssh -p 22"
+  dests:
+    - path: joruri@192.168.0.0:/var/www/joruri/

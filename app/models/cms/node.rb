@@ -4,21 +4,24 @@ class Cms::Node < ApplicationRecord
   include Cms::Model::Base::Page::Publisher
   include Cms::Model::Base::Page::TalkTask
   include Cms::Model::Base::Node
+  include Cms::Model::Base::Sitemap
   include Sys::Model::Tree
   include Sys::Model::Rel::Creator
+  include Cms::Model::Site
   include Cms::Model::Rel::Site
   include Cms::Model::Rel::Concept
-  include Cms::Model::Rel::Content
+  include Cms::Model::Rel::ContentModel
   include Sys::Model::Rel::ObjectRelation
   include Cms::Model::Rel::Bracket
   include Cms::Model::Auth::Concept
 
   include StateText
-  include Cms::Nodes::Preload
 
-  SITEMAP_STATE_OPTIONS = [['表示', 'visible'], ['非表示', 'hidden']]
+  REBUILDABLE_MODELS = ['Cms::Page', 'Cms::Sitemap']
+  DYNAMIC_MODELS = ['GpArticle::SearchDoc', 'GpCalendar::SearchEvent', 'Reception::Course', 'Survey::Form']
 
   belongs_to :parent, :foreign_key => :parent_id, :class_name => 'Cms::Node'
+  belongs_to :route, :foreign_key => :route_id, :class_name => 'Cms::Node'
   belongs_to :layout, :foreign_key => :layout_id, :class_name => 'Cms::Layout'
 
   has_many :children, -> { sitemap_order },
@@ -29,7 +32,7 @@ class Cms::Node < ApplicationRecord
   # conditional associations
   has_many :public_children, -> { public_state.sitemap_order },
     :foreign_key => :parent_id, :class_name => 'Cms::Node'
-  has_many :public_children_in_route, -> { public_state.sitemap_order },
+  has_many :public_children_for_sitemap, -> { public_state.visible_in_sitemap.sitemap_order },
     :foreign_key => :route_id, :class_name => 'Cms::Node'
 
   validates :parent_id, :state, :model, :title, presence: true
@@ -47,8 +50,14 @@ class Cms::Node < ApplicationRecord
 
   after_save Cms::Publisher::NodeCallbacks.new, if: :changed?
 
+  define_model_callbacks :publish_files, :close_files
+  after_publish_files Cms::FileTransferCallbacks.new([:public_path, :public_smart_phone_path])
+  after_close_files Cms::FileTransferCallbacks.new([:public_path, :public_smart_phone_path])
+
   scope :public_state, -> { where(state: 'public') }
   scope :sitemap_order, -> { order('sitemap_sort_no IS NULL, sitemap_sort_no, name') }
+  scope :rebuildable_models, -> { where(model: REBUILDABLE_MODELS) }
+  scope :dynamic_models, -> { where(model: DYNAMIC_MODELS) }
 
   scope :search_with_params, ->(params) {
     rel = all
@@ -109,13 +118,10 @@ class Cms::Node < ApplicationRecord
     "#{site.public_path}/_smartphone#{public_uri}".gsub(/\?.*/, '')
   end
 
-  def public_uri=(uri)
-    @public_uri = uri
-  end
-
   def public_uri
     return @public_uri if @public_uri
     return unless site
+    return '' if name.blank?
     uri = site.uri
     ancestors.each{|n| uri += "#{n.name}/" if n.name != '/' }
     uri = uri.gsub(/\/$/, '') if directory == 0
@@ -226,33 +232,52 @@ class Cms::Node < ApplicationRecord
     return label =~ /^translation missing:/ ? name.to_s.humanize : label
   end
 
-  def sitemap_visible?
-    self.sitemap_state == 'visible'
-  end
-
-  def pdf_in_body?(html)
-    extract_links(html, false).any?{|l| l[:url] =~ /\.pdf$/i }
-  end
-
   def top_page?
     parent.try(:parent_id) == 0 && name == 'index.html'
-  end
-
-  def script_model
-    "#{model.pluralize}Script"
-  end
-
-  def script_klass
-    script_model.constantize
-  rescue NameError => e
-    nil
   end
 
   protected
 
   def remove_file
-    close_page# rescue nil
+    run_callbacks :close_files do
+      close_page# rescue nil
+    end
     return true
+  end
+
+  private
+
+  def set_defaults
+    self.directory = (model_type == :directory) if self.has_attribute?(:directory) && directory.nil?
+  end
+
+  def move_directory
+    path_changes.each do |src, dest|
+      next unless Dir.exist?(src)
+
+      FileUtils.move(src, dest)
+      src = src.gsub(Rails.root.to_s, '.')
+      dest = dest.gsub(Rails.root.to_s, '.')
+      Sys::Publisher.where(Sys::Publisher.arel_table[:path].matches("#{src}%"))
+                    .replace_for_all(:path, src, dest)
+    end
+  end
+
+  def path_changed?
+    [:name, :parent_id].any? do |column|
+      changes[column].present? && changes[column][0].present? && changes[column][1].present?
+    end
+  end
+
+  def path_changes
+    return {} unless path_changed?
+    parent = self.class.find_by(id: parent_id)
+    parent_was = self.class.find_by(id: parent_id_was)
+    return {} if parent.nil? || parent_was.nil?
+    {
+      "#{parent_was.public_path}#{name_was}" => "#{parent.public_path}#{name}",
+      "#{parent_was.public_smart_phone_path}#{name_was}" => "#{parent.public_smart_phone_path}#{name}"
+    }
   end
 
   class Directory < Cms::Node
@@ -268,8 +293,17 @@ class Cms::Node < ApplicationRecord
     include Sys::Model::Rel::Recognition
     include Cms::Model::Rel::Inquiry
     include Sys::Model::Rel::Task
-    include Cms::Model::Rel::PublishUrl
     include Cms::Model::Rel::Link
+    include Cms::Model::Rel::PublishUrl
+    include Cms::Model::Rel::SearchText
+
+    self.linkable_columns = [:body]
+    self.searchable_columns = [:body]
+
+    after_save :replace_public_page
+
+    after_save     Cms::SearchIndexerCallbacks.new, if: :changed?
+    before_destroy Cms::SearchIndexerCallbacks.new
 
 #    validate :validate_inquiry,
 #      :if => %Q(state == 'public')
@@ -280,47 +314,6 @@ class Cms::Node < ApplicationRecord
       s = [['下書き保存','draft'],['承認待ち','recognize']]
       s << ['公開保存','public'] if Core.user.has_auth?(:manager)
       s
-    end
-
-    def publish(content)
-      @save_mode = :publish
-      self.state = 'public'
-      self.published_at ||= Core.now
-      return false unless save(:validate => false)
-
-      if rep = replace_page
-        rep.destroy if rep.directory == 0
-      end
-
-      publish_page(content, :path => public_path, :uri => public_uri)
-    end
-
-    def rebuild(content, options={})
-      if options[:dependent] == :smart_phone
-        return false unless self.site.publish_for_smart_phone?
-        return false unless self.site.spp_all? || (self.site.spp_only_top? && top_page?)
-      end
-
-      return false unless self.state == 'public'
-      @save_mode = :publish
-
-      if rep = replace_page
-        rep.destroy if rep.directory == 0
-      end
-
-      options[:path] ||= public_path
-      options[:uri] ||= public_uri
-
-      publish_page(content, options)
-    end
-
-    def close
-      @save_mode = :close
-      self.state = 'closed' if self.state == 'public'
-      #self.published_at = nil
-      return false unless save(:validate => false)
-      close_page
-      return true
     end
 
     def duplicate(rel_type = nil)
@@ -359,57 +352,58 @@ class Cms::Node < ApplicationRecord
       return item
     end
 
-    def links_in_body(all=false)
-      extract_links(self.body, all)
+    private
+
+    def replace_public_page
+      return if state != 'public'
+      if (rep = replace_page) && rep.directory == 0
+        rep.destroy
+      end
     end
-  end
 
-  private
+    concerning :Publication do
+      def publish
+        self.state = 'public'
+        self.published_at ||= Core.now
+        transaction do
+          return false unless save(validate: false)
+          rebuild
+        end
+      end
 
-  def set_defaults
-    self.sitemap_state ||= SITEMAP_STATE_OPTIONS.first.last if self.has_attribute?(:sitemap_state)
-    self.directory = (model_type == :directory) if self.has_attribute?(:directory) && directory.nil?
-  end
+      def rebuild
+        return false if state != 'public'
 
-  def extract_links(html, all)
-    links = Nokogiri::HTML.fragment(html).css('a[@href]')
-                          .map { |a| { body: a.text, url: a.attribute('href').value } }
-    return links if all
-    links.select do |link|
-      uri = Addressable::URI.parse(link[:url])
-      !uri.absolute? || uri.scheme.to_s.downcase.in?(%w(http https))
+        run_callbacks :publish_files do
+          rendered = Cms::Admin::RenderService.new(site).render_public(public_uri)
+          return true unless publish_page(rendered, path: public_path)
+
+          if site.use_kana?
+            rendered = Cms::Lib::Navi::Kana.convert(rendered, site_id)
+            publish_page(rendered, path: "#{public_path}.r", dependent: :ruby)
+          end
+
+          if site.publish_for_smart_phone?(self)
+            rendered = Cms::Admin::RenderService.new(site).render_public(public_uri, agent_type: :smart_phone)
+            publish_page(rendered, path: public_smart_phone_path, dependent: :smart_phone)
+          end
+        end
+
+        rebuild_search_texts if model == 'Cms::Page'
+
+        return true
+      end
+
+      def close
+        self.state = 'closed' if self.state == 'public'
+        transaction do
+          return false unless save(validate: false)
+          run_callbacks :close_files do
+            close_page
+          end
+        end
+        return true
+      end
     end
-  rescue => evar
-    warn_log evar.message
-    return []
-  end
-
-  def move_directory
-    path_changes.each do |src, dest|
-      next unless Dir.exist?(src)
-
-      FileUtils.move(src, dest)
-      src = src.gsub(Rails.root.to_s, '.')
-      dest = dest.gsub(Rails.root.to_s, '.')
-      Sys::Publisher.where(Sys::Publisher.arel_table[:path].matches("#{src}%"))
-                    .replace_for_all(:path, src, dest)
-    end
-  end
-
-  def path_changed?
-    [:name, :parent_id].any? do |column|
-      changes[column].present? && changes[column][0].present? && changes[column][1].present?
-    end
-  end
-
-  def path_changes
-    return {} unless path_changed?
-    parent = self.class.find_by(id: parent_id)
-    parent_was = self.class.find_by(id: parent_id_was)
-    return {} if parent.nil? || parent_was.nil?
-    {
-      "#{parent_was.public_path}#{name_was}" => "#{parent.public_path}#{name}",
-      "#{parent_was.public_smart_phone_path}#{name_was}" => "#{parent.public_smart_phone_path}#{name}"
-    }
   end
 end

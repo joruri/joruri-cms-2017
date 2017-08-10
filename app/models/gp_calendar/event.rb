@@ -2,6 +2,8 @@ class GpCalendar::Event < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
   include Sys::Model::Rel::File
+  include Cms::Model::Site
+  include Cms::Model::Rel::Content
   include Cms::Model::Auth::Content
   include GpCategory::Model::Rel::Category
 
@@ -10,6 +12,9 @@ class GpCalendar::Event < ApplicationRecord
   STATE_OPTIONS = [['公開中', 'public'], ['非公開', 'closed']]
   TARGET_OPTIONS = [['同一ウィンドウ', '_self'], ['別ウィンドウ', '_blank']]
   ORDER_OPTIONS = [['作成日時（降順）', 'created_at_desc'], ['作成日時（昇順）', 'created_at_asc']]
+
+  # Not saved to database
+  attr_accessor :doc
 
   # Content
   belongs_to :content, :foreign_key => :content_id, :class_name => 'GpCalendar::Content::Event'
@@ -20,23 +25,21 @@ class GpCalendar::Event < ApplicationRecord
 
   after_initialize :set_defaults
   before_save :set_name
+  before_destroy :close_files
 
   after_save     GpCalendar::Publisher::EventCallbacks.new, if: :changed?
   before_destroy GpCalendar::Publisher::EventCallbacks.new
 
-  validates :started_on, :presence => true
-  validates :ended_on, :presence => true
-  validates :title, :presence => true
-  validates :name, :uniqueness => true, :format => {with: /\A[\-\w]*\z/ }
+  validates :started_on, presence: true
+  validates :ended_on, presence: true
+  validates :title, presence: true
+  validates :name, uniqueness: { scope: :content_id }, format: { with: /\A[\-\w]*\z/ }
 
   validate :dates_range
 
   scope :public_state, -> { where(state: 'public') }
   scope :scheduled_between, ->(start_date, end_date) {
-    rel = all
-    rel = rel.where(arel_table[:ended_on].gteq(start_date))   if start_date
-    rel = rel.where(arel_table[:started_on].lt(end_date + 1)) if end_date
-    rel
+    dates_intersects(:started_on, :ended_on, start_date.try(:beginning_of_day), end_date.try(:end_of_day))
   }
 
   scope :content_and_criteria, ->(content, criteria){
@@ -86,9 +89,8 @@ class GpCalendar::Event < ApplicationRecord
     'event'
   end
 
-  attr_accessor :doc # Not saved to database
-
   def holiday
+    return nil unless started_on
     criteria = {date: started_on, kind: 'holiday'}
     GpCalendar::Holiday.public_state.content_and_criteria(content, criteria).first.try(:title)
   end
@@ -96,31 +98,18 @@ class GpCalendar::Event < ApplicationRecord
   def public_path
     node = content.public_nodes.where(model: 'GpCalendar::Event').first
     return '' unless node
-    "#{node.public_path}#{name}"
+    "#{node.public_path}#{name}/"
   end
 
-  def public_files_path
-    return '' if public_path.blank?
-    "#{public_path}/file_contents"
+  def public_smart_phone_path
+    node = content.public_nodes.where(model: 'GpCalendar::Event').first
+    return '' unless node
+    "#{node.public_smart_phone_path}#{name}/"
   end
 
   def publish_files
-    return if public_files_path.blank?
-    @save_mode = :publish
     super
-  end
-
-  def close_files
-    @save_mode = :close
-    super
-  end
-
-  def publish!
-    update_attribute(:state, 'public')
-  end
-
-  def close!
-    update_attribute(:state, 'closed')
+    publish_smart_phone_files if content.site.publish_for_smart_phone?
   end
 
   private

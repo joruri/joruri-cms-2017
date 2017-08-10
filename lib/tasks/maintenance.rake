@@ -1,4 +1,4 @@
-namespace :zomeki do
+namespace ZomekiCMS::NAME do
   namespace :maintenance do
     desc 'Replace @title@ to @title_link@ in settings'
     task :replace_title_with_title_link => :environment do
@@ -19,17 +19,6 @@ namespace :zomeki do
         info_log "#{tm.class.name}(#{tm.id}):#{tm.title}(#{tm.name})"
         tm.update_column(:doc_style, tm.doc_style.gsub('@title@', '@title_link@'))
       end
-    end
-
-    desc 'Clean invalid links'
-    task :clean_invalid_links => :environment do
-      count = 0
-      GpArticle::Link.find_each do |l|
-        next if l.doc && l.doc.state_public?
-        l.destroy
-        count += 1
-      end
-      puts count > 0 ? "#{count} invalid links removed." : 'No invalid links.'
     end
 
     namespace :postgresql do
@@ -89,7 +78,7 @@ namespace :zomeki do
       desc 'Copy _common directory for all sites'
       task copy: :environment do
         Cms::Site.all.each do |site|
-          site.send(:force_copy_common_directory)
+          site.copy_common_directory(force: true)
         end
       end
 
@@ -106,7 +95,7 @@ namespace :zomeki do
     namespace :publish_url do
       desc 'Set pulished Url'
       task :set => :environment do
-        Rake::Task['zomeki:cms:publish_urls:rebuild'].invoke
+        Rake::Task["#{ZomekiCMS::NAME}:cms:publish_urls:rebuild"].invoke
       end
     end
 

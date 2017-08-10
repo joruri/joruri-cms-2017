@@ -22,7 +22,6 @@ class GpCalendar::Public::Node::SearchEventsController < GpCalendar::Public::Nod
     end
 
     docs = @content.public_event_docs(@start_date, @end_date, categories)
-                   .preload_assocs(:public_node_ancestors_assocs, :event_categories, :files)
     @events = merge_docs_into_events(docs, @events)
 
     @holidays = GpCalendar::Holiday.public_state.content_and_criteria(@content, criteria).where(kind: :event)
@@ -30,7 +29,7 @@ class GpCalendar::Public::Node::SearchEventsController < GpCalendar::Public::Nod
       holiday.started_on = @date.year
       @events << holiday if holiday.started_on
     end
-    @events.sort! {|a, b| a.started_on <=> b.started_on}
+    @events.sort_by! { |e| e.started_on || Time.new(0) }
   end
 
   def file_content
