@@ -14,6 +14,6 @@
   spp_target: "only_top",
   admin_full_uri: "",
   smart_phone_layout: "pc",
-  mobile_feature: "enabled"
+  mobile_feature: "disabled"
 )
 @cms_sites_1.copy_common_directory
