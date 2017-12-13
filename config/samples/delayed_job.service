@@ -3,13 +3,15 @@ Description=delayed_job for Joruri
 After=postgresql-9.5.service
 
 [Service]
-Type=forking
+Type=simple
 User=joruri
 WorkingDirectory=/var/www/joruri/
 Environment=RAILS_ENV=production
 SyslogIdentifier=joruri_delayed_job
-ExecStart=/usr/local/rbenv/shims/bundle exec rake delayed_job:start
-ExecStop=/usr/local/rbenv/shims/bundle exec rake delayed_job:stop
+PIDFile=/var/www/joruri/tmp/pids/delayed_job_master.pid
+ExecStart=/usr/local/rbenv/shims/bundle exec bin/delayed_job_master -c config/delayed_job/delayed_job_master.rb
+ExecStop=/bin/kill -QUIT $MAINPID
+ExecReload=/bin/kill -USR2 $MAINPID
 
 [Install]
 WantedBy = multi-user.target

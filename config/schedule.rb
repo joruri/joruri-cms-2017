@@ -26,29 +26,19 @@ set :output, nil
 
 env :PATH, ENV['PATH']
 
+# メールを取り込みます。
+every '1-56/5 * * * *' do
+  rake "#{ZomekiCMS::NAME}:mailin:filters:exec"
+end
+
 # 音声ファイルを静的ファイルとして書き出します。
 every '6-51/15 * * * *' do
   rake "#{ZomekiCMS::NAME}:cms:talks:exec"
 end
 
-# アンケートの回答データを取り込みます。
+# アンケート等のデータを取り込みます。
 every '9-54/15 * * * *' do
-  rake "#{ZomekiCMS::NAME}:survey:answers:pull"
-end
-
-# 広告バナーのクリック数を取り込みます。
-every '12-57/15 * * * *' do
-  rake "#{ZomekiCMS::NAME}:ad_banner:clicks:pull"
-end
-
-# サイトの設定を定期的に更新します。
-every '25,55 * * * *' do
-  rake "#{ZomekiCMS::NAME}:cms:sites:update_server_configs"
-end
-
-# delayed_jobプロセスを監視します。
-every '26,56 * * * *' do
-  rake 'delayed_job:monitor'
+  rake "#{ZomekiCMS::NAME}:remote:data:pull"
 end
 
 # Feedコンテンツで設定したRSS・Atomフィードを取り込みます。
@@ -66,16 +56,6 @@ every :day, at: '0:00 am' do
   rake "#{ZomekiCMS::NAME}:sys:cleanup"
 end
 
-# 今日のイベントページを静的ファイルとして書き出します。
-every :day, at: '0:10 am' do
-  rake "#{ZomekiCMS::NAME}:gp_calendar:publish_todays_events"
-end
-
-# 今月の業務カレンダーを静的ファイルとして書き出します。
-every :month, at: '0:15 am' do
-  rake "#{ZomekiCMS::NAME}:biz_calendar:publish_this_month"
-end
-
 # アクセスランキングデータを取り込みます。
 every :day, at: '0:30 am' do
   rake "#{ZomekiCMS::NAME}:rank:ranks:exec"
@@ -89,4 +69,9 @@ end
 # 静的ファイルを転送します。
 every :day, at: '5:00 am' do
   rake "#{ZomekiCMS::NAME}:cms:file_transfers:exec"
+end
+
+# delayed_jobを再起動します。
+every :sunday, at: '0:10 am' do
+  rake "delayed_job:restart"
 end
