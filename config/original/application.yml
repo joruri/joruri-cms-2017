@@ -9,7 +9,7 @@ sys:
   file_text_extraction: false
 
   # ツールメニュー表示
-  show_tool_menu: true
+  show_tool_menu: false
 
 cms:
   # 静的ファイルの書き出し
