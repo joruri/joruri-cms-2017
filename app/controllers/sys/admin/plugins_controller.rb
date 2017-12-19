@@ -7,6 +7,7 @@ class Sys::Admin::PluginsController < Cms::Controller::Admin::Base
 
   def index
     return version_options if params[:version_options]
+    return title_options if params[:title_options]
 
     @items = Sys::Plugin.search_with_params(params).order(:name)
                         .paginate(page: params[:page], per_page: params[:limit])
@@ -25,7 +26,7 @@ class Sys::Admin::PluginsController < Cms::Controller::Admin::Base
   def create
     @item = Sys::Plugin.new(plugin_params)
     _create @item do
-      update_plugins && restart_application
+      update_plugins
     end
   end
 
@@ -33,22 +34,37 @@ class Sys::Admin::PluginsController < Cms::Controller::Admin::Base
     @item = Sys::Plugin.find(params[:id])
     @item.attributes = plugin_params
     _create @item do
-      update_plugins && restart_application
+      update_plugins
     end
   end
 
   def destroy
     @item = Sys::Plugin.find(params[:id])
     _destroy @item do
-      update_plugins && restart_application
+      update_plugins
     end
+  end
+
+  def restart
+    if bundle_install
+      restart_application
+      flash[:notice] = "アプリケーションを再起動しました。"
+    else
+      flash[:notice] = "アプリケーションの再起動に失敗しました。"
+    end
+    redirect_to url_for(action: :index)
   end
 
   private
 
   def version_options
     opts = Sys::Plugin.version_options(params[:name])
-    render plain: view_context.options_for_select(opts), layout: false
+    render plain: view_context.options_for_select([['','']] + opts), layout: false
+  end
+
+  def title_options
+    title = Sys::Plugin.title_options(params[:name])
+    render plain: title, layout: false
   end
 
   def plugin_params
@@ -57,11 +73,7 @@ class Sys::Admin::PluginsController < Cms::Controller::Admin::Base
 
   def update_plugins
     Rails::Generators.invoke('sys:plugins:config', ['--force'])
-
-    status = bundle_install
-
-    flash[:notice] = status ? "プラグインリストを更新しました。" : "プラグインリストの更新に失敗しました。"
-    status
+    flash[:notice] = "プラグインリストを更新しました。プラグインの利用にはアプリケーションの再起動が必要です。"
   end
 
   def bundle_install
@@ -77,7 +89,7 @@ class Sys::Admin::PluginsController < Cms::Controller::Admin::Base
   end
 
   def restart_application
-    pid_file = Rails.root.join('tmp/pids/unicorn.pid')
-    `kill -USR2 \`cat #{pid_file}\`` if File.exist?(pid_file)
+    `bundle exec rake delayed_job:restart RAILS_ENV=#{Rails.env}`
+    `bundle exec rake unicorn:restart RAILS_ENV=#{Rails.env}`
   end
 end
