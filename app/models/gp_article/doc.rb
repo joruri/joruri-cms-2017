@@ -319,7 +319,7 @@ class GpArticle::Doc < ApplicationRecord
     inquiries.each_with_index do |inquiry, i|
       attrs = inquiry.attributes
       attrs[:id] = nil
-      attrs[:group_id] = Core.user.group_id if i == 0
+      attrs[:group_id] = Core.user.group_id if i == 0 && !Core.user.has_auth?(:manager)
       new_doc.inquiries.build(attrs)
     end
 
@@ -341,7 +341,7 @@ class GpArticle::Doc < ApplicationRecord
         new_attributes = f.attributes
         new_attributes[:id] = nil
         new_file = Sys::File.new(new_attributes)
-        new_file.file = Sys::Lib::File::NoUploadedFile.new(f.upload_path, mime_type: new_file.mime_type)
+        new_file.file = Sys::Lib::File::NoUploadedFile.new(path: f.upload_path, mime_type: new_file.mime_type)
         new_file.file_attachable = new_doc
         new_file.save
       end
@@ -505,17 +505,13 @@ class GpArticle::Doc < ApplicationRecord
 
   def set_name
     return if self.name.present?
-    date = if created_at
-             created_at.strftime('%Y%m%d')
-           else
-             Date.strptime(Core.now, '%Y-%m-%d').strftime('%Y%m%d')
-           end
+    date = (created_at || Time.now).strftime('%Y%m%d')
     seq = Util::Sequencer.next_id('gp_article_docs', version: date, site_id: content.site_id)
     self.name = Util::String::CheckDigit.check(date + format('%04d', seq))
   end
 
   def set_published_at
-    self.published_at ||= Core.now if self.state == 'public'
+    self.published_at ||= Time.now if self.state == 'public'
   end
 
   def set_defaults

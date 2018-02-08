@@ -1,8 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Cms::Controller::Public
   include ParamsKeeper::Controller
-  helper  FormHelper
-  helper  LinkHelper
   protect_from_forgery with: :exception
   before_action :initialize_application
 #  rescue_from Exception, :with => :rescue_exception
@@ -19,10 +16,6 @@ class ApplicationController < ActionController::Base
     end
     return false if Core.dispatched?
     return Core.dispatched
-  end
-
-  def query(params = nil)
-    Util::Http::QueryString.get_query(params)
   end
 
   def send_mail(fr_addr, to_addr, subject, body)
