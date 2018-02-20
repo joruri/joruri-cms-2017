@@ -142,692 +142,6 @@ Cms::Bracket.create!(
 Cms::Bracket.create!(
   site_id: @cms_sites_1.id,
   concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "text/meta"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-css"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-js"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "text/analytics"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/accessibility-tool"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-header"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/global-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/bread-crumbs"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-title"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/back-btn"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/useful-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/lifeevent-list"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/ad-banner-lower"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/footer-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-footer"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/copyright"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_4.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-top"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "text/meta"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-css"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-js"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "text/analytics"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/accessibility-tool"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-header"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/global-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/bread-crumbs"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-title"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/archive"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/useful-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/lifeevent-list"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/ad-banner-lower"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/footer-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-footer"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/copyright"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_5.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-top"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "text/meta"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-css"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-js"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "text/analytics"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "piece/accessibility-tool"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-header"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "piece/global-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "piece/bread-crumbs"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-title"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "piece/useful-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "piece/lifeevent-list"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "piece/ad-banner-lower"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "piece/footer-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-footer"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "piece/copyright"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_10.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-top"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "text/meta"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-css"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-js"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "text/analytics"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "piece/accessibility-tool"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-header"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "piece/global-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "piece/bread-crumbs"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-title"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "piece/useful-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "piece/lifeevent-list"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "piece/ad-banner-lower"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "piece/footer-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-footer"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "piece/copyright"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_9.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-top"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "text/meta"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-css"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-js"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "text/analytics"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "piece/accessibility-tool"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-header"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "piece/global-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "piece/bread-crumbs"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-title"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "piece/useful-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "piece/lifeevent-list"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "piece/ad-banner-lower"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "piece/footer-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-footer"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "piece/copyright"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_2.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-top"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "text/meta"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-css"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-js"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "text/analytics"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "piece/accessibility-tool"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-header"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "piece/global-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "piece/bread-crumbs"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-title"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "piece/useful-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "piece/lifeevent-list"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "piece/ad-banner-lower"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "piece/footer-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-footer"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "piece/copyright"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_8.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-top"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
   owner_id: @cms_layouts_3.id,
   owner_type: "Cms::Layout",
   name: "text/meta"
@@ -920,573 +234,6 @@ Cms::Bracket.create!(
   site_id: @cms_sites_1.id,
   concept_id: @cms_concepts_1.id,
   owner_id: @cms_layouts_3.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-top"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "text/meta"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-css"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-js"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "text/analytics"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "piece/accessibility-tool"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-header"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "piece/global-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "piece/bread-crumbs"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-title"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "piece/calendar-category-list"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "piece/calendar"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "piece/ad-banner-lower"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "piece/footer-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-footer"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "piece/copyright"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_12.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-top"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "text/meta"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-css"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-js"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "text/analytics"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "piece/accessibility-tool"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-header"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "piece/global-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "piece/bread-crumbs"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-title"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "piece/lifeevent-list"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "piece/use-site"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "piece/ad-banner-lower"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "piece/footer-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-footer"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "piece/copyright"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_13.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-top"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "text/meta"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-css"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-js"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "text/analytics"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/accessibility-tool"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-header"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/global-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/bread-crumbs"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-title"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/back-btn"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/lifeevent-list"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/use-site"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/ad-banner-lower"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/footer-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-footer"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/copyright"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_14.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-top"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "text/meta"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-css"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-js"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "text/analytics"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "piece/accessibility-tool"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-header"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "piece/global-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "piece/bread-crumbs"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-title"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "piece/use-site"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "piece/ad-banner-lower"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "piece/footer-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-footer"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "piece/copyright"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_15.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-top"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "text/meta"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-css"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "text/common-js"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "text/analytics"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "piece/accessibility-tool"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-header"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "piece/global-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "piece/bread-crumbs"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "piece/page-title"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "piece/category-list"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "piece/useful-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "piece/lifeevent-list"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "piece/ad-banner-lower"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "piece/footer-navi"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "piece/common-footer"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
-  owner_type: "Cms::Layout",
-  name: "piece/copyright"
-)
-Cms::Bracket.create!(
-  site_id: @cms_sites_1.id,
-  concept_id: @cms_concepts_1.id,
-  owner_id: @cms_layouts_7.id,
   owner_type: "Cms::Layout",
   name: "piece/page-top"
 )
@@ -2049,4 +796,1257 @@ Cms::Bracket.create!(
   owner_id: @gp_article_docs_485.id,
   owner_type: "GpArticle::Doc",
   name: "text/site-name"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "text/meta"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-css"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-js"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "text/analytics"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "piece/accessibility-tool"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-header"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "piece/global-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "piece/bread-crumbs"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-title"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "piece/use-site"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "piece/ad-banner-lower"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "piece/footer-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-footer"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "piece/copyright"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_15.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-top"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "text/meta"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-css"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-js"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "text/analytics"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/accessibility-tool"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-header"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/global-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/bread-crumbs"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-title"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/category-list"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/useful-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/lifeevent-list"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/ad-banner-lower"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/footer-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-footer"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/copyright"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_7.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-top"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "text/meta"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-css"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-js"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "text/analytics"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/accessibility-tool"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-header"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/global-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/bread-crumbs"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-title"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/back-btn"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/useful-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/lifeevent-list"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/ad-banner-lower"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/footer-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-footer"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/copyright"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_4.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-top"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "text/meta"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-css"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-js"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "text/analytics"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/accessibility-tool"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-header"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/global-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/bread-crumbs"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-title"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/archive"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/useful-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/lifeevent-list"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/ad-banner-lower"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/footer-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-footer"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/copyright"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_5.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-top"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "text/meta"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-css"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-js"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "text/analytics"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "piece/accessibility-tool"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-header"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "piece/global-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "piece/bread-crumbs"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-title"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "piece/calendar-category-list"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "piece/calendar"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "piece/ad-banner-lower"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "piece/footer-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-footer"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "piece/copyright"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_12.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-top"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "text/meta"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-css"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-js"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "text/analytics"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "piece/accessibility-tool"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-header"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "piece/global-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "piece/bread-crumbs"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-title"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "piece/useful-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "piece/lifeevent-list"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "piece/ad-banner-lower"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "piece/footer-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-footer"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "piece/copyright"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_10.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-top"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "text/meta"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-css"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-js"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "text/analytics"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "piece/accessibility-tool"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-header"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "piece/global-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "piece/bread-crumbs"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-title"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "piece/useful-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "piece/lifeevent-list"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "piece/ad-banner-lower"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "piece/footer-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-footer"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "piece/copyright"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_9.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-top"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "text/meta"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-css"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-js"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "text/analytics"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/accessibility-tool"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-header"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/global-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/bread-crumbs"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-title"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/back-btn"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/lifeevent-list"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/use-site"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/ad-banner-lower"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/footer-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-footer"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/copyright"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_14.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-top"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "text/meta"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-css"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-js"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "text/analytics"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "piece/accessibility-tool"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-header"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "piece/global-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "piece/bread-crumbs"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-title"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "piece/lifeevent-list"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "piece/use-site"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "piece/ad-banner-lower"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "piece/footer-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-footer"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "piece/copyright"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_13.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-top"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "text/meta"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-css"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-js"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "text/analytics"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "piece/accessibility-tool"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-header"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "piece/global-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "piece/bread-crumbs"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-title"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "piece/useful-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "piece/lifeevent-list"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "piece/ad-banner-lower"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "piece/footer-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-footer"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "piece/copyright"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_2.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-top"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "text/meta"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-css"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "text/common-js"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "text/analytics"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "piece/accessibility-tool"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-header"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "piece/global-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "piece/bread-crumbs"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-title"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "piece/useful-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "piece/lifeevent-list"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "piece/ad-banner-lower"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "piece/footer-navi"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "piece/common-footer"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "piece/copyright"
+)
+Cms::Bracket.create!(
+  site_id: @cms_sites_1.id,
+  concept_id: @cms_concepts_1.id,
+  owner_id: @cms_layouts_8.id,
+  owner_type: "Cms::Layout",
+  name: "piece/page-top"
 )

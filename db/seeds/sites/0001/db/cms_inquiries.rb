@@ -1331,3 +1331,15 @@ Cms::Inquiry.create!(
   inquirable_id: @gp_article_docs_576.id,
   inquirable_type: "GpArticle::Doc"
 )
+Cms::Inquiry.create!(
+  state: "visible",
+  group_id: @sys_groups_13.id,
+  inquirable_id: @gp_article_docs_577.id,
+  inquirable_type: "GpArticle::Doc"
+)
+Cms::Inquiry.create!(
+  state: "visible",
+  group_id: @sys_groups_13.id,
+  inquirable_id: @gp_article_docs_578.id,
+  inquirable_type: "GpArticle::Doc"
+)

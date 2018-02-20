@@ -3881,3 +3881,27 @@ Sys::Editor.create!(
   editable_id: @gp_article_docs_576.id,
   editable_type: "GpArticle::Doc"
 )
+Sys::Editor.create!(
+  user_id: @sys_users_7.id,
+  group_id: @sys_groups_13.id,
+  editable_id: @gp_article_docs_577.id,
+  editable_type: "GpArticle::Doc"
+)
+Sys::Editor.create!(
+  user_id: @sys_users_7.id,
+  group_id: @sys_groups_13.id,
+  editable_id: @gp_article_docs_577.id,
+  editable_type: "GpArticle::Doc"
+)
+Sys::Editor.create!(
+  user_id: @sys_users_7.id,
+  group_id: @sys_groups_13.id,
+  editable_id: @gp_article_docs_578.id,
+  editable_type: "GpArticle::Doc"
+)
+Sys::Editor.create!(
+  user_id: @sys_users_7.id,
+  group_id: @sys_groups_13.id,
+  editable_id: @gp_article_docs_578.id,
+  editable_type: "GpArticle::Doc"
+)
