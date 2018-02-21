@@ -1979,3 +1979,21 @@
   map_attachable_id: @gp_article_docs_576.id,
   map_attachable_type: "GpArticle::Doc"
 )
+@cms_maps_577 ||= Cms::Map.create!(
+  name: "1",
+  title: "",
+  map_lat: "",
+  map_lng: "",
+  map_zoom: "",
+  map_attachable_id: @gp_article_docs_577.id,
+  map_attachable_type: "GpArticle::Doc"
+)
+@cms_maps_578 ||= Cms::Map.create!(
+  name: "1",
+  title: "",
+  map_lat: "",
+  map_lng: "",
+  map_zoom: "",
+  map_attachable_id: @gp_article_docs_578.id,
+  map_attachable_type: "GpArticle::Doc"
+)

@@ -1551,3 +1551,17 @@ Cms::PublishUrl.create!(
   content_id: @cms_contents_1.id,
   node_id: @cms_nodes_4.id
 )
+Cms::PublishUrl.create!(
+  name: "/fixed_docs/2017111600010/index.html",
+  publishable_id: @gp_article_docs_577.id,
+  publishable_type: "GpArticle::Doc",
+  content_id: @cms_contents_11.id,
+  node_id: @cms_nodes_17.id
+)
+Cms::PublishUrl.create!(
+  name: "/fixed_docs/2017111600027/index.html",
+  publishable_id: @gp_article_docs_578.id,
+  publishable_type: "GpArticle::Doc",
+  content_id: @cms_contents_11.id,
+  node_id: @cms_nodes_17.id
+)

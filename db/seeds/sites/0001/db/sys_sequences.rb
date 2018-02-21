@@ -30,7 +30,7 @@ EOS
   version: <<EOS.chomp,
 #{@cms_contents_11.id}
 EOS
-  value: 197,
+  value: 199,
   site_id: @cms_sites_1.id
 )
 @sys_sequences_6 ||= Sys::Sequence.create!(
@@ -63,5 +63,11 @@ EOS
   name: "gp_article_docs",
   version: 20170802,
   value: 4,
+  site_id: @cms_sites_1.id
+)
+@sys_sequences_11 ||= Sys::Sequence.create!(
+  name: "gp_article_docs",
+  version: 20171116,
+  value: 2,
   site_id: @cms_sites_1.id
 )
