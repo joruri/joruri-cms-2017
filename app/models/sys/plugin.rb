@@ -4,7 +4,8 @@ class Sys::Plugin < ApplicationRecord
 
   GITHUB_USER = 'zomeki'
   GITHUB_TOPIC = 'zomeki3-plugin'
-  STATE_OPTIONS = [['有効','enabled'], ['無効','disabled']]
+
+  enum_ish :state, [:enabled, :disabled], predicate: true
 
   validates :name, presence: true, uniqueness: true,
                    format: { with: %r|\A[^/]+/[^/]+\z| }
@@ -12,21 +13,14 @@ class Sys::Plugin < ApplicationRecord
                       format: { with: %r|\A[^/]+/.+\z| }
   validates :title, presence: true
 
-  scope :search_with_params, ->(params = {}) {
-    all
-  }
-
   def gem_name
     name.split('/').last
   end
 
-  def engine_class_name
-    gem_name.gsub('-', '/').classify + '::Engine'
-  end
-
-  def engine_route
-    route = name.split('/').last
-    "/#{ZomekiCMS::ADMIN_URL_PREFIX}/plugins/#{route}"
+  def engine
+    Rails.application.config.x.engines.detect { |engine|
+      engine.root.to_s.split('/').last.gsub(/-[0-9a-z]{12}$/, '') == gem_name
+    }
   end
 
   def source
@@ -37,22 +31,16 @@ class Sys::Plugin < ApplicationRecord
     version.split('/').last
   end
 
-  def state_enabled?
-    state == 'enabled'
-  end
-
-  def state_label
-    STATE_OPTIONS.rassoc(state).try(:first)
-  end
-
   class << self
     def search_repos
+      require 'octokit'
       result = Octokit.search_repositories("user:#{GITHUB_USER} topic:#{GITHUB_TOPIC}")
       repos = result[:items].map { |item| item.to_h.slice(:full_name, :description) }
       repos.uniq
     end
 
     def version_options(name)
+      require 'octokit'
       tags = Octokit.tags(name)
       branches = Octokit.branches(name)
       tags.map { |tag| "tag/#{tag[:name]}" } + branches.map { |branch| "branch/#{branch[:name]}" }
@@ -62,6 +50,7 @@ class Sys::Plugin < ApplicationRecord
     end
 
     def title_options(name)
+      require 'octokit'
       Octokit.repository(name)[:description]
     rescue => e
       error_log e

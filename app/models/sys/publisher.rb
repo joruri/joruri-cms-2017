@@ -1,6 +1,6 @@
 class Sys::Publisher < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Site
+  include Sys::Model::Auth::Manager
 
   DIGEST_FILE_SIZE_LIMIT = 100 * 1024**2
 
@@ -84,7 +84,7 @@ class Sys::Publisher < ApplicationRecord
   end
 
   def check_path
-    remove_files(:path => path_was) if !path_was.blank? && path_changed?
+    remove_files(path: path_was) if !path_was.blank? && path_changed?
     return true
   end
 
@@ -92,8 +92,8 @@ class Sys::Publisher < ApplicationRecord
     up_path = options[:path] || path
     up_path = ::File.expand_path(path, Rails.root) if up_path.to_s.slice(0, 1) == '/'
     FileUtils.rm(up_path) if FileTest.exist?(up_path)
-    FileUtils.rm("#{up_path}.mp3") if FileTest.exist?("#{up_path}.mp3")
-    FileUtils.rmdir(::File.dirname(path)) rescue nil
+    #FileUtils.rm("#{up_path}.mp3") if FileTest.exist?("#{up_path}.mp3")
+    FileUtils.rmdir(::File.dirname(up_path)) rescue nil
     return true
   end
 end

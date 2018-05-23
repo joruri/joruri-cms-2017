@@ -1,17 +1,15 @@
 class GpCategory::Template < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Site
   include Cms::Model::Rel::Content
   include Cms::Model::Auth::Content
 
-  belongs_to :content, :foreign_key => :content_id, :class_name => 'GpCategory::Content::CategoryType'
-  validates :content_id, presence: true
+  belongs_to :content, class_name: 'GpCategory::Content::CategoryType', required: true
 
   has_many :category_types
   has_many :categories
 
   after_save     GpCategory::Publisher::TemplateCallbacks.new, if: :changed?
-  before_destroy GpCategory::Publisher::TemplateCallbacks.new
+  before_destroy GpCategory::Publisher::TemplateCallbacks.new, prepend: true
 
   validates :name, presence: true, uniqueness: { scope: :content_id, case_sensitive: false }
   validates :title, presence: true

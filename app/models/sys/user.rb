@@ -1,21 +1,21 @@
 require 'digest/sha1'
 class Sys::User < ApplicationRecord
   include Sys::Model::Base
-  include Sys::Model::Base::Config
   include Sys::Model::Auth::Manager
-  include Cms::Model::Site
-
-  include StateText
 
   ROOT_ID = 1
-  ADMIN_CREATABLE_OPTIONS = [['許可する', true], ['許可しない', false]]
+
+  enum_ish :state, [:enabled, :disabled]
+  enum_ish :ldap_state, [1, 0]
+  enum_ish :admin_creatable, [true, false]
 
   has_many :users_groups, foreign_key: :user_id, class_name: 'Sys::UsersGroup', dependent: :destroy
   has_many :groups, through: :users_groups, source: :group
   has_many :users_roles, foreign_key: :user_id, class_name: 'Sys::UsersRole', dependent: :destroy
   has_many :role_names, through: :users_roles, source: :role_name
   has_many :operation_logs, class_name: 'Sys::OperationLog'
-  has_many :gp_article_holds, class_name: 'GpArticle::Hold', dependent: :destroy
+  has_many :users_holds, dependent: :delete_all
+  has_many :users_sessions, dependent: :delete_all
 
   attr_accessor :in_group_id
 
@@ -32,7 +32,7 @@ class Sys::User < ApplicationRecord
 
   before_destroy :block_root_deletion
 
-  define_site_scope :users_groups
+  nested_scope :in_site, through: :users_groups
 
   scope :in_group, ->(group) { joins(:users_groups).where(sys_users_groups: { group_id: group.id }) }
 
@@ -76,25 +76,12 @@ class Sys::User < ApplicationRecord
     return nil
   end
 
-  def ldap_states
-    [['同期',1],['非同期',0]]
-  end
-
-  def ldap_label
-    ldap_states.each {|a| return a[0] if a[1] == ldap }
-    return nil
-  end
-
   def name_with_id
     "#{name}（#{id}）"
   end
 
   def name_with_account
     "#{name}（#{account}）"
-  end
-
-  def label(name)
-    case name; when nil; end
   end
 
   def group(load = nil)
@@ -120,12 +107,12 @@ class Sys::User < ApplicationRecord
 
   def has_auth?(name)
     auth = {
-      :none     => 0, # なし  操作不可
-      :reader   => 1, # 読者  閲覧のみ
-      :creator  => 2, #作成者 記事作成者
-      :editor   => 3, #編集者 データ作成者
-      :designer => 4, #設計者 デザイン作成者
-      :manager  => 5, #管理者 設定作成者
+      none:     0, # なし  操作不可
+      reader:   1, # 読者  閲覧のみ
+      creator:  2, #作成者 記事作成者
+      editor:   3, #編集者 データ作成者
+      designer: 4, #設計者 デザイン作成者
+      manager:  5, #管理者 設定作成者
     }
     raise "Unknown authority name: #{name}" unless auth.has_key?(name)
     return auth[name] <= auth_no
@@ -153,7 +140,7 @@ class Sys::User < ApplicationRecord
     root_users = self.where(state: 'enabled', account: account, id: ROOT_ID)
     users = self.where(state: 'enabled', account: account)
     users = users.in_site(site) if site
-    self.union([root_users, users])
+    [root_users, users].reduce(:union)
   end
 
   ## Authenticates a user by their account name and unencrypted password.  Returns the user or nil.
@@ -193,14 +180,13 @@ class Sys::User < ApplicationRecord
   def remember_me
     self.remember_token_expires_at = 2.weeks.from_now.utc
     self.remember_token            = encrypt("#{email}--#{remember_token_expires_at}")
-    save(:validate => false)
+    save(validate: false)
   end
 
   def forget_me
     self.remember_token_expires_at = nil
     self.remember_token            = nil
-    #save(:validate => false)
-    update_attributes :remember_token_expires_at => nil, :remember_token => nil
+    update_attributes remember_token_expires_at: nil, remember_token: nil
   end
 
   def root?
@@ -225,7 +211,7 @@ class Sys::User < ApplicationRecord
     users = users.where.not(id: id) if persisted?
     root_users = self.class.where(account: account, id: ROOT_ID)
 
-    if self.class.union([users, root_users]).exists?
+    if [users, root_users].reduce(:union).exists?
       errors.add(:account, :taken_in_site)
     end
   end
@@ -250,8 +236,8 @@ class Sys::User < ApplicationRecord
 
     if !exists && !in_group_id.blank?
       rel = Sys::UsersGroup.create(
-        :user_id  => id,
-        :group_id => in_group_id
+        user_id: id,
+        group_id: in_group_id
       )
     end
 

@@ -5,13 +5,9 @@ class GpArticle::Doc < ApplicationRecord
   include Sys::Model::Rel::EditableGroup
   include Sys::Model::Rel::File
   include Sys::Model::Rel::Task
-  include Cms::Model::Site
   include Cms::Model::Base::Page
-  include Cms::Model::Base::Page::Publisher
-  include Cms::Model::Base::Page::TalkTask
   include Cms::Model::Base::Qrcode
   include Cms::Model::Rel::Content
-  include Cms::Model::Rel::Concept
   include Cms::Model::Rel::Inquiry
   include Cms::Model::Rel::Map
   include Cms::Model::Rel::Bracket
@@ -21,58 +17,67 @@ class GpArticle::Doc < ApplicationRecord
   include Cms::Model::Rel::Importation
 
   include Cms::Model::Auth::Concept
+  include Sys::Model::Auth::Trash
   include Sys::Model::Auth::EditableGroup
 
-  include GpArticle::Model::Rel::Doc
   include GpArticle::Model::Rel::Category
   include GpArticle::Model::Rel::Tag
   include GpArticle::Model::Rel::RelatedDoc
   include Approval::Model::Rel::Approval
   include GpTemplate::Model::Rel::Template
 
-  include StateText
-
-  self.linkable_columns = [:body, :mobile_body, :body_more]
-  self.searchable_columns = [:body]
-
-  TARGET_OPTIONS = [['無効', ''], ['同一ウィンドウ', '_self'], ['別ウィンドウ', '_blank'], ['添付ファイル', 'attached_file']]
-  EVENT_STATE_OPTIONS = [['表示', 'visible'], ['非表示', 'hidden']]
-  MARKER_STATE_OPTIONS = [['表示', 'visible'], ['非表示', 'hidden']]
-  OGP_TYPE_OPTIONS = [['article', 'article']]
-  FEATURE_1_OPTIONS = [['表示', true], ['非表示', false]]
-  FEATURE_2_OPTIONS = [['表示', true], ['非表示', false]]
-
   default_scope { where.not(state: 'archived') }
 
+  column_attribute :href, default: ''
+  column_attribute :title, default: ''
+  column_attribute :mobile_title, default: ''
+  column_attribute :subtitle, default: ''
+  column_attribute :summary, default: ''
+  column_attribute :body, default: '', html: true, fts: true
+  column_attribute :mobile_body, default: '', html: true
+  column_attribute :body_more, default: '', html: true
+  column_attribute :terminal_pc_or_smart_phone, default: true
+  column_attribute :terminal_mobile, default: true
+  column_attribute :body_more_link_text, default: '続きを読む'
+  column_attribute :filename_base, default: 'index'
+
+  enum_ish :state, [:draft, :approvable, :approved, :prepared, :public, :closed, :trashed, :archived], predicate: true
+  enum_ish :target, ['', '_self', '_blank', 'attached_file'], default: ''
+  enum_ish :event_state, [:visible, :hidden], default: :hidden
+  enum_ish :marker_state, [:visible, :hidden], default: :hidden
+  enum_ish :og_type, [:article]
+  enum_ish :feature_1, [true, false], default: true
+
   # Content
-  belongs_to :content, :foreign_key => :content_id, :class_name => 'GpArticle::Content::Doc'
-  validates :content_id, :presence => true
+  belongs_to :content, class_name: 'GpArticle::Content::Doc', required: true
 
   # Page
-  belongs_to :layout, :foreign_key => :layout_id, :class_name => 'Cms::Layout'
+  belongs_to :concept, foreign_key: :concept_id, class_name: 'Cms::Concept'
+  belongs_to :layout, foreign_key: :layout_id, class_name: 'Cms::Layout'
 
+  has_many :users_holds, as: :holdable, class_name: 'Sys::UsersHold', dependent: :delete_all
   has_many :operation_logs, -> { where(item_model: 'GpArticle::Doc') },
-    foreign_key: :item_id, class_name: 'Sys::OperationLog'
+           foreign_key: :item_id, class_name: 'Sys::OperationLog'
 
-  belongs_to :prev_edition, :class_name => self.name
-  has_one :next_edition, :foreign_key => :prev_edition_id, :class_name => self.name
+  belongs_to :prev_edition, -> { where.not(state: 'trashed') }, class_name: self.name
+  has_one :next_edition, -> { where.not(state: 'trashed') }, foreign_key: :prev_edition_id, class_name: self.name
 
-  belongs_to :marker_icon_category, :class_name => 'GpCategory::Category'
+  belongs_to :marker_icon_category, class_name: 'GpCategory::Category'
 
-  has_many :categorizations, :class_name => 'GpCategory::Categorization', :as => :categorizable, :dependent => :destroy
+  has_many :categorizations, class_name: 'GpCategory::Categorization', as: :categorizable, dependent: :destroy
   has_many :categories, -> { where(GpCategory::Categorization.arel_table[:categorized_as].eq('GpArticle::Doc')) },
-           :class_name => 'GpCategory::Category', :through => :categorizations,
-           :after_add => proc {|d, c|
+           class_name: 'GpCategory::Category', through: :categorizations,
+           after_add: proc {|d, c|
              d.categorizations.where(category_id: c.id, categorized_as: nil).first.update_columns(categorized_as: d.class.name)
            }
   has_many :event_categories, -> { where(GpCategory::Categorization.arel_table[:categorized_as].eq('GpCalendar::Event')) },
-           :class_name => 'GpCategory::Category', :through => :categorizations, :source => :category,
-           :after_add => proc {|d, c|
+           class_name: 'GpCategory::Category', through: :categorizations, source: :category,
+           after_add: proc {|d, c|
              d.categorizations.where(category_id: c.id, categorized_as: nil).first.update_columns(categorized_as: 'GpCalendar::Event')
            }
   has_many :marker_categories, -> { where(GpCategory::Categorization.arel_table[:categorized_as].eq('Map::Marker')) },
-           :class_name => 'GpCategory::Category', :through => :categorizations, :source => :category,
-           :after_add => proc {|d, c|
+           class_name: 'GpCategory::Category', through: :categorizations, source: :category,
+           after_add: proc {|d, c|
              d.categorizations.where(category_id: c.id, categorized_as: nil).first.update_columns(categorized_as: 'Map::Marker')
            }
   has_and_belongs_to_many :tags, ->(doc) {
@@ -80,24 +85,25 @@ class GpArticle::Doc < ApplicationRecord
                               c && c.tag_related? && c.tag_content_tag ? where(content_id: c.tag_content_tag.id) : where(id: nil)
                             }, class_name: 'Tag::Tag', join_table: 'gp_article_docs_tag_tags'
 
-  has_many :holds, :as => :holdable, :dependent => :destroy
-
   after_initialize :set_defaults
   before_save :set_name
   before_save :set_serial_no
   before_save :set_published_at
-  before_save :set_display_attributes
-  before_save :replace_public
+  before_save :set_display_published_at
+  before_save :set_display_updated_at
 
   after_save     GpArticle::Publisher::DocCallbacks.new, if: :changed?
-  before_destroy GpArticle::Publisher::DocCallbacks.new
+  before_destroy GpArticle::Publisher::DocCallbacks.new, prepend: true
 
   after_save     Cms::SearchIndexerCallbacks.new, if: :changed?
-  before_destroy Cms::SearchIndexerCallbacks.new
+  before_destroy Cms::SearchIndexerCallbacks.new, prepend: true
+
+  after_save :replace_public
 
   attr_accessor :link_check_results, :in_ignore_link_check
   attr_accessor :accessibility_check_results, :in_ignore_accessibility_check, :in_modify_accessibility_check
 
+  validates :name, format: { with: /\A[\-\w]*\z/ }
   validates :title, presence: true, length: { maximum: 200 }
   validates :mobile_title, length: { maximum: 200 }
   validates :body, length: { maximum: Zomeki.config.application['gp_article.body_limit'].to_i }
@@ -110,51 +116,38 @@ class GpArticle::Doc < ApplicationRecord
                                              attribute: -> { mobile_body.present? ? :mobile_body : :body } },
                               if: -> { site.use_mobile_feature? }
 
-  validate :name_validity, if: -> { name.present? }
-  validate :event_dates_range
+  validate :validate_name, if: -> { name.present? }
+  validate :validate_event_dates_range
   validate :validate_accessibility_check, if: -> { !state_draft? && errors.blank? }
   validate :validate_broken_link_existence, if: -> { !state_draft? && errors.blank? }
 
-  validates_with Cms::ContentNodeValidator, if: -> { state_approvable? },
-                                           message: '記事コンテンツのディレクトリが作成されていないため、承認依頼が行えません。'
-  validates_with Cms::ContentNodeValidator, if: -> { state_public? },
-                                           message: '記事コンテンツのディレクトリが作成されていないため、即時公開が行えません。'
+  validates_with Sys::TaskValidator, if: -> { !state_draft? }
+  validates_with Cms::ContentNodeValidator, if: -> { state_approvable? || state_public? }
 
   scope :public_state, -> { where(state: 'public') }
   scope :mobile, ->(m) { m ? where(terminal_mobile: true) : where(terminal_pc_or_smart_phone: true) }
-  scope :display_published_after, ->(date) { where(arel_table[:display_published_at].gteq(date)) }
   scope :visible_in_list, -> { where(feature_1: true) }
   scope :event_scheduled_between, ->(start_date, end_date, category_ids = nil) {
     rel = dates_intersects(:event_started_on, :event_ended_on, start_date.try(:beginning_of_day), end_date.try(:end_of_day))
-    rel = rel.categorized_into_event(category_ids) if category_ids.present?
+    rel = rel.categorized_into(category_ids, categorized_as: 'GpCalendar::Event', alls: true) if category_ids.present?
     rel
   }
-  scope :categorized_into, ->(category_ids) {
-    cats = GpCategory::Categorization.arel_table
-    where(id: GpCategory::Categorization.select(:categorizable_id)
-      .where(cats[:categorized_as].eq('GpArticle::Doc'))
-      .where(cats[:category_id].in(category_ids)))
-  }
-  scope :categorized_into_all, ->(category_ids) {
-    cats = GpCategory::Categorization.arel_table
-    category_ids.inject(all) do |rel, category_id|
-      rel = rel.where(id: GpCategory::Categorization.select(:categorizable_id)
-        .where(cats[:categorized_as].eq('GpArticle::Doc'))
-        .where(cats[:category_id].eq(category_id)))
+  scope :categorized_into, ->(categories, categorized_as: 'GpArticle::Doc', alls: false) {
+    cats = GpCategory::Categorization.select(:categorizable_id)
+                                     .where(categorized_as: categorized_as, categorizable_type: self.to_s)
+    if alls
+      Array(categories).inject(all) { |rel, c| rel.where(id: cats.where(category_id: c)) }
+    else
+      where(id: cats.where(category_id: categories))
     end
   }
-  scope :categorized_into_event, ->(category_ids) {
-    cats = GpCategory::Categorization.arel_table
-    category_ids.inject(all) do |rel, category_id|
-      rel = rel.where(id: GpCategory::Categorization.select(:categorizable_id)
-        .where(cats[:categorized_as].eq('GpCalendar::Event'))
-        .where(cats[:category_id].eq(category_id)))
-    end
+  scope :organized_into, ->(groups) {
+    joins(creator: :group).where(sys_groups: { id: groups })
   }
-  scope :organized_into, ->(group_ids) {
-    groups = Sys::Group.arel_table
-    joins(creator: :group).where(groups[:id].in(group_ids))
-  }
+
+  def deletable?
+    super && !state_public?
+  end
 
   def public_path
     return '' if public_uri.blank?
@@ -166,38 +159,32 @@ class GpArticle::Doc < ApplicationRecord
     "#{content.public_path}/_smartphone#{public_uri(without_filename: true)}#{filename_base}.html"
   end
 
-  def organization_group
-    return @organization_group if defined? @organization_group
-    @organization_group =
-      if content.organization_content_group && creator.group
-        content.organization_content_group.groups.detect{|og| og.sys_group_code == creator.group.code}
-      else
-        nil
-      end
+  def filename_for_uri
+    if filename_base == 'index'
+      ''
+    else
+      "#{filename_base}.html"
+    end
   end
 
   def public_uri(without_filename: false, with_closed_preview: false)
     uri =
-      if content.organization_content_related? && organization_group
-        "#{organization_group.public_uri}docs/#{name}/"
-      elsif with_closed_preview && content.main_node && content.main_node.public_uri.present?
+      if with_closed_preview && content.main_node && content.main_node.public_uri.present?
         "#{content.main_node.public_uri}#{name}/"
       elsif !with_closed_preview && content.public_node
         "#{content.public_node.public_uri}#{name}/"
       end
     return '' unless uri
-    without_filename || filename_base == 'index' ? uri : "#{uri}#{filename_base}.html"
+    without_filename ? uri : "#{uri}#{filename_for_uri}"
   end
 
   def public_full_uri(without_filename: false)
     uri =
-      if content.organization_content_related? && organization_group
-        "#{organization_group.public_full_uri}docs/#{name}/"
-      elsif content.public_node
+      if content.public_node
         "#{content.public_node.public_full_uri}#{name}/"
       end
     return '' unless uri
-    without_filename || filename_base == 'index' ? uri : "#{uri}#{filename_base}.html"
+    without_filename ? uri : "#{uri}#{filename_for_uri}"
   end
 
   def preview_uri(terminal: nil, without_filename: false, params: {})
@@ -207,40 +194,26 @@ class GpArticle::Doc < ApplicationRecord
 
     flag = { mobile: 'm', smart_phone: 's' }[terminal]
     query = "?#{params.to_query}" if params.present?
-    filename = without_filename || filename_base == 'index' ? '' : "#{filename_base}.html"
+    filename = without_filename ? '' : filename_for_uri
     "#{site.main_admin_uri}_preview/#{format('%04d', site.id)}#{flag}#{path}preview/#{id}/#{filename}#{query}"
   end
 
-  def file_content_uri
+  def file_base_uri
     if state_public?
-      %Q(#{public_uri}file_contents/)
+      public_uri
     else
-      %Q(#{content.admin_uri}/#{id}/file_contents/)
+      admin_uri + '/'
     end
   end
 
-  def state_draft?
-    state == 'draft'
-  end
-
-  def state_approvable?
-    state == 'approvable'
-  end
-
-  def state_approved?
-    state == 'approved'
-  end
-
-  def state_prepared?
-    state == 'prepared'
-  end
-
-  def state_public?
-    state == 'public'
-  end
-
-  def state_closed?
-    state == 'closed'
+  def organization_group
+    return @organization_group if defined? @organization_group
+    @organization_group =
+      if content.organization_content_group && creator.group
+        content.organization_content_group.groups.detect{|og| og.sys_group_code == creator.group.code}
+      else
+        nil
+      end
   end
 
   def external_link?
@@ -299,6 +272,7 @@ class GpArticle::Doc < ApplicationRecord
         new_doc.tasks.build(site_id: task.site_id, name: task.name, process_at: task.process_at) if task.state_queued?
       end
       new_doc.creator_attributes = { group_id: creator.group_id, user_id: creator.user_id }
+      new_doc.display_updated_at = nil unless keep_display_updated_at
     else
       new_doc.name = nil
       new_doc.title = new_doc.title.gsub(/^(【複製】)*/, '【複製】')
@@ -335,15 +309,10 @@ class GpArticle::Doc < ApplicationRecord
     end
 
     transaction do
-      new_doc.save!
+      new_doc.save(validate: false)
 
       files.each do |f|
-        new_attributes = f.attributes
-        new_attributes[:id] = nil
-        new_file = Sys::File.new(new_attributes)
-        new_file.file = Sys::Lib::File::NoUploadedFile.new(path: f.upload_path, mime_type: new_file.mime_type)
-        new_file.file_attachable = new_doc
-        new_file.save
+        f.duplicate(file_attachable: new_doc)
       end
 
       new_doc.categories = self.categories
@@ -360,22 +329,6 @@ class GpArticle::Doc < ApplicationRecord
 
   def publishable?
     state.in?(%w(approved prepared)) && (editable? || approval_participators.include?(Core.user))
-  end
-
-  def formated_display_published_at
-    display_published_at.try(:strftime, content.date_style)
-  end
-
-  def formated_display_updated_at
-    display_updated_at.try(:strftime, content.date_style)
-  end
-
-  def default_map_position
-    [content.map_coordinate, content.site.map_coordinate].lazy.each do |pos|
-      p = pos.to_s.split(',').map(&:strip)
-      return p if p.size == 2
-    end
-    super
   end
 
   def extract_links
@@ -415,7 +368,7 @@ class GpArticle::Doc < ApplicationRecord
   def replace_words_with_dictionary
     return if content.word_dictionary.blank?
 
-    dic = Cms::Admin::WordDictionaryService.new(content.word_dictionary)
+    dic = Cms::WordDictionaryService.new(content.word_dictionary)
     [:body, :mobile_body].each do |column|
       text = read_attribute(column)
       self[column] = dic.replace(text) if text.present?
@@ -437,70 +390,63 @@ class GpArticle::Doc < ApplicationRecord
     next_edition && state_public?
   end
 
-  def og_type_text
-    OGP_TYPE_OPTIONS.detect{|o| o.last == self.og_type }.try(:first).to_s
-  end
-
-  def target_text
-    TARGET_OPTIONS.detect{|o| o.last == self.target }.try(:first).to_s
-  end
-
-  def event_state_text
-    EVENT_STATE_OPTIONS.detect{|o| o.last == self.event_state }.try(:first).to_s
-  end
-
-  def marker_state_text
-    MARKER_STATE_OPTIONS.detect{|o| o.last == self.marker_state }.try(:first).to_s
-  end
-
-  def feature_1_text
-    FEATURE_1_OPTIONS.detect{|o| o.last == self.feature_1 }.try(:first).to_s
-  end
-
-  def feature_2_text
-    FEATURE_2_OPTIONS.detect{|o| o.last == self.feature_2 }.try(:first).to_s
-  end
-
   def qrcode_visible?
     super && content && content.qrcode_related?
-  end
-
-  def event_state_visible?
-    event_state == 'visible'
   end
 
   def lang_text
     content.lang_options.rassoc(lang).try(:first)
   end
 
-  def link_to_options
-    if target.present?
-      if href.present?
-        if target == 'attached_file'
-          if (file = files.find_by(name: href))
-            ["#{public_uri}file_contents/#{file.name}", target: '_blank']
-          else
-            nil
-          end
-        else
-          [href, target: target]
-        end
-      else
-        nil
-      end
-    else
-      [public_uri]
+  def trash
+    self.state = 'trashed'
+    save(validate: false)
+  end
+
+  def untrash
+    if prev_edition_id && self.class.where(prev_edition_id: prev_edition_id).where.not(id: id, state: 'trashed').exists?
+      errors.add(:next_edition, :taken)
+      return false
     end
+    self.state = 'draft'
+    save(validate: false)
   end
 
   private
 
-  def name_validity
-    errors.add(:name, :invalid) if name !~ /^[\-\w]*$/
-
+  def validate_name
     doc = self.class.where(content_id: content_id, name: name)
     doc = doc.where.not(serial_no: serial_no) if serial_no
     errors.add(:name, :taken) if doc.exists?
+  end
+
+  def validate_event_dates_range
+    return if self.event_started_on.blank? && self.event_ended_on.blank?
+    self.event_started_on = self.event_ended_on if self.event_started_on.blank?
+    self.event_ended_on = self.event_started_on if self.event_ended_on.blank?
+    errors.add(:event_ended_on, "が#{self.class.human_attribute_name :event_started_on}を過ぎています。") if self.event_ended_on < self.event_started_on
+  end
+
+  def validate_broken_link_existence
+    return unless content.link_check_enabled?
+    return if in_ignore_link_check == '1'
+
+    results = check_links
+    if results.any? {|r| !r[:result] }
+      self.link_check_results = results
+      errors.add(:base, 'リンクチェック結果を確認してください。')
+    end
+  end
+
+  def validate_accessibility_check
+    return unless content.accessibility_check_enabled?
+
+    modify_accessibility if in_modify_accessibility_check == '1'
+    results = check_accessibility
+    if (results.present? && in_ignore_accessibility_check != '1') || errors.present?
+      self.accessibility_check_results = results
+      errors.add(:base, 'アクセシビリティチェック結果を確認してください。')
+    end
   end
 
   def set_name
@@ -515,24 +461,10 @@ class GpArticle::Doc < ApplicationRecord
   end
 
   def set_defaults
-    self.target       ||= TARGET_OPTIONS.first.last if self.has_attribute?(:target)
-    self.event_state  ||= 'hidden'                  if self.has_attribute?(:event_state)
-    self.marker_state ||= 'hidden'                  if self.has_attribute?(:marker_state)
-    self.terminal_pc_or_smart_phone = true if self.has_attribute?(:terminal_pc_or_smart_phone) && self.terminal_pc_or_smart_phone.nil?
-    self.terminal_mobile            = true if self.has_attribute?(:terminal_mobile) && self.terminal_mobile.nil?
-    self.body_more_link_text ||= '続きを読む' if self.has_attribute?(:body_more_link_text)
-    self.filename_base ||= 'index' if self.has_attribute?(:filename_base)
-
-    [:href, :subtitle, :summary, :title, :mobile_title, :body, :mobile_body, :body_more].each do |column|
-      self[column] ||= '' if has_attribute?(column)
-    end
-
-    set_defaults_from_content if new_record?
+    set_defaults_from_content if new_record? && content
   end
 
   def set_defaults_from_content
-    return unless content
-
     self.qrcode_state = content.qrcode_default_state if self.has_attribute?(:qrcode_state) && self.qrcode_state.nil?
     self.feature_1 = content.feature_settings[:feature_1] if self.has_attribute?(:feature_1) && self.feature_1.nil?
     self.feature_2 = content.feature_settings[:feature_2] if self.has_attribute?(:feature_2) && self.feature_2.nil?
@@ -548,9 +480,15 @@ class GpArticle::Doc < ApplicationRecord
     end
   end
 
-  def set_display_attributes
-    self.display_published_at = published_at if display_published_at.nil?
-    self.display_updated_at = updated_at if display_updated_at.nil? || !keep_display_updated_at
+  def set_display_published_at
+    if (publish_task = tasks.detect(&:publish_task?)) && state == 'approvable'
+      self.display_published_at ||= publish_task.process_at
+    end
+    self.display_published_at ||= published_at
+  end
+
+  def set_display_updated_at
+    self.display_updated_at ||= Time.now if state.in?(%w(approvable public))
   end
 
   def set_serial_no
@@ -559,50 +497,25 @@ class GpArticle::Doc < ApplicationRecord
     self.serial_no = seq
   end
 
-  def validate_platform_dependent_characters
-    [:title, :body, :mobile_title, :mobile_body].each do |attr|
-      if chars = Util::String.search_platform_dependent_characters(send(attr))
-        errors.add attr, :platform_dependent_characters, :chars => chars
-      end
-    end
-  end
-
-  def event_dates_range
-    return if self.event_started_on.blank? && self.event_ended_on.blank?
-    self.event_started_on = self.event_ended_on if self.event_started_on.blank?
-    self.event_ended_on = self.event_started_on if self.event_ended_on.blank?
-    errors.add(:event_ended_on, "が#{self.class.human_attribute_name :event_started_on}を過ぎています。") if self.event_ended_on < self.event_started_on
-  end
-
-  def validate_broken_link_existence
-    return unless content.site.link_check_enabled?
-    return if in_ignore_link_check == '1'
-
-    results = check_links
-    if results.any? {|r| !r[:result] }
-      self.link_check_results = results
-      errors.add(:base, 'リンクチェック結果を確認してください。')
-    end
-  end
-
-  def validate_accessibility_check
-    return unless content.site.accessibility_check_enabled?
-
-    modify_accessibility if in_modify_accessibility_check == '1'
-    results = check_accessibility
-    if (results.present? && in_ignore_accessibility_check != '1') || errors.present?
-      self.accessibility_check_results = results
-      errors.add(:base, 'アクセシビリティチェック結果を確認してください。')
-    end
-  end
-
   def replace_public
     prev_edition.destroy if state_public? && prev_edition
   end
 
+  class << self
+    def cleanup
+      days = Sys::Setting.trash_keep_days
+      return unless days
+
+      docs = self.where(state: 'trashed').date_before(:updated_at, days.days.ago)
+      docs.find_each(batch_size: 100) do |doc|
+        doc.destroy
+      end
+    end
+  end
+
   concerning :Publication do
     included do
-      after_destroy :close_page
+      after_destroy :close_page, if: -> { state_public? }
 
       define_model_callbacks :publish_files
       after_publish_files Cms::FileTransferCallbacks.new([:public_path, :public_smart_phone_path], recursive: true)
@@ -622,7 +535,7 @@ class GpArticle::Doc < ApplicationRecord
       return false unless state_public?
       return true unless terminal_pc_or_smart_phone
 
-      rendered = Cms::Admin::RenderService.new(content.site).render_public(public_uri)
+      rendered = Cms::RenderService.new(content.site).render_public(public_uri)
       return true unless publish_page(rendered, path: public_path)
       publish_files
       publish_qrcode
@@ -633,7 +546,7 @@ class GpArticle::Doc < ApplicationRecord
       end
 
       if content.site.publish_for_smart_phone?
-        rendered = Cms::Admin::RenderService.new(content.site).render_public(public_uri, agent_type: :smart_phone)
+        rendered = Cms::RenderService.new(content.site).render_public(public_uri, agent_type: :smart_phone)
         publish_page(rendered, path: public_smart_phone_path, dependent: :smart_phone)
         publish_smart_phone_files
         publish_smart_phone_qrcode

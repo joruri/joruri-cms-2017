@@ -1,0 +1,15 @@
+<%- if (item = Page.current_item) -%>
+  <%- if item.respond_to?(:meta_description) && item.meta_description.present? -%>
+  <meta name="description" content="<%= item.meta_description.gsub(/(\r\n|\r|\n)/, ' ') %>" />
+  <%- end -%>
+  <%- if item.respond_to?(:meta_keywords) && item.meta_keywords.present? -%>
+  <meta name="keywords" content="<%= item.meta_keywords %>" />
+  <%- end -%>
+  <%= og_tags(item) %>
+<%- end -%>
+<%= stylesheet_link_tag '/_common/js/flatpickr/themes/light.min.css' %>
+<%= stylesheet_link_tag '/_common/js/flatpickr/themes/ja.css' %>
+<%= javascript_include_tag '/_common/js/flatpickr/flatpickr.min.js' %>
+<%= javascript_include_tag '/_common/js/flatpickr/l10n/ja.js' %>
+<%= javascript_include_tag '/_common/js/flatpickr/plugins/scrollPlugin.js' %>
+<%= javascript_include_tag '/_common/js/bowser.min.js' %>

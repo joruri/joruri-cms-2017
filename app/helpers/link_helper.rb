@@ -26,28 +26,28 @@ module LinkHelper
     elsif link.class == Array
       return link_to(link[0], link[1], args)
     else
-      return link_to(type, url_for(:action => type), args)
+      return link_to(type, url_for(action: type), args)
     end
   end
 
   def link_to(*args)
     labels = {
-      :up        => '上へ',
-      :index     => '一覧',
-      :list      => '一覧',
-      :show      => '詳細',
-      :new       => '新規作成',
-      :edit      => '編集',
-      :duplicate => '複製',
-      :delete    => '削除',
-      :destroy   => '削除',
-      :set       => '設定',
-      :open      => '公開',
-      :close     => '非公開',
-      :enabale   => '有効化',
-      :disable   => '無効化',
-      :recognize => '承認',
-      :publish   => '公開'
+      up:        '上へ',
+      index:     '一覧',
+      list:      '一覧',
+      show:      '詳細',
+      new:       '新規作成',
+      edit:      '編集',
+      duplicate: '複製',
+      delete:    '削除',
+      destroy:   '削除',
+      set:       '設定',
+      open:      '公開',
+      close:     '非公開',
+      enabale:   '有効化',
+      disable:   '無効化',
+      recognize: '承認',
+      publish:   '公開'
     }
     args[0] = labels[args[0]] if labels.key?(args[0])
 
@@ -81,5 +81,28 @@ module LinkHelper
     text ||= tel
     return tel if tel.to_s !~ /^([\(]?)([0-9]+)([-\(\)]?)([0-9]+)([-\)]?)([0-9]+$)/
     link_to text.html_safe, "tel:#{tel}"
+  end
+
+  def data_uri(data, mime_type:)
+    "data:#{mime_type};base64,#{Base64.strict_encode64(data)}"
+  end
+
+  def sort_link(name, options = {}, html_options = {})
+    curr_key = params[:sort_key]
+    curr_order = params[:sort_order]
+
+    if curr_key.present? && curr_key.to_s == options[:sort_key].to_s
+      if curr_order.blank?
+        order, mark = 'desc', '▲'
+      else
+        order, mark = '', '▼'
+      end
+    elsif options[:default] == :desc
+      order, mark = 'desc', ''
+    end
+
+    link_options = options.merge(params.to_unsafe_h.symbolize_keys)
+                          .merge(sort_key: options[:sort_key], sort_order: order)
+    link_to "#{name}#{mark}".html_safe, link_options, html_options
   end
 end

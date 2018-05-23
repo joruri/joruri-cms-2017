@@ -18,6 +18,9 @@ namespace ZomekiCMS::NAME do
     desc 'Cleanup unnecessary data.'
     task :cleanup => :environment do
       Sys::File.cleanup
+      Sys::UsersSession.cleanup
+      Sys::Process.cleanup
+      GpArticle::Doc.cleanup
     end
 
     namespace :tasks do

@@ -1,6 +1,5 @@
 class Cms::ContentSetting < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Site
   include Cms::Model::Rel::Content
 
   @@configs = {}
@@ -11,7 +10,7 @@ class Cms::ContentSetting < ApplicationRecord
 
   def self.set_config(id, params = {})
     @@configs[self] ||= []
-    @@configs[self] << params.merge(:id => id).freeze
+    @@configs[self] << params.merge(id: id).freeze
   end
 
   def self.configs(content)

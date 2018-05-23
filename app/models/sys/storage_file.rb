@@ -1,7 +1,6 @@
 class Sys::StorageFile < ApplicationRecord
   include Sys::Model::Base
-  include Sys::Model::TextExtraction
-  include Cms::Model::Site
+  include Sys::Model::Base::TextExtraction
 
   before_save :set_mime_type
 
@@ -29,6 +28,10 @@ class Sys::StorageFile < ApplicationRecord
 
   def state_was
     nil
+  end
+
+  def upload_path
+    path
   end
 
   private

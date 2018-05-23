@@ -2,7 +2,7 @@ class Cms::Public::TalkController < Cms::Controller::Public::Data
   def down_m3u
     uri  = sound_uri
     data = "#{uri}\n"
-    send_data data, {:type => 'audio/x-mpegurl', :filename => 'sound.m3u', :disposition => 'inline'}
+    send_data data, type: 'audio/x-mpegurl', filename: 'sound.m3u', disposition: 'inline'
   end
   
   def down_mp3
@@ -15,24 +15,26 @@ class Cms::Public::TalkController < Cms::Controller::Public::Data
     uri = "#{Core.script_uri.gsub(/\A(.*?\/\/.*?)\/.*/, '\1')}#{uri}"
 
     header = {}
-    header.merge!('Cookie' => request.headers['Cookie']) if request.headers['Cookie'].present?
+    %w(Cookie Authorization).each do |key|
+      header.merge!(key => request.headers[key]) if request.headers[key].present?
+    end
     res = Util::Http::Request.get(uri, header: header)
     return http_error(404) if res.status != 200
 
     site_id = Page.site.id rescue nil
 
     jtalk = Cms::Lib::Navi::Jtalk.new
-    jtalk.make res.body, {:site_id => site_id}
+    jtalk.make(res.body, site_id: site_id)
     file = jtalk.output
-    send_file(file[:path], :type => file[:mime_type], :filename => 'sound.mp3', :disposition => 'inline')
+    send_file(file[:path], type: file[:mime_type], filename: 'sound.mp3', disposition: 'inline')
     
     #file = "#{Rails.root}/ext/making.mp3"
-    #send_file file, :type => 'audio/mp3', :filename => 'sound.mp3', :disposition => 'inline'
+    #send_file file, type: 'audio/mp3', filename: 'sound.mp3', disposition: 'inline'
     
     #gtalk = Cms::Lib::Navi::Gtalk.new
     #gtalk.make "只今、音声を作成しています。しばらくお待ち頂いてから、もう一度、アクセスしてください"
     #file = gtalk.output
-    #send_data file[:path], :type => file[:path], :filename => 'sound.mp3', :disposition => 'inline'
+    #send_data file[:path], type: file[:path], filename: 'sound.mp3', disposition: 'inline'
   end
 
   def sound_uri
@@ -48,6 +50,6 @@ class Cms::Public::TalkController < Cms::Controller::Public::Data
   
   def send_sound(file)
     file = "#{Rails.root}/public/_common/sounds/#{file}"
-    send_file(file, :type => 'audio/mp3', :filename => 'sound.mp3', :disposition => 'inline')
+    send_file(file, type: 'audio/mp3', filename: 'sound.mp3', disposition: 'inline')
   end
 end

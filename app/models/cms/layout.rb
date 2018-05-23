@@ -1,23 +1,21 @@
 class Cms::Layout < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
-  include Cms::Model::Site
   include Cms::Model::Rel::Site
   include Cms::Model::Rel::Concept
   include Cms::Model::Rel::Bracket
   include Cms::Model::Auth::Concept
 
-  after_save     Cms::Publisher::LayoutCallbacks.new, if: :changed?
-  before_destroy Cms::Publisher::LayoutCallbacks.new
+  enum_ish :state, [:public, :closed], default: :public
 
+  after_save     Cms::Publisher::LayoutCallbacks.new, if: :changed?
+  before_destroy Cms::Publisher::LayoutCallbacks.new, prepend: true
+
+  validates :concept_id, presence: true
   validates :state, :title, presence: true
   validates :name, presence: true,
                    uniqueness: { scope: :concept_id, case_sensitive: false },
                    format: { with: /\A[0-9a-zA-Z\-_]+\z/, if: -> { name.present? }, message: :invalid_bracket_name }
-
-  def states
-    [['公開','public']]
-  end
 
   def concept_name_and_title
     "#{concept.try(:name)} : #{title}"
@@ -165,6 +163,6 @@ class Cms::Layout < ApplicationRecord
       item.title         = item.title.gsub(/^(【複製】)*/, "【複製】")
     end
 
-    return item.save(:validate => false)
+    return item.save(validate: false)
   end
 end

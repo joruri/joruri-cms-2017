@@ -9,12 +9,12 @@ class Gnav::Admin::MenuItemsController < Cms::Controller::Admin::Base
       @category_types = gccct.category_types
       @category_types_for_option = gccct.category_types_for_option
     else
-      redirect_to gnav_content_settings_path, :alert => 'カテゴリ種別を設定してください。'
+      redirect_to gnav_content_settings_path, alert: 'カテゴリ種別を設定してください。'
     end
   end
 
   def index
-    @items = @content.menu_items.paginate(page: params[:page], per_page: 50)
+    @items = @content.menu_items.paginate(page: params[:page], per_page: params[:limit])
     _index @items
   end
 

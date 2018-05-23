@@ -7,10 +7,11 @@ class Sys::Admin::UsersController < Cms::Controller::Admin::Base
   end
 
   def index
-    @items = Sys::UsersFinder.new(Core.site.users).search(params)
-                             .order("LPAD(account, 15, '0')")
+    @items = Sys::UsersFinder.new(Core.site.users)
+                             .search(params)
+                             .order(:account)
                              .paginate(page: params[:page], per_page: params[:limit])
-                             .preload(:groups, :role_names)
+                             .preload(:role_names, :groups => [:parent])
 
     _index @items
   end
@@ -22,11 +23,10 @@ class Sys::Admin::UsersController < Cms::Controller::Admin::Base
   end
 
   def new
-    @item = Sys::User.new(
-      :state       => 'enabled',
-      :ldap        => 0,
-      :auth_no     => 2
-    )
+    @item = Sys::User.new(state: 'enabled',
+                          ldap: 0,
+                          auth_no: 2,
+                          password: SecureRandom.base64(8).slice(0, 8))
   end
 
   def create

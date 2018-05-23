@@ -9,11 +9,11 @@
         </tr>
         <tr>
           <td><%= @item.locale :group_id %></td>
-          <td><%= select_tag "group_id", options_for_select(Core.site.groups_for_option), include_blank: true %></td>
+          <td><%= select_tag :group_id, options_for_select(Core.site.groups_for_option), include_blank: true %></td>
         </tr>
         <tr>
           <td><%= @item.locale :user_id %></td>
-          <td><%= select_tag "user_id", options_for_select([]), include_blank: true %></td>
+          <td><%= select_tag :user_id, options_for_select([]), include_blank: true %></td>
         </tr>
         <tr>
           <td><%= @item.locale :doc_id %></td>
@@ -25,7 +25,7 @@
   </tr>
   <tr>
     <th><%= @item.locale :sort_no %> <span class="note">※</span></th>
-    <td><%= f.text_field :sort_no, :class => 'number' %></td>
+    <td><%= f.text_field :sort_no, class: 'number' %></td>
   </tr>
 </table>
 
@@ -61,7 +61,7 @@ function get_articles() {
     doc_select.html('<option value=""></option>');
   } else {
     doc_select.html('<option value="">更新中...</option>');
-    url = '<%= gp_article_docs_path(content: 'CONTENT_ID') %>?options=true&public=true';
+    url = '<%= gp_article_docs_path(content: 'CONTENT_ID') %>?doc_options=true&state=public';
     if (!isNaN(group_id)) { url = url + '&group_id=' + group_id; }
     if (!isNaN(user_id)) { url = url + '&user_id=' + user_id; }
     $.get(url.replace('CONTENT_ID', content_id), function (data) {

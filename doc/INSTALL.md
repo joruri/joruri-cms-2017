@@ -6,7 +6,7 @@
 
 * OS: CentOS 7.2
 * Webサーバ: nginx 1.12
-* Appサーバ: unicorn 5.1
+* Appサーバ: unicorn 5.4
 * Database: PostgreSQL 9.5
 * Ruby: 2.3
 * Rails: 5.0
@@ -58,8 +58,8 @@ rbenvをインストールします。
 
 rubyをインストールします。
 
-    # rbenv install 2.3.1
-    # rbenv global 2.3.1
+    # rbenv install 2.3.7
+    # rbenv global 2.3.7
     # rbenv rehash
     # ruby -v
 

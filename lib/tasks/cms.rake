@@ -71,7 +71,7 @@ namespace ZomekiCMS::NAME do
         out2 = `bundle exec rails g cms:apache:site_config --force`
         puts out2
         if (out1 + out2) =~ /^\s*(force|create|remove)/
-          Cms::Site.reload_servers
+          FileUtils.touch Rails.root.join('tmp/reload_servers.txt')
         end
       end
     end
@@ -120,7 +120,7 @@ namespace ZomekiCMS::NAME do
         models.each do |model|
           items = model
           items = items.in_site(ENV['SITE_ID']) if ENV['SITE_ID']
-          items.find_each(&:set_public_name)
+          items.find_each(&:save_publish_urls)
         end
       end
     end

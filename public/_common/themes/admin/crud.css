@@ -46,6 +46,9 @@ table.index th {
   text-align: left;
   color: #000;
 }
+table.index th a {
+  color: #000;
+}
 table.index td {
   padding: 5px 6px;
   border-left: 1px solid #ccc;
@@ -56,6 +59,16 @@ table.index td.approvable {
 }
 table.index tr.cycle td {
   background-color: #f4f4f4;
+}
+table.index th.action_link,
+table.index td.action_link {
+  width: 45px;
+  text-align: center;
+}
+table.index th.checkbox,
+table.index td.checkbox {
+  width: 20px;
+  text-align: center;
 }
 
 /* Show
@@ -90,6 +103,9 @@ table.show td.tableContainer th {
 table.show td textarea {
   width: 100%;
 }
+table.show td label {
+  margin-right: 4px;
+}
 
 /* Form
 ------------------------------------- */
@@ -118,6 +134,7 @@ table.show input.nameEn {
 table.show input.title {
   width: 600px;
 }
+form.search input.number,
 table.show input.number {
   text-align: right;
   width: 100px;
@@ -223,9 +240,7 @@ table.show td textarea.head {
 
 /* Contents > Search
 --------------------------------------------------------- */
-#keyword {
-  margin-left: 10px;
-}
-#target_concept {
-  margin: 0 10px;
+form.searchTool table.search td,
+form.searchTool table.search th {
+  padding: 2px 4px;
 }

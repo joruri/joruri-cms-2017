@@ -7,7 +7,7 @@ module Sys::Model::Scope
     }
     scope :search_with_text, ->(*args) {
       words = args.pop.to_s.split(/[ 　]+/)
-      columns = args
+      columns = args.flatten
       where(words.map{|w| columns.map{|c| arel_table[c].matches("%#{escape_like(w)}%") }.reduce(:or) }.reduce(:and))
     }
     scope :search_with_logical_query, ->(*args) {
@@ -54,15 +54,6 @@ module Sys::Model::Scope
   module ClassMethods
     def escape_like(s)
       s.gsub(/[\\%_]/) {|r| "\\#{r}"}
-    end
-
-    def union(relations)
-      if relations.present?
-        sql = '((' + relations.map{|rel| rel.to_sql}.join(') UNION (') + ')) AS ' + self.table_name 
-        from(sql)
-      else
-        none
-      end
     end
 
     def replace_for_all(column, from, to)

@@ -1,11 +1,10 @@
 class GpCategory::Categorization < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Site
 
-  default_scope { order("#{self.table_name}.sort_no IS NULL, #{self.table_name}.sort_no") }
+  default_scope { order(:sort_no) }
 
   belongs_to :categorizable, polymorphic: true
   belongs_to :category
 
-  define_site_scope :categorizable
+  nested_scope :in_site, through: :categorizable
 end

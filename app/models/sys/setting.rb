@@ -13,8 +13,28 @@ class Sys::Setting < ApplicationRecord
              default_value: 'disabled',
              options: [['有効にする', 'enabled'], ['無効にする', 'disabled']],
              form_type: :radio_buttons
+  set_config :block_word,
+             name: '禁止語句',
+             form_type: :text,
+             lower_text: 'スペースまたは改行で複数指定できます。'
+  set_config :process_log_keep_days,
+             name: 'プロセスログ保存期間',
+             comment: '日',
+             default_value: 10
+  set_config :trash_keep_days,
+             name: 'ごみ箱保存期間',
+             comment: '日',
+             default_value: 10
 
   validates :name, presence: true
+
+  def value_name
+    if config[:form_type] == :radio_buttons && config[:options].present?
+      config[:options].rassoc(value).try(:first)
+    else
+      value
+    end
+  end
 
   class << self
     def use_common_ssl?
@@ -43,6 +63,20 @@ class Sys::Setting < ApplicationRecord
       end_at = setting_extra_value(:maintenance_mode, :maintenance_end_at)
       return nil if end_at.blank?
       "#{end_at}　まで"
+    end
+
+    def block_words
+      setting_value(:block_word).to_s.split(/(\r\n|\n|\t| |　)+/).uniq.map(&:strip).select(&:present?)
+    end
+
+    def process_log_keep_days
+      days = setting_value(:process_log_keep_days)
+      days.to_i if days.present?
+    end
+
+    def trash_keep_days
+      days = setting_value(:trash_keep_days)
+      days.to_i if days.present?
     end
 
     private

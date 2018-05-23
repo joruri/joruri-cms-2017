@@ -13,14 +13,15 @@
         item_id: "marker<%= i %>",
         lat: <%= marker.latitude %>,
         lng: <%= marker.longitude %>,
-        icon_url: '<%= @content.icon_image(marker.icon_category || (marker.categories.include?(@specified_category) ? @specified_category : marker.categories.first), true) %>'
+        icon_url: '<%= @content.icon_image(marker.icon_category || marker.categories.first, true) %>'
       };
       <%- if marker.doc -%>
       marker_list["marker<%= i %>"]["url"] = "<%= marker.doc.public_uri %>";
       <%- end-%>
     <%- end -%>
 
-    renderMap(<%= @content.default_map_position.first %>, <%= @content.default_map_position.last %>, marker_list);
+    <%- default_position = default_map_position(@content) -%>
+    renderMap(<%= default_position[0] %>, <%= default_position[1] %>, marker_list);
   });
 
 })(jQuery);

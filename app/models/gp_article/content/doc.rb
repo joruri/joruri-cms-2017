@@ -3,48 +3,28 @@ class GpArticle::Content::Doc < Cms::Content
 
   STATE_OPTIONS = [['下書き保存', 'draft'], ['承認依頼', 'approvable'], ['即時公開', 'public']]
 
-  has_one :main_node, -> { where(model: 'GpArticle::Doc').order(:id) },
-    foreign_key: :content_id, class_name: 'Cms::Node'
-  has_one :public_node, -> { public_state.where(model: 'GpArticle::Doc').order(:id) },
-    foreign_key: :content_id, class_name: 'Cms::Node'
-  has_one :public_archives_node, -> { public_state.where(model: 'GpArticle::Archive').order(:id) },
-    foreign_key: :content_id, class_name: 'Cms::Node'
-  has_one :public_search_docs_node, -> { public_state.where(model: 'GpArticle::SearchDoc').order(:id) },
-    foreign_key: :content_id, class_name: 'Cms::Node'
-
-  has_many :settings, -> { order(:sort_no) },
-    foreign_key: :content_id, class_name: 'GpArticle::Content::Setting', dependent: :destroy
-  has_one :organization_content_group_setting, -> { where(name: 'organization_content_group_id') },
-    foreign_key: :content_id, class_name: 'GpArticle::Content::Setting'
-
+  has_many :settings, foreign_key: :content_id, class_name: 'GpArticle::Content::Setting', dependent: :destroy
   has_many :docs, foreign_key: :content_id, class_name: 'GpArticle::Doc', dependent: :destroy
 
-  # draft, approvable, approved, public
-  def preview_docs
-    table = docs.arel_table
-    docs.mobile(::Page.mobile?).where(table[:state].not_eq('closed'))
-  end
+  # node
+  has_one :main_node, -> { where(model: 'GpArticle::Doc').order(:id) },
+                      foreign_key: :content_id, class_name: 'Cms::Node'
+  has_one :public_node, -> { public_state.where(model: 'GpArticle::Doc').order(:id) },
+                        foreign_key: :content_id, class_name: 'Cms::Node'
+  has_one :public_archives_node, -> { public_state.where(model: 'GpArticle::Archive').order(:id) },
+                                 foreign_key: :content_id, class_name: 'Cms::Node'
+  has_one :public_search_docs_node, -> { public_state.where(model: 'GpArticle::SearchDoc').order(:id) },
+                                    foreign_key: :content_id, class_name: 'Cms::Node'
 
-  # public
-  def public_docs
-    docs.mobile(::Page.mobile?).public_state
-  end
-
-  def public_docs_for_list
-    public_docs.visible_in_list
+  def docs_for_list
+    docs.visible_in_list
   end
 
   def organization_content_group
+    organization_content_group_setting = settings.detect { |st| st.name == 'organization_content_group_id' }
     if organization_content_group_setting
       @organization_content_group ||= organization_content_group_setting.organization_content_group
     end
-  end
-
-  def organization_content_related?
-    organization_content = organization_content_group
-    organization_content &&
-      organization_content.article_related? &&
-      organization_content.related_article_content_id == content.id
   end
 
   def gp_category_content_category_type
@@ -119,17 +99,11 @@ class GpArticle::Content::Doc < Cms::Content
     setting_value(:save_button_states) || []
   end
 
-  def state_options(user = Core.user)
-    options = if user.has_auth?(:manager) || save_button_states.include?('public')
-                STATE_OPTIONS
-              else
-                STATE_OPTIONS.reject{|so| so.last == 'public' }
-              end
-    if approval_related?
-      options
-    else
-      options.reject{|o| o.last == 'approvable' }
-    end
+  def doc_state_options(user)
+    options = STATE_OPTIONS.clone
+    options.reject! { |o| o.last == 'public' } if !user.has_auth?(:manager) && !save_button_states.include?('public')
+    options.reject! { |o| o.last == 'approvable' } unless approval_related?
+    options
   end
 
   def display_dates(key)
@@ -142,11 +116,6 @@ class GpArticle::Content::Doc < Cms::Content
 
   def event_category_types
     gp_calendar_content_event.try(:category_types) || GpCategory::CategoryType.none
-  end
-
-  def event_category_type_categories_for_option(category_type, include_descendants: true)
-    gp_calendar_content_event.try(:category_type_categories_for_option,
-                                  category_type, include_descendants: include_descendants) || []
   end
 
   def calendar_related?
@@ -180,6 +149,18 @@ class GpArticle::Content::Doc < Cms::Content
 
   def inquiry_extra_values
     setting_extra_values(:inquiry_setting) || {}
+  end
+
+  def inquiry_default_state
+    inquiry_extra_values[:state]
+  end
+
+  def inquiry_title
+    inquiry_extra_values[:inquiry_title]
+  end
+
+  def inquiry_style
+    inquiry_extra_values[:inquiry_style]
   end
 
   def approval_content_approval_flow
@@ -372,5 +353,13 @@ class GpArticle::Content::Doc < Cms::Content
 
   def related_doc_enabled?
     setting_value(:related_doc) == 'enabled'
+  end
+
+  def link_check_enabled?
+    setting_value(:link_check) == 'enabled'
+  end
+
+  def accessibility_check_enabled?
+    setting_value(:accessibility_check) == 'enabled'
   end
 end

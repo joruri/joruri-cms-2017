@@ -25,7 +25,7 @@
     </tr>
   </table>
   
-  <%- if item.state_approvable? && item.approvers.include?(Core.user) && controller.respond_to?(:passback) -%>
+  <%- if item.passbackable?(Core.user) && controller.respond_to?(:passback) -%>
     <%= form_tag url_for(content: content, action: 'passback') do %>
     <table class="show">
       <tr>
@@ -37,7 +37,7 @@
     <%- end -%>
   <%- end -%>
   
-  <%- if item.state_approvable? && item.approval_requesters.include?(Core.user) && controller.respond_to?(:pullback) -%>
+  <%- if item.pullbackable?(Core.user) && controller.respond_to?(:pullback) -%>
     <%= form_tag url_for(content: content, action: 'pullback') do %>
     <table class="show">
       <tr>
@@ -57,7 +57,7 @@
       <%- approval_request.histories.each do |history| -%>
       <tr>
         <th>
-          <span class="reason"><%= history.reason_title %></span>
+          <span class="reason"><%= history.reason_text %></span>
           <span class="group"><%= history.operator ? history.operator.group.name : '担当者削除済み' %></span>
           <span class="user"><%= history.operator ? history.operator.name : '担当者削除済み' %>
                              （<%= history.operator ? history.operator.account : '担当者削除済み' %>）</span>

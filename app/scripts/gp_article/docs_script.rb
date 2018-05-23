@@ -11,7 +11,7 @@ class GpArticle::DocsScript < PublicationScript
     if content.doc_list_pagination == 'simple'
       publish_more(@node, common_params.merge(limit: content.doc_publish_more_pages))
     else
-      paginator = content.public_docs_for_list
+      paginator = content.docs_for_list.public_state
                          .date_paginate(content.docs_order_column, content.docs_order_direction, scope: content.doc_list_pagination)
                          .paginator
       if params[:target_date].present?
@@ -44,7 +44,7 @@ class GpArticle::DocsScript < PublicationScript
   end
 
   def publish_doc
-    docs = @node.content.public_docs.where(id: params[:target_doc_id])
+    docs = @node.content.docs.public_state.where(id: params[:target_doc_id])
     docs.find_each do |doc|
       ::Script.progress(doc) do
         doc.rebuild
@@ -57,15 +57,14 @@ class GpArticle::DocsScript < PublicationScript
   def publish_by_task(item)
     if (item.state_approved? || item.state_prepared?)
       ::Script.current
-      info_log "-- Publish: #{item.class}##{item.id}"
 
       if item.publish
+        ::Script.log "published: #{item.public_uri}"
         Sys::OperationLog.script_log(item: item, site: item.content.site, action: 'publish')
       else
         raise "#{item.class}##{item.id}: failed to publish"
       end
 
-      info_log 'OK: Published'
       ::Script.success
       return true
     elsif item.state_public?
@@ -76,13 +75,12 @@ class GpArticle::DocsScript < PublicationScript
   def close_by_task(item)
     if item.state_public?
       ::Script.current
-      info_log "-- Close: #{item.class}##{item.id}"
 
       if item.close
+        ::Script.log "closed: #{item.public_uri}"
         Sys::OperationLog.script_log(item: item, site: item.content.site, action: 'close')
       end
 
-      info_log 'OK: Finished'
       ::Script.success
       return true
     elsif item.state_closed?

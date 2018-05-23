@@ -35,22 +35,27 @@
 <table class="show">
   <tr>
     <th><%= @item.class.human_attribute_name :state %></th>
-    <td><%= @item.status.try(:name) %></td>
+    <td><%= @item.state_text %></td>
   </tr>
   <tr>
     <th><%= @item.class.human_attribute_name :published_at %></th>
-    <td><%=i18n_l @item.published_at %></td>
+    <td><%=l @item.published_at %></td>
   </tr>
   <tr>
     <th><%= @item.class.human_attribute_name :closed_at %></th>
-    <td><%=i18n_l @item.closed_at %></td>
+    <td><%=l @item.closed_at %></td>
   </tr>
   <tr>
     <th><%= @item.class.human_attribute_name :url %></th>
-    <td>
-      <%= link_to @item.url, @item.url, target: '_blank' %>
-      <span style="margin-left: 10px;"><%= @item.target_text %></span>
-    </td>
+    <td><%= link_to @item.url, @item.url, target: '_blank' %></td>
+  </tr>
+  <tr>
+    <th><%= @item.class.human_attribute_name :sp_url %></th>
+    <td><%= link_to @item.sp_url, @item.sp_url, target: '_blank' if @item.sp_url.present? %></td>
+  </tr>
+  <tr>
+    <th><%= @item.class.human_attribute_name :target %></th>
+    <td><%= @item.target_text %></td>
   </tr>
   <tr>
     <th><%= @item.class.human_attribute_name :sort_no %></th>

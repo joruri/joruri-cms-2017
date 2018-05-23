@@ -1,5 +1,5 @@
 class GpCalendar::Public::Node::EventsController < GpCalendar::Public::Node::BaseController
-  skip_after_action :render_public_layout, :only => [:file_content]
+  skip_after_action :render_public_layout, only: [:file_content]
 
   def index
     http_error(404) if params[:page]
@@ -19,7 +19,7 @@ class GpCalendar::Public::Node::EventsController < GpCalendar::Public::Node::Bas
                            else
                              [@date.beginning_of_month, @date.end_of_month]
                            end
-    docs = @content.public_event_docs(start_date, end_date)
+    docs = @content.event_docs(start_date, end_date)
     @events = merge_docs_into_events(docs, @events)
 
     @holidays = GpCalendar::Holiday.public_state.content_and_criteria(@content, criteria).where(kind: :event)

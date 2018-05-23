@@ -20,7 +20,7 @@
 # Learn more: http://github.com/javan/whenever
 
 # set :environment, 'development'
-require_relative 'application'
+require_relative 'environment'
 
 set :output, nil
 
@@ -74,4 +74,16 @@ end
 # delayed_jobを再起動します。
 every :sunday, at: '0:10 am' do
   rake "delayed_job:restart"
+end
+
+# Modules
+Dir[Rails.root.join('config/modules/**/schedule.rb')].each do |file|
+  instance_eval File.read(file)
+end
+
+# Engines
+Rails.application.config.x.engines.each do |engine|
+  Dir["#{engine.root}/config/modules/**/schedule.rb"].each do |file|
+    instance_eval File.read(file)
+  end
 end

@@ -1,25 +1,20 @@
 class Map::Content::Marker < Cms::Content
   default_scope { where(model: 'Map::Marker') }
 
-  has_one :public_node, -> { public_state.where(model: 'Map::Marker').order(:id) },
-    foreign_key: :content_id, class_name: 'Cms::Node'
-
-  has_many :settings, -> { order(:sort_no) },
-    foreign_key: :content_id, class_name: 'Map::Content::Setting', dependent: :destroy
-
+  has_many :settings, foreign_key: :content_id, class_name: 'Map::Content::Setting', dependent: :destroy
   has_many :markers, foreign_key: :content_id, class_name: 'Map::Marker', dependent: :destroy
   has_many :marker_icons, foreign_key: :content_id, class_name: 'Map::MarkerIcon', dependent: :destroy
+
+  # node
+  has_one :public_node, -> { public_state.where(model: 'Map::Marker').order(:id) },
+                        foreign_key: :content_id, class_name: 'Cms::Node'
 
   def public_markers
     markers.public_state
   end
 
-  def default_map_position
-    [setting_value(:lat_lng), site.map_coordinate].lazy.each do |pos|
-      p = pos.to_s.split(',').map(&:strip)
-      return p if p.size == 2
-    end
-    Zomeki.config.application["cms.default_map_coordinate"].to_s.split(',').map(&:strip)
+  def map_coordinate
+    setting_value(:lat_lng)
   end
 
   def categories
@@ -86,9 +81,11 @@ class Map::Content::Marker < Cms::Content
   def sort_markers(markers)
     case setting_value(:marker_order)
     when 'time_asc'
-      markers.sort {|a, b| a.created_at <=> b.created_at }
+      markers.sort_by { |m| m.created_at }
     when 'time_desc'
-      markers.sort {|a, b| b.created_at <=> a.created_at }
+      markers.sort_by { |m| m.created_at }.reverse
+    when 'sort_no'
+      markers.sort_by { |m| [m.sort_no.to_i, m.created_at] }
     when 'category'
       markers.sort do |a, b|
         next  0 if a.categories.empty? && b.categories.empty?
@@ -101,7 +98,7 @@ class Map::Content::Marker < Cms::Content
     end
   end
 
-  def public_marker_docs(specified_category = nil)
+  def marker_docs
     contents = GpArticle::Content::Doc.arel_table
     content_settings = Cms::ContentSetting.arel_table
     doc_content_ids = GpArticle::Content::Doc.joins(:settings)
@@ -113,15 +110,8 @@ class Map::Content::Marker < Cms::Content
     if doc_content_ids.blank?
       GpArticle::Doc.none
     else
-      docs = GpArticle::Doc.distinct.joins(maps: :markers).mobile(::Page.mobile?).public_state
+      docs = GpArticle::Doc.distinct.joins(maps: :markers)
                            .where(content_id: doc_content_ids, marker_state: 'visible')
-      if specified_category
-        cat_ids = GpCategory::Categorization.select(:categorizable_id)
-                                            .where(categorized_as: 'Map::Marker')
-                                            .where(category_id: specified_category.public_descendants.map(&:id))
-        docs = docs.where(id: cat_ids)
-      end
-      docs
     end
   end
 end

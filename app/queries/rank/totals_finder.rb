@@ -1,4 +1,4 @@
-class Rank::TotalsFinder < FinderQuery
+class Rank::TotalsFinder < ApplicationFinder
   def initialize(relation)
     @relation = relation
   end
@@ -25,7 +25,7 @@ class Rank::TotalsFinder < FinderQuery
                                         .where(category_id: category_ids).exists)
     end
 
-    ranks = ranks.order('accesses DESC')
+    ranks = ranks.order(Arel.sql('accesses DESC'))
     ranks
   end
 

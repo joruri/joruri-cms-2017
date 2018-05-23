@@ -1,23 +1,22 @@
 class Cms::Piece < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Base::Piece
   include Sys::Model::Rel::Creator
-  include Cms::Model::Site
+  include Sys::Model::Rel::ObjectRelation
   include Cms::Model::Rel::Site
   include Cms::Model::Rel::Concept
   include Cms::Model::Rel::ContentModel
-  include Sys::Model::Rel::ObjectRelation
   include Cms::Model::Rel::Bracket
   include Cms::Model::Rel::Bracketee
   include Cms::Model::Auth::Concept
+  include Cms::Model::Base::Piece
 
-  include StateText
+  enum_ish :state, [:public, :closed]
 
-  has_many :settings, -> { order(:sort_no) }, :foreign_key => :piece_id,
-    :class_name => 'Cms::PieceSetting', :dependent => :destroy
+  has_many :settings, -> { order(:sort_no) }, class_name: 'Cms::PieceSetting', dependent: :destroy
 
   attr_accessor :setting_save_skip
 
+  validates :concept_id, presence: true
   validates :state, :model, :name, :title, presence: true
   validates :name, uniqueness: { scope: :concept_id, case_sensitive: false, if: -> { !replace_page? } },
                    format: { with: /\A[0-9a-zA-Z\-_]+\z/, if: -> { name.present? }, message: :invalid_bracket_name }
@@ -26,7 +25,7 @@ class Cms::Piece < ApplicationRecord
   after_save :replace_new_piece
 
   after_save     Cms::Publisher::PieceCallbacks.new, if: :changed?
-  before_destroy Cms::Publisher::PieceCallbacks.new
+  before_destroy Cms::Publisher::PieceCallbacks.new, prepend: true
 
   scope :public_state, -> { where(state: 'public') }
 
@@ -62,17 +61,6 @@ class Cms::Piece < ApplicationRecord
     @in_settings = values
   end
 
-  def locale(name)
-    model = self.class.to_s.underscore
-    label = ''
-    if model != 'cms/piece'
-      label = I18n.t name, :scope => [:activerecord, :attributes, model]
-      return label if label !~ /^translation missing:/
-    end
-    label = I18n.t name, :scope => [:activerecord, :attributes, 'cms/piece']
-    return label =~ /^translation missing:/ ? name.to_s.humanize : label
-  end
-
   def css_id
     name.gsub(/-/, '_').camelize(:lower)
   end
@@ -89,7 +77,7 @@ class Cms::Piece < ApplicationRecord
   end
 
   def new_setting(name = nil)
-    Cms::PieceSetting.new({:piece_id => id, :name => name.to_s})
+    Cms::PieceSetting.new(piece_id: id, name: name.to_s)
   end
 
   def setting_value(name)
@@ -125,7 +113,7 @@ class Cms::Piece < ApplicationRecord
     end
 
     item.setting_save_skip = true
-    return false unless item.save(:validate => false)
+    return false unless item.save(validate: false)
 
     # piece_settings
     settings.each do |setting|
@@ -135,7 +123,7 @@ class Cms::Piece < ApplicationRecord
       setting_attributes[:created_at] = nil
       setting_attributes[:updated_at] = nil
       dupe_setting = Cms::PieceSetting.new(setting_attributes)
-      dupe_setting.save(:validate => false)
+      dupe_setting.save(validate: false)
     end
 
     Sys::ObjectRelation.create(source: item, related: self, relation_type: 'replace') if rel_type == :replace

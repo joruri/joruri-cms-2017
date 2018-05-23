@@ -6,9 +6,11 @@ class Cms::Admin::PiecesController < Cms::Controller::Admin::Base
   end
 
   def index
-    @items = Cms::Piece.readable.order(:name, :id)
-                       .paginate(page: params[:page], per_page: params[:limit])
-                       .preload(:related_objects_for_replace)
+    @items = Cms::Piece.readable
+    @items = @items.order(params[:sort_key] => params[:sort_order].presence || :asc) if params[:sort_key].present?
+    @items = @items.order(updated_at: :desc, name: :asc, id: :asc)
+                   .paginate(page: params[:page], per_page: params[:limit] || 100)
+                   .preload(:concept, :related_objects_for_replace)
     _index @items
   end
 
@@ -29,8 +31,8 @@ class Cms::Admin::PiecesController < Cms::Controller::Admin::Base
 
   def new
     @item = Cms::Piece.new(
-      :concept_id => Core.concept(:id),
-      :state      => 'public'
+      concept_id: Core.concept(:id),
+      state: 'public'
     )
 
     @contents = content_options(false)
@@ -69,7 +71,7 @@ class Cms::Admin::PiecesController < Cms::Controller::Admin::Base
     concept_id ||= Core.concept.id
     if concept = Cms::Concept.find_by(id: concept_id)
       concept.ancestors.each do |c|
-        contents += Cms::Content.where(concept_id: c.id).order("sort_no IS NULL, sort_no, name, id").to_a
+        contents += Cms::Content.where(concept_id: c.id).order(:sort_no, :name, :id).to_a
       end
     end
 
@@ -85,7 +87,7 @@ class Cms::Admin::PiecesController < Cms::Controller::Admin::Base
     @options.unshift ["// 一覧を更新しました（#{concept_name}#{contents.size + 1}件）", ""]
 
     respond_to do |format|
-      format.html { render :layout => false }
+      format.html { render layout: false }
     end
   end
 
@@ -107,7 +109,7 @@ class Cms::Admin::PiecesController < Cms::Controller::Admin::Base
     @options.unshift ["// 一覧を更新しました（#{content_name}:#{models.size}件）", '']
 
     respond_to do |format|
-      format.html { render :layout => false }
+      format.html { render layout: false }
     end
   end
 

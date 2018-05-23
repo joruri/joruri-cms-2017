@@ -1,4 +1,4 @@
-class GpArticle::DocsFinder < FinderQuery
+class GpArticle::DocsFinder < ApplicationFinder
   def initialize(docs, user)
     @docs = docs
     @user = user
@@ -21,7 +21,7 @@ class GpArticle::DocsFinder < FinderQuery
     end
 
     if criteria[:category_ids].present? && (category_ids = criteria[:category_ids].select(&:present?)).present?
-      @docs = @docs.categorized_into_all(category_ids)
+      @docs = @docs.categorized_into(category_ids, alls: true)
     end
 
     if criteria[:user_operation].present?
@@ -35,11 +35,16 @@ class GpArticle::DocsFinder < FinderQuery
     end
 
     if criteria[:assocs].present?
-      criteria[:assocs].select(&:present?).each { |assoc| @docs = @docs.joins(assoc.to_sym) }
+      criteria[:assocs].select(&:present?).each do |assoc|
+        @docs = @docs.joins(assoc.to_sym)
+      end
     end
 
     if criteria[:tasks].present?
-      criteria[:tasks].select(&:present?).each { |task| @docs = @docs.with_task_name(task) }
+      criteria[:tasks].select(&:present?).each do |task|
+        tasks = Sys::Task.where(name: task, processable_type: 'GpArticle::Doc')
+        @docs = @docs.where(id: tasks.select(:processable_id))
+      end
     end
 
     if criteria[:texts].present?
@@ -51,6 +56,11 @@ class GpArticle::DocsFinder < FinderQuery
     search_columns = [:name, :title, :body, :subtitle, :summary, :mobile_title, :mobile_body]
     @docs = @docs.search_with_logical_query(*search_columns, criteria[:free_word]) if criteria[:free_word].present?
     @docs = @docs.where(serial_no: criteria[:serial_no]) if criteria[:serial_no].present?
+
+    if criteria[:sort_key].present?
+      @docs = sort_by(criteria[:sort_key], criteria[:sort_order])
+    end
+
     @docs
   end
 
@@ -63,7 +73,7 @@ class GpArticle::DocsFinder < FinderQuery
   def with_target(target)
     case target
     when 'user'
-      @docs.creator_or_approvables
+      @docs.creator_or_approvables(@user)
     when 'group'
       @docs.editable
     when 'all'
@@ -81,8 +91,10 @@ class GpArticle::DocsFinder < FinderQuery
       @docs.where(state: 'public')
     when 'closed'
       @docs.where(state: 'closed')
+    when 'trashed'
+      @docs.where(state: 'trashed')
     when 'all'
-      @docs.all
+      @docs.all.where.not(state: 'trashed')
     else
       @docs.none
     end
@@ -122,26 +134,74 @@ class GpArticle::DocsFinder < FinderQuery
 
   def search_date_column(column, operation, dates = nil)
     dates = Array.wrap(dates)
+
+    if column.in?(%w(task_publish_at task_close_at))
+      search_date_column_for_task(column, operation, dates)
+    else
+      search_date_column_for_doc(column, operation, dates)
+    end
+  end
+
+  def search_date_column_for_doc(column, operation, dates)
+    build_date_conditions(@docs, column, operation, dates)
+  end
+
+  def search_date_column_for_task(column, operation, dates)
+    tasks = Sys::Task.where(processable_type: 'GpArticle::Doc')
+
+    case column
+    when 'task_publish_at'
+      tasks.where!(name: 'publish')
+    when 'task_close_at'
+      tasks.where!(name: 'close')
+    end
+
+    tasks = build_date_conditions(tasks, :process_at, operation, dates)
+    @docs.joins(:tasks).where(id: tasks.select(:processable_id))
+  end
+
+  def build_date_conditions(rels, column, operation, dates)
     case operation
     when 'today'
       today = Date.today
-      @docs.date_between(column, today.beginning_of_day, today.end_of_day)
+      rels.date_between(column, today.beginning_of_day, today.end_of_day)
     when 'this_week'
       today = Date.today
-      @docs.date_between(column, today.beginning_of_week, today.end_of_week)
+      rels.date_between(column, today.beginning_of_week, today.end_of_week)
     when 'last_week'
       last_week = 1.week.ago
-      @docs.date_between(column, last_week.beginning_of_week, last_week.end_of_week)
+      rels.date_between(column, last_week.beginning_of_week, last_week.end_of_week)
+    when 'next_week'
+      next_week = 1.week.since
+      rels.date_between(column, next_week.beginning_of_week, next_week.end_of_week)
     when 'equal'
-      @docs.date_between(column, dates[0].beginning_of_day, dates[0].end_of_day) if dates[0]
+      rels.date_between(column, dates[0].beginning_of_day, dates[0].end_of_day) if dates[0]
     when 'before'
-      @docs.date_before(column, dates[0].end_of_day) if dates[0]
+      rels.date_before(column, dates[0].end_of_day) if dates[0]
     when 'after'
-      @docs.date_after(column, dates[0].beginning_of_day) if dates[0]
+      rels.date_after(column, dates[0].beginning_of_day) if dates[0]
     when 'between'
-      @docs.date_between(column, dates[0].beginning_of_day, dates[1].end_of_day) if dates[0] && dates[1]
+      rels.date_between(column, dates[0].beginning_of_day, dates[1].end_of_day) if dates[0] && dates[1]
     else
-      @docs.none
+      rels.none
+    end
+  end
+
+  def sort_by(key, order)
+    order = (order.presence || :asc).to_sym
+
+    if key.index('.')
+      table, column = key.split('.')
+      case table
+      when 'sys_groups'
+        @docs.eager_load(creator: :group).merge(Sys::Group.order(column => order))
+      when 'sys_users'
+        @docs.eager_load(creator: :user).merge(Sys::User.order(column => order))
+      else
+        @docs.none
+      end
+    else
+      @docs.order(key => order)
     end
   end
 end
