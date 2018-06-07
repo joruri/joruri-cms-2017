@@ -33,7 +33,7 @@ $(function(){
   $("a img + img.external").remove();
 
 // slick.js
-  $('#keyvisual .ad_banner').slick({
+  $('#keyvisual .bannerImages').slick({
     accessibility: true,  // アクセシビリティ。左右ボタンで画像の切り替えをできるかどうか
     autoplay: true,  // 自動再生。trueで自動再生される。
     autoplaySpeed: 4000,  // 自動再生で切り替えをする時間
@@ -53,16 +53,16 @@ $(function(){
     slidesToScroll: 1,  // 一度にスライドする数
     swipe: true  // タッチスワイプに対応するかどうか
   });
-  $('#keyvisual .ad_banner').slick('slickPause');
-  $('#keyvisual .ad_banner').slick('slickPlay');
+  $('#keyvisual .bannerImages').slick('slickPause');
+  $('#keyvisual .bannerImages').slick('slickPlay');
   $('#startBtn').addClass("current");
   $('#stopBtn').on('click',function(){
-    $('#keyvisual .ad_banner').slick('slickPause');
+    $('#keyvisual .bannerImages').slick('slickPause');
     $('#startBtn').removeClass("current");
     $('#stopBtn').addClass("current");
   });
   $('#startBtn').on('click',function(){
-    $('#keyvisual .ad_banner').slick('slickPlay');
+    $('#keyvisual .bannerImages').slick('slickPlay');
     $('#startBtn').addClass("current");
     $('#stopBtn').removeClass("current");
   });
@@ -85,7 +85,7 @@ $(function(){
 });
 
 // todaysEvent
-function enable_simple_tabs(){
+$(function(){
   var simple_tabs = $('#simple_tabs > li');
   var simple_tab_panels = $('#simple_tab_panels > div');
   var index;
@@ -97,4 +97,4 @@ function enable_simple_tabs(){
     }
   });
   $(simple_tabs[0]).trigger('click');
-}
+});
