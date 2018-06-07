@@ -19,7 +19,7 @@ $(function() {
       showMap();
     } else {
       var script = document.createElement('script');
-      script.src = 'https://maps.googleapis.com/maps/api/js?key=<%= item.site.google_map_api_key %>&region=jp';
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=<%==j item.site.google_map_api_key %>&region=jp';
       script.onload = showMap;
       document.body.appendChild(script);
       mapLoaded = true;
@@ -28,8 +28,8 @@ $(function() {
 
   function showMap() {
     var mapOptions = {
-      center: new google.maps.LatLng(<%= map_lat %>, <%= map_lng %>),
-      zoom: <%= map_zoom %>,
+      center: new google.maps.LatLng(<%= map_lat.to_f %>, <%= map_lng.to_f %>),
+      zoom: <%= map_zoom.to_i %>,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       scaleControl: true,
       scrollwheel: false
@@ -38,12 +38,11 @@ $(function() {
 
     <% markers.each_with_index do |marker, idx| %>
       var marker<%= idx %> = new google.maps.Marker({
-        //title: '<%= marker.name.gsub(/'/, "\\\\'") %>'
-        position: new google.maps.LatLng(<%= marker.lat %>, <%= marker.lng %>),
+        position: new google.maps.LatLng(<%= marker.lat.to_f %>, <%= marker.lng.to_f %>),
         map: map
       });
       var infowindow<%= idx %> = new google.maps.InfoWindow({
-        content: '<%= marker.name.gsub(/'/, "\\\\'").gsub(/\r\n|\r|\n/, "<br />") %>',
+        content: '<%==j marker.name.gsub(/\r\n|\r|\n/, "<br />") %>',
         disableAutoPan: false
       });
       google.maps.event.addListener(marker<%= idx %>, 'click', function() {
@@ -56,11 +55,8 @@ $(function() {
 </script>
 
 <div id="mapForm" class="articleMapForm">
-  <div style="margin: 10px;">
+  <div id="map1" class="mapCanvas">
     <%= button_tag '地図を表示', type: :button, id: 'showMap' %>
-  </div>
-  <div style="margin: 10px;">
-    <div id="map1" class="mapCanvas"></div>
   </div>
 </div>
 
