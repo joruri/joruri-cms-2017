@@ -2,16 +2,16 @@
 
 <table class="show">
   <tr>
-    <th><%= @item.locale(:state) %></th>
-    <td><%= f.radio_buttons :state, @item.class::STATE_OPTIONS, :class => 'states' %></td>
+    <th><%= f.label :state %></th>
+    <td><%= f.collection_radio_buttons :state, @item.class.state_options, :last, :first %></td>
   </tr><tr>
-    <th><%= @item.locale(:fixed_start_date) %></th>
+    <th><%= f.label :fixed_start_date %></th>
     <td>
-      <%= f.text_field :fixed_start_date, :value => value_for_datepicker(f.object_name, :fixed_start_date),
-                             :style => 'width: 150px;', :class => 'datepicker' %>
+      <%= f.text_field :fixed_start_date, value: l(@item.fixed_start_date),
+                                          style: 'width: 150px;', class: 'datepicker' %>
       &nbsp;&nbsp;～&nbsp;&nbsp;
-      <%= f.text_field :fixed_end_date, :value => value_for_datepicker(f.object_name, :fixed_end_date),
-                             :style => 'width: 150px;', :class => 'datepicker' %>
+      <%= f.text_field :fixed_end_date, value: l(@item.fixed_end_date),
+                                        style: 'width: 150px;', class: 'datepicker' %>
     </td>
   </tr><tr>
     <th>対象条件</th>
@@ -19,8 +19,8 @@
       <table id="categories">
         <tbody>
           <tr>
-            <th><%= @item.locale(:repeat_type) %></th>
-            <td><%= f.select :repeat_type, @item.class::REPEAT_OPTIONS, include_blank: true %></td>
+            <th><%= f.label :repeat_type %></th>
+            <td><%= f.select :repeat_type, @item.class.repeat_type_options, include_blank: true %></td>
           </tr>
           <tr id ="intervalTr">
             <th>繰り返す間隔</th>
@@ -31,50 +31,54 @@
           <tr id ="criterionTr">
             <th>繰り返しの基準</th>
             <td>
-              <%= f.radio_buttons :repeat_criterion, @item.class::REPEAT_CRITERION_OPTIONS, :class => 'states' %>
+              <%= f.collection_radio_buttons :repeat_criterion, @item.class.repeat_criterion_options, :last, :first %>
             </td>
           </tr>
           <tr id ="weekTr">
             <th>曜日</th>
             <td>
               <input type="hidden" name="<%= "#{f.object_name}[repeat_week][_]" %>" value="" />
-              <%= f.check_boxes(:repeat_week, @item.class::REPEAT_WEEK_OPTIONS) -%>
+              <%- @item.class::REPEAT_WEEK_OPTIONS.each do |title, name| -%>
+                <input type="checkbox" name="<%= "item[repeat_week][#{name}]" %>" id="<%= "item_repeat_week_#{name}" %>" value="1" <%= 'checked="checked"' if @item.repeat_week_ary[name] == '1' %>"/><label for="<%= "item_repeat_week_#{name}" %>"><%= title %></label>
+              <%- end -%>
             </td>
           </tr>
           <tr>
             <th>開始日</th>
-            <td><%= f.text_field :start_date, :value => value_for_datepicker(f.object_name, :start_date),
-                             :style => 'width: 150px;', :class => 'datepicker' %></td>
+            <td><%= f.text_field :start_date, value: l(@item.start_date),
+                                              style: 'width: 150px;', class: 'datepicker' %></td>
           </tr>
           <tr>
             <th rowspan="3">終了日</th>
             <td>
-              <%= f.radio_button :end_type, @item.class::END_TYPE_OPTIONS[0].last, {:checked => (@item.end_type == @item.class::END_TYPE_OPTIONS[0].last)} %>
+              <%= f.radio_button :end_type, @item.class.end_type_options[0].last, { checked: (@item.end_type == @item.class.end_type_options[0].last) } %>
               なし
             </td>
           </tr>
           <tr>
             <td>
-              <%= f.radio_button :end_type, @item.class::END_TYPE_OPTIONS[1].last, {:checked => (@item.end_type == @item.class::END_TYPE_OPTIONS[1].last)} %>
-              <%= f.text_field :end_times, :class => 'name', :style => 'width: 60px; ime-mode: disabled;' %>&nbsp;回
+              <%= f.radio_button :end_type, @item.class.end_type_options[1].last, { checked: (@item.end_type == @item.class.end_type_options[1].last) } %>
+              <%= f.text_field :end_times, class: 'name', style: 'width: 60px; ime-mode: disabled;' %>&nbsp;回
             </td>
           </tr>
           <tr>
             <td>
-              <%= f.radio_button :end_type, @item.class::END_TYPE_OPTIONS[2].last, {:checked => (@item.end_type == @item.class::END_TYPE_OPTIONS[2].last)} %>
-              <%= f.text_field :end_date, :value => value_for_datepicker(f.object_name, :end_date),
-                             :style => 'width: 150px;', :class => 'datepicker' %>
+              <%= f.radio_button :end_type, @item.class.end_type_options[2].last, { checked: (@item.end_type == @item.class.end_type_options[2].last) } %>
+              <%= f.text_field :end_date, value: l(@item.end_date),
+                                          style: 'width: 150px;', class: 'datepicker' %>
             </td>
           </tr>
         </tbody>
       </table>
     </td>
   </tr><tr>
-    <th><%= @item.locale(:business_hours_start_time) %> <span class="note">※</span></th>
+    <th><%= f.label :business_hours_start_time %> <span class="note">※</span></th>
     <td>
-      <%= f.text_field :business_hours_start_time, :value => value_for_timepicker(f.object_name, :business_hours_start_time), :style => 'width: 120px;', :class => 'timepicker' %>
+      <%= f.text_field :business_hours_start_time, value: l(@item.business_hours_start_time, format: :short),
+                                                   style: 'width: 120px;', class: 'timepicker' %>
       &nbsp;&nbsp;～&nbsp;&nbsp;
-      <%= f.text_field :business_hours_end_time, :value => value_for_timepicker(f.object_name, :business_hours_end_time), :style => 'width: 120px;', :class => 'timepicker' %>
+      <%= f.text_field :business_hours_end_time, value: l(@item.business_hours_end_time, format: :short),
+                                                 style: 'width: 120px;', class: 'timepicker' %>
     </td>
   </tr>
 </table>

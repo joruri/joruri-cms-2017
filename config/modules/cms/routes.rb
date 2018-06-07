@@ -29,12 +29,11 @@ ZomekiCMS::Application.routes.draw do
           get :hide_portal
         end
       end
-    resources :site_basic_auth_users,
-      :controller  => "admin/site/basic_auth_users",
-      :path        => ":site/basic_auth_users" do
+    resources :site_access_controls,
+      :controller  => "admin/site/access_controls",
+      :path        => ":site/access_controls" do
         collection do
-          get :enable_auth
-          get :disable_auth
+          get :enable, :disable
         end
       end
     resources :site_settings,
@@ -118,16 +117,16 @@ ZomekiCMS::Application.routes.draw do
         end
       end
     resources :data_texts,
-      :controller  => "admin/data/texts"
+      :controller  => "admin/data_texts"
     resources :data_files,
-      :controller  => "admin/data/files",
+      :controller  => "admin/data_files",
       :path        => ":parent/data_files" do
         member do
           get :download
         end
       end
     resources :data_file_nodes,
-      :controller  => "admin/data/file_nodes",
+      :controller  => "admin/data_file_nodes",
       :path        => ":parent/data_file_nodes"
     resources :inline_data_files,
       :controller  => "admin/inline/data_files",

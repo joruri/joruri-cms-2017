@@ -4,13 +4,12 @@ class Organization::Content::Group < Cms::Content
 
   default_scope { where(model: 'Organization::Group') }
 
-  has_one :public_node, -> { public_state.where(model: 'Organization::Group').order(:id) },
-    foreign_key: :content_id, class_name: 'Cms::Node'
-
-  has_many :settings, -> { order(:sort_no) },
-    foreign_key: :content_id, class_name: 'Organization::Content::Setting', dependent: :destroy
-
+  has_many :settings, foreign_key: :content_id, class_name: 'Organization::Content::Setting', dependent: :destroy
   has_many :groups, foreign_key: :content_id, class_name: 'Organization::Group', dependent: :destroy
+
+  # node
+  has_one :public_node, -> { public_state.where(model: 'Organization::Group').order(:id) },
+                        foreign_key: :content_id, class_name: 'Cms::Node'
 
   def top_layer_sys_groups
     Sys::Group.in_site(site).where(level_no: 2)
@@ -38,19 +37,6 @@ class Organization::Content::Group < Cms::Content
     group_names.inject(group) {|result, item|
       result.children.where(name: item).first
     }
-  end
-
-  def article_related?
-    setting_value(:article_relation) == 'enabled'
-  end
-
-  def related_article_content_id
-    setting_extra_value(:article_relation, :gp_article_content_doc_id)
-  end
-
-  def related_article_content
-    return @related_article_content if defined? @related_article_content
-    @related_article_content = GpArticle::Content::Doc.find_by(id: setting_extra_value(:article_relation, :gp_article_content_doc_id))
   end
 
   def feed_display?
@@ -111,8 +97,7 @@ class Organization::Content::Group < Cms::Content
                            .where(site_id: site_id)
   end
 
-  def public_docs
-    GpArticle::Doc.mobile(::Page.mobile?).public_state
-                  .where(content_id: article_contents.pluck(:id))
+  def docs
+    GpArticle::Doc.where(content_id: article_contents.pluck(:id))
   end
 end

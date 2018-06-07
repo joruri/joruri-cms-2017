@@ -15,6 +15,7 @@
   <%= link_to '公開中', { target: params[:target], target_state: 'public', target_public: nil }, (params[:target_state] == 'public' ? {class: 'current'} : {}) %>
   <%= link_to '公開終了', { target: params[:target], target_state: 'closed', target_public: nil }, (params[:target_state] == 'closed' ? {class: 'current'} : {}) %>
   <%= link_to '全記事', { target: params[:target], target_state: 'all', target_public: nil }, (params[:target_state] == 'all' ? {class: 'current'} : {}) %>
+  <%= link_to 'ごみ箱', { target: params[:target], target_state: 'trashed', target_public: nil }, (params[:target_state] == 'trashed' ? {class: 'current'} : {}) %>
   <span class="separator"></span>
   <%= link_to '公開記事', { target: '', target_state: '', target_public: 1 }, (params[:target_public] == '1' ? {class: 'current'} : {}) %>
 <%- when 'new', 'create' -%>
@@ -23,15 +24,20 @@
   <%= link_to "#{GpArticle::Doc.model_name.human}一覧", { action: :index } %>
   <span class="separator"></span>
   <%- dupmsg = '編集用の記事を作成します。よろしいですか？' if @item.state_public? -%>
-  <%= link_to '編集', { action: :edit }, disable_with: '編集', confirm: dupmsg if @item.try(:editable?) && !@item.will_be_replaced? %>
-  <%= link_to '削除', { action: :destroy }, method: :delete, confirm: '削除してよろしいですか？' if @item.try(:deletable?) %>
-  <%= link_to '更新をキャンセル', { action: :destroy }, method: :delete, confirm: '更新をキャンセルしてよろしいですか？' if @item.try(:deletable?) && @item.will_replace? %>
+  <%= link_to '編集', { action: :edit }, disable_with: '編集', confirm: dupmsg if @item.editable? && !@item.will_be_replaced? && !@item.state_trashed? %>
+  <%- if @item.deletable? && !@item.state_public? -%>
+    <%- if @item.state_trashed? -%>
+      <%= link_to 'ごみ箱から復元', { do: :untrash }, confirm: '下書き状態に復元します。よろしいですか？' %>
+      <%= link_to 'ごみ箱から削除', { action: :destroy }, method: :delete, confirm: 'ごみ箱から削除してよろしいですか？' %>
+    <%- else -%>
+      <%= link_to '削除', { do: :trash }, confirm: 'ごみ箱へ移動してよろしいですか？' %>
+    <%- end -%>
+  <%- end -%>
   <%= link_to :duplicate, { do: :duplicate}, confirm: '複製してよろしいですか？' %>
-  <%= link_to '承認', { action: :approve }, method: :post, confirm: '承認してよろしいですか？' if @item.state_approvable? &&
-                                                                                           @item.approvers.include?(Core.user) %>
+  <%= link_to '承認', { action: :approve }, method: :post, confirm: '承認してよろしいですか？' if @item.approvable?(Core.user) %>
   <%-
   task = @item.queued_tasks.find_by(name: 'publish')
-  pubmsg = task ? "公開日時が設定されています。\n（ #{task.process_at.strftime('%Y-%m-%d %H:%M')} ）\n直ちに公開してよろしいですか？" : '公開してよろしいですか？'
+  pubmsg = task ? "公開日時が設定されています。\n（ #{l(task.process_at)} ）\n直ちに公開してよろしいですか？" : '公開してよろしいですか？'
   -%>
   <%= link_to :publish, { action: :publish }, method: :post, confirm: pubmsg if @item.publishable? %>
   <%= link_to '公開終了', { do: :close }, confirm: '公開を終了してよろしいですか？' if @item.closable? %>
@@ -39,7 +45,7 @@
   <%= link_to "#{GpArticle::Doc.model_name.human}一覧", { action: :index } %>
   <span class="separator"></span>
   <%= link_to '詳細', { action: :show } %>
-  <%= link_to '更新をキャンセル', { action: :destroy }, method: :delete, confirm: '更新をキャンセルしてよろしいですか？' if @item.try(:deletable?) && @item.will_replace? %>
+  <%= link_to '削除', { action: :show, do: :trash }, confirm: 'ごみ箱へ移動してよろしいですか？' if @item.deletable? && @item.will_replace? %>
   <span class="separator"></span>
   <%= link_to 'プレビュー(PC)', @item.preview_uri,
               target: 'preview' if @item.preview_uri.present? %>

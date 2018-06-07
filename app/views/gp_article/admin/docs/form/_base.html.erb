@@ -1,15 +1,22 @@
-<table class="show">
-  <%- if @content.template_available? -%>
-  <tr>
-    <th><%= f.label :template_id %></th>
-    <td colspan="3"><%= f.select :template_id, @content.templates.map {|t| [t.title, t.id] }, include_blank: true %></td>
-  </tr>
+<%- if @content.template_available? -%>
+  <%- if @content.templates.size == 1 && @item.template -%>
+    <%= f.hidden_field :template_id %>
+  <%- else -%>
+    <table class="show">
+      <tr>
+        <th><%= f.label :template_id %></th>
+        <td colspan="3"><%= f.select :template_id, @content.templates.map {|t| [t.title, t.id] }, include_blank: true %></td>
+      </tr>
+    </table>
   <%- end -%>
+<%- end -%>
+
+<table class="show">
   <tr>
     <th><%= f.label :title %> <span class="note">（※入力必須）</span></th>
     <td><%= f.text_field :title, class: 'title', style: 'width: 96%;' %></td>
     <th style="width: 110px;">タイトル設定</th>
-    <td style="width: 80px;"><%= link_to '開く▼', 'javascript:void(0);', 'data-toggle-form' => '#title_settings' %></td>
+    <td style="width: 80px;"><%= link_to '開く▼', 'javascript:void(0);', onclick: "$(this).toggleOpen('#title_settings');" %></td>
   </tr>
 </table>
 
@@ -18,7 +25,7 @@
     <tr>
       <th><%= f.label :href %></th>
       <td><%= f.text_field :href, style: 'width: 500px;' %></td>
-      <td><%= f.radio_buttons :target, GpArticle::Doc::TARGET_OPTIONS %></td>
+      <td><%= f.collection_radio_buttons :target, @item.class.target_options, :last, :first %></td>
     </tr>
     <tr>
       <th><%= f.label :subtitle %></th>
@@ -58,8 +65,8 @@
 <table class="show">
   <tr>
     <td>
-      <%= submit_tag 'リンクチェック', name: 'link_check_in_body' if @content.site.link_check_enabled? %>
-      <%= submit_tag 'アクセシビリティチェック', name: 'accessibility_check' if @content.site.accessibility_check_enabled? %>
+      <%= submit_tag 'リンクチェック', name: 'link_check_in_body' if @content.link_check_enabled? %>
+      <%= submit_tag 'アクセシビリティチェック', name: 'accessibility_check' if @content.accessibility_check_enabled? %>
     </td>
   </tr>
 </table>
@@ -69,7 +76,7 @@
 
 <table class="show">
   <tr>
-    <td><%= link_to '開く▼', 'javascript:void(0);', 'data-toggle-form' => '#body_more' %></td>
+    <td><%= link_to '開く▼', 'javascript:void(0);', onclick: "$(this).toggleOpen('#body_more');" %></td>
   </tr>
 </table>
 
@@ -114,7 +121,7 @@
   <%- if @content.feature_settings_enabled? -%>
   <tr>
     <th><%= f.label :feature_1 %></th>
-    <td><%= f.radio_buttons :feature_1, @item.class::FEATURE_1_OPTIONS %></td>
+    <td><%= f.collection_radio_buttons :feature_1, @item.class.feature_1_options, :last, :first %></td>
   </tr>
   <%- end -%>
   <%- if @content.tag_related? && @content.tag_content_tag.present? -%>
@@ -125,7 +132,7 @@
   <%- end -%>
   <%- if @content.related_doc_enabled? -%>
   <tr>
-    <th><%= f.label :in_rel_doc_ids %></th>
+    <th><%= f.label :related_docs %></th>
     <td>
       <table class="noDesign">
         <tr>
@@ -158,8 +165,8 @@
                                                              doc_link: link_to_if(doc.state_public?, doc.title, doc.public_full_uri, target: 'preview'),
                                                              doc_user_name: doc.creator.user.try(:name),
                                                              doc_group_name: doc.creator.group.try(:name),
-                                                             doc_updated_at: i18n_l(doc.updated_at),
-                                                             doc_status: doc.status.name %>
+                                                             doc_updated_at: l(doc.updated_at),
+                                                             doc_status: doc.state_text %>
           <%- end -%>
         <%- end -%>
        </table>
@@ -169,7 +176,7 @@
   <%- if @content.qrcode_related? -%>
   <tr>
     <th><%= f.label :qrcode_state %></th>
-    <td><%= f.radio_buttons :qrcode_state, @item.class::QRCODE_OPTIONS %></td>
+    <td><%= f.collection_radio_buttons :qrcode_state, @item.class.qrcode_state_options, :last, :first %></td>
   </tr>
   <%- end -%>
 </table>
@@ -259,8 +266,8 @@ $(document).ready(function() {
     var doc_select = $('#rel_doc');
     doc_select.html('<option value="">更新中...</option>');
     $.get('<%= gp_article_docs_path(content: @content) %>', {
-          options: true,
-          exclude: '<%= @item.name %>',
+          doc_options: true,
+          exclude: '<%==j @item.name %>',
           category_id: category_id,
           group_id: group_id,
           user_id: user_id }, function (data) {

@@ -1,12 +1,11 @@
 class Cms::SiteSetting < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Base::Setting
-  include Cms::Model::Site
   include Cms::Model::Rel::Site
   include Cms::Model::Auth::Site
 
-  set_config :basic_auth_state,
-             name: 'ベーシック認証',
+  set_config :access_control_state,
+             name: 'アクセス制御',
              default_value: 'disabled'
   set_config :common_ssl,
              name: '共有SSL',
@@ -43,11 +42,6 @@ class Cms::SiteSetting < ApplicationRecord
   set_config :link_check_exclusion,
              name: 'リンクチェック対象外URL',
              default_value: ''
-  set_config :accessibility_check,
-             name: 'アクセシビリティチェック機能',
-             default_value: 'enabled',
-             options: [['使用する', 'enabled'], ['使用しない', 'disabled']],
-             index: true
   set_config :adobe_reader_link,
              name: 'Adobe Acrobat Reader リンク',
              default_value: 'enabled',
@@ -55,7 +49,7 @@ class Cms::SiteSetting < ApplicationRecord
              index: true
   set_config :kana_talk,
              name: 'ふりがな・音声',
-             default_value: 'enabled',
+             default_value: 'disabled',
              options: [['ふりがなと音声を書き出し', 'enabled'], ['ふりがなのみ書き出し', 'kana_only'], ['書き出さない', 'disabled']],
              index: true
   set_config :map_coordinate,
@@ -65,6 +59,11 @@ class Cms::SiteSetting < ApplicationRecord
   set_config :zip_download_max_size,
              name: 'ZIPダウンロード最大サイズ',
              default_value: 100,
+             index: true
+  set_config :datetime_preview,
+             name: '日時指定プレビュー',
+             default_value: 'disabled',
+             options: [['使用する', 'enabled'], ['使用しない', 'disabled']],
              index: true
 
   validates :site_id, presence: true

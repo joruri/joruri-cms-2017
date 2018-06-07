@@ -1,44 +1,12 @@
 class Sys::OperationLog < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Site
   include Cms::Model::Rel::Site
 
-  default_scope { order(updated_at: :desc) }
+  default_scope { order(id: :desc) }
 
-  ACTION_OPTIONS = [["作成","create"], ["更新","update"], ["承認","recognize"], ["承認","approve"], ["削除","destroy"], ["公開","publish"], ["非公開","close"], ["期限切れ","expire"], ["ログイン","login"], ["ログアウト","logout"]]
+  enum_ish :action, [:create, :update, :recognize, :approve, :destroy, :publish, :close, :expire, :trash, :untrash, :login, :logout]
 
-  belongs_to :loggable, :polymorphic => true
-  belongs_to :user, :class_name => 'Sys::User'
-
-  validates :loggable, :presence => true
-  validates :user, :presence => true
-
-  scope :search_with_params, ->(params = {}) {
-    rel = all
-    params.each do |n, v|
-      next if v.to_s == ''
-      case n
-      when 's_id'
-        rel.where!(id: v)
-      when 's_user_id'
-        rel.where!(user_id: v)
-      when 's_action'
-        rel.where!(action: v == 'recognize' ? ['recognize', 'approve'] : v)
-      when 's_keyword'
-        rel = rel.search_with_text(:item_name, :item_model, v)
-      when 'start_date'
-        rel.where!(arel_table[:created_at].gteq(v))
-      when 'close_date'
-        date = Date.strptime(params[:close_date], "%Y-%m-%d") + 1.days rescue nil
-        rel.where!(arel_table[:created_at].lteq(date)) if date
-      end
-    end
-    rel
-  }
-
-  def action_text
-    ACTION_OPTIONS.detect{|o| o.last == action }.try(:first).to_s
-  end
+  belongs_to :user, required: true
 
   def set_item_info(item)
     self.item_model  = item.class.to_s
@@ -61,9 +29,11 @@ class Sys::OperationLog < ApplicationRecord
     if user = options[:user]
       log.user_id   = user.id
       log.user_name = user.name
+      log.user_account = user.account
     elsif user = Core.user
       log.user_id   = user.id
       log.user_name = user.name
+      log.user_account = user.account
     end
 
     log.set_item_info(options[:item]) if options[:item]

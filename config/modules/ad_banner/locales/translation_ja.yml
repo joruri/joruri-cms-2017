@@ -13,13 +13,15 @@ ja:
         published_at: 公開開始日時
         closed_at: 公開終了日時
         url: URL
+        sp_url: スマートフォンURL
+        target: ウィンドウ
         sort_no: 表示順
         created_at: 作成日時
         state: 状態
         file: ファイル
         name: 保存ファイル名
-        title: 表示ファイル名
-        alt_text: 代替テキスト
+        title: 表示ファイル名（TITLE）
+        alt_text: 代替テキスト（ALT）
       ad_banner/group:
         name: グループID
         title: グループ名

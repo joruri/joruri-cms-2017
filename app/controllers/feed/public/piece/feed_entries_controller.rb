@@ -1,17 +1,13 @@
-class Feed::Public::Piece::FeedEntriesController < Sys::Controller::Public::Base
-
+class Feed::Public::Piece::FeedEntriesController < Feed::Public::PieceController
   def pre_dispatch
-    @piece = Feed::Piece::FeedEntry.find_by(id: Page.current_piece.id)
-    return render plain: '' unless @piece
-    
+    @piece = Feed::Piece::FeedEntry.find(Page.current_piece.id)
+    @content = Feed::Content::Feed.find(Page.current_piece.content_id)
     @item = Page.current_item
   end
 
   def index
-    @content = Feed::Content::Feed.find(Page.current_piece.content_id)
-
     item = @content.public_entries
-    
+
     list_type = nil
     list_html = ''
     page_html = nil
@@ -26,8 +22,8 @@ class Feed::Public::Piece::FeedEntriesController < Sys::Controller::Public::Base
     @entries.each do |entry|
       date = entry.entry_updated.strftime('%y%m%d')
       @items << {
-        :date => (date != prev ? entry.entry_updated.strftime('%Y年%-m月%-d日') : nil),
-        :entry  => entry
+        date: (date != prev ? entry.entry_updated.strftime('%Y年%-m月%-d日') : nil),
+        entry: entry
       }
       prev = date
     end

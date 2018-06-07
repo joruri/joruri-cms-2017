@@ -1,4 +1,4 @@
-class GpCategory::Public::TemplateModule::CategoriesController < GpCategory::Public::TemplateModule::BaseController
+class GpCategory::Public::TemplateModule::CategoriesController < GpCategory::Public::TemplateModuleController
   def pre_dispatch
     @content = params.delete(:content)
     @category_type = params.delete(:category_type)
@@ -31,7 +31,7 @@ class GpCategory::Public::TemplateModule::CategoriesController < GpCategory::Pub
   end
 
   def show_docs_1
-    @docs = GpCategory::Category.public_docs_for_template_module(@category, @template_module, mobile: Page.mobile?)
+    @docs = GpCategory::Category.docs_for_template_module(@category, @template_module)
                                 .order(@content.translated_docs_order)
                                 .paginate(page: 1, per_page: @template_module.num_docs)
     return render plain: '' if @docs.empty?
@@ -46,12 +46,12 @@ class GpCategory::Public::TemplateModule::CategoriesController < GpCategory::Pub
   def show_docs_3
     return render plain: '' unless @category_type.internal_category_type
 
-    docs = GpCategory::Category.public_docs_for_template_module(@category, @template_module, mobile: Page.mobile?)
+    docs = GpCategory::Category.docs_for_template_module(@category, @template_module)
     return render plain: '' if docs.empty?
 
     @categories = @category_type.internal_category_type.public_root_categories
     @category_docs = @categories.each_with_object({}) do |category, hash|
-      hash[category.id] = docs.categorized_into(category.public_descendants_ids)
+      hash[category.id] = docs.categorized_into(category.public_descendants)
                               .order(@content.translated_docs_order)
                               .paginate(page: 1, per_page: @template_module.num_docs)
     end
@@ -65,7 +65,7 @@ class GpCategory::Public::TemplateModule::CategoriesController < GpCategory::Pub
   end
 
   def show_docs_5
-    docs = GpCategory::Category.public_docs_for_template_module(@category, @template_module, mobile: Page.mobile?)
+    docs = GpCategory::Category.docs_for_template_module(@category, @template_module)
                                .joins(creator: :group)
     return render plain: '' if docs.empty?
 
@@ -86,12 +86,12 @@ class GpCategory::Public::TemplateModule::CategoriesController < GpCategory::Pub
   end
 
   def show_docs_7
-    docs = GpCategory::Category.public_docs_for_template_module(@category, @template_module, mobile: Page.mobile?)
+    docs = GpCategory::Category.docs_for_template_module(@category, @template_module)
     return render plain: '' if docs.empty?
 
     @categories = @category.public_children
     @category_docs = @categories.each_with_object({}) do |category, hash|
-      hash[category.id] = docs.categorized_into(category.public_descendants_ids)
+      hash[category.id] = docs.categorized_into(category.public_descendants)
                               .order(@content.translated_docs_order)
                               .paginate(page: 1, per_page: @template_module.num_docs)
     end
@@ -105,7 +105,7 @@ class GpCategory::Public::TemplateModule::CategoriesController < GpCategory::Pub
   end
 
   def more
-    @docs = GpCategory::Category.public_docs_for_template_module(@category, @template_module, mobile: Page.mobile?)
+    @docs = GpCategory::Category.docs_for_template_module(@category, @template_module)
 
     if (filter = @more_options[1])
       prefix, code_or_name = filter.split('_', 2)
@@ -114,7 +114,7 @@ class GpCategory::Public::TemplateModule::CategoriesController < GpCategory::Pub
         return render plain: '', status: 404 unless @category_type.internal_category_type
         internal_category = @category_type.internal_category_type.public_root_categories.find_by(name: code_or_name)
         return render plain: '', status: 404 unless internal_category
-        @docs = @docs.categorized_into(internal_category.public_descendants_ids)
+        @docs = @docs.categorized_into(internal_category.public_descendants)
       when 'g'
         group = Sys::Group.in_site(Page.site).where(code: code_or_name).first
         return render plain: '', status: 404 unless group

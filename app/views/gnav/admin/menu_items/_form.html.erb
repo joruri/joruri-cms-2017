@@ -5,23 +5,23 @@
 <table class="show">
   <tr>
     <th><%= f.label :state %></th>
-    <td><%= f.radio_buttons :state, @item.class::STATE_OPTIONS, :class => 'status' %></td>
+    <td><%= f.collection_radio_buttons :state, @item.class.state_options, :last, :first %></td>
   </tr>
   <tr>
     <th><%= f.label :name %> <span class="note">※</span></th>
-    <td><%= f.text_field :name, :class => 'id' %></td>
+    <td><%= f.text_field :name, class: 'id' %></td>
   </tr>
   <tr>
     <th><%= f.label :title %> <span class="note">※</span></th>
-    <td><%= f.text_field :title, :class => 'name' %></td>
+    <td><%= f.text_field :title, class: 'name' %></td>
   </tr>
   <tr>
     <th><%= f.label :sitemap_state %></th>
-    <td><%= f.radio_buttons :sitemap_state, @item.class::SITEMAP_STATE_OPTIONS %></td>
+    <td><%= f.collection_radio_buttons :sitemap_state, @item.class.sitemap_state_options, :last, :first %></td>
   </tr>
   <tr>
     <th><%= f.label :sort_no %></th>
-    <td><%= f.text_field :sort_no, :class => 'number' %></td>
+    <td><%= f.text_field :sort_no, class: 'number' %></td>
   </tr>
 </table>
 
@@ -55,11 +55,7 @@
 <%= creator_form f %>
 
 <%= javascript_tag do -%>
-<%= toggle_form_function -%>
-
 $(document).ready(function () {
-  <%= disable_enter_script -%>
-
   $('#categories > tbody > tr > td.category_type > select').on('change', function (event) {
     var category_type_id = parseInt(event.target.value);
     var category_select = $(event.target).closest('tr').find('td.category > select');

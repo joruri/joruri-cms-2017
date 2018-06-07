@@ -1,43 +1,41 @@
 class Cms::Node < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Base::Page
-  include Cms::Model::Base::Page::Publisher
-  include Cms::Model::Base::Page::TalkTask
-  include Cms::Model::Base::Node
-  include Cms::Model::Base::Sitemap
   include Sys::Model::Tree
   include Sys::Model::Rel::Creator
-  include Cms::Model::Site
+  include Cms::Model::Base::Sitemap
+  include Cms::Model::Base::Page
   include Cms::Model::Rel::Site
   include Cms::Model::Rel::Concept
   include Cms::Model::Rel::ContentModel
   include Sys::Model::Rel::ObjectRelation
   include Cms::Model::Rel::Bracket
   include Cms::Model::Auth::Concept
+  include Cms::Model::Base::Node
 
-  include StateText
+  column_attribute :body, html: true, fts: true
 
-  REBUILDABLE_MODELS = ['Cms::Page', 'Cms::Sitemap']
-  DYNAMIC_MODELS = ['GpArticle::SearchDoc', 'GpCalendar::SearchEvent', 'Reception::Course', 'Survey::Form']
+  enum_ish :state, [:draft, :recognize, :recognized, :public, :closed]
 
-  belongs_to :parent, :foreign_key => :parent_id, :class_name => 'Cms::Node'
-  belongs_to :route, :foreign_key => :route_id, :class_name => 'Cms::Node'
-  belongs_to :layout, :foreign_key => :layout_id, :class_name => 'Cms::Layout'
+  belongs_to :parent, class_name: self.name
+  belongs_to :route, class_name: self.name
+  belongs_to :layout
 
-  has_many :children, -> { sitemap_order },
-    :foreign_key => :parent_id, :class_name => 'Cms::Node', :dependent => :destroy
-  has_many :children_in_route, -> { sitemap_order },
-    :foreign_key => :route_id,  :class_name => 'Cms::Node', :dependent => :destroy
+  has_many :children, -> { sitemap_order }, foreign_key: :parent_id, class_name: self.name, dependent: :destroy
+  has_many :children_in_route, -> { sitemap_order }, foreign_key: :route_id, class_name: self.name, dependent: :destroy
 
   # conditional associations
   has_many :public_children, -> { public_state.sitemap_order },
-    :foreign_key => :parent_id, :class_name => 'Cms::Node'
+                            foreign_key: :parent_id, class_name: self.name
   has_many :public_children_for_sitemap, -> { public_state.visible_in_sitemap.sitemap_order },
-    :foreign_key => :route_id, :class_name => 'Cms::Node'
+                                         foreign_key: :route_id, class_name: self.name
 
-  validates :parent_id, :state, :model, :title, presence: true
-  validates :name, presence: true, uniqueness: {scope: [:site_id, :parent_id], if: %Q(!replace_page?) },
-    format: { with: /\A[0-9A-Za-z@\.\-_\+\s]+\z/, message: :not_a_filename, if: %Q(parent_id != 0) }
+  validates :concept_id, presence: true
+  validates :parent_id, :state, :title, presence: true
+  validates :name, presence: true,
+                   uniqueness: { scope: [:site_id, :parent_id], if: %Q(!replace_page?) },
+                   format: { with: /\A[0-9A-Za-z@\.\-_\+]+\z/, message: :not_a_filename, if: %Q(parent_id != 0) }
+  validates :model, presence: true,
+                    uniqueness: { scope: [:content_id], if: :content_id? }
 
   validate {
     errors.add :parent_id, :invalid if id != nil && id == parent_id
@@ -55,28 +53,11 @@ class Cms::Node < ApplicationRecord
   after_close_files Cms::FileTransferCallbacks.new([:public_path, :public_smart_phone_path])
 
   scope :public_state, -> { where(state: 'public') }
-  scope :sitemap_order, -> { order('sitemap_sort_no IS NULL, sitemap_sort_no, name') }
-  scope :rebuildable_models, -> { where(model: REBUILDABLE_MODELS) }
-  scope :dynamic_models, -> { where(model: DYNAMIC_MODELS) }
-
-  scope :search_with_params, ->(params) {
-    rel = all
-    params.each do |n, v|
-      next if v.to_s == ''
-      case n
-      when 's_state'
-        rel.where!(state: v)
-      when 's_title'
-        rel = rel.search_with_text(:title, v)
-      when 's_body'
-        rel = rel.search_with_text(:body, v)
-      when 's_directory'
-        rel.where!(directory: v)
-      when 's_keyword'
-        rel = rel.search_with_text(:title, :body, v)
-      end
-    end
-    rel
+  scope :sitemap_order, -> { order(:sitemap_sort_no, :name, :id) }
+  scope :rebuildable_models, -> { where(model: ['Cms::Page', 'Cms::Sitemap']) }
+  scope :dynamic_models, -> {
+    models = Cms::Lib::Modules.modules.flat_map(&:directories).select { |d| d.options[:dynamic] }.map(&:model)
+    where(model: models)
   }
 
   def states
@@ -89,50 +70,27 @@ class Cms::Node < ApplicationRecord
     opts[:prefix] * [level_no - 1 + opts[:depth], 0].max + title
   end
 
-  def self.find_by_uri(path, site_id)
-    return nil if path.to_s == ''
-
-    unless item = self.where(site_id: site_id, parent_id: 0, name: '/').order(:id).first
-      return nil
-    end
-    return item if path == '/'
-
-    path.split('/').each do |p|
-      next if p == ''
-      unless item = self.where(site_id: site_id, parent_id: item.id, name: p).order(:id).first
-        return nil
-      end
-    end
-    return item
-  end
-
   def public_path
-    "#{site.public_path}#{public_uri}".gsub(/\?.*/, '')
-  end
-
-  def public_mobile_path
-    "#{site.public_path}/_mobile#{public_uri}".gsub(/\?.*/, '')
+    "#{site.public_path}#{public_uri}"
   end
 
   def public_smart_phone_path
-    "#{site.public_path}/_smartphone#{public_uri}".gsub(/\?.*/, '')
+    "#{site.public_smart_phone_path}#{public_uri}"
   end
 
   def public_uri
     return @public_uri if @public_uri
-    return unless site
     return '' if name.blank?
     uri = site.uri
-    ancestors.each{|n| uri += "#{n.name}/" if n.name != '/' }
+    ancestors.each { |n| uri += "#{n.name}/" if n.name != '/' }
     uri = uri.gsub(/\/$/, '') if directory == 0
     @public_uri = uri
   end
 
   def public_full_uri
     return @public_full_uri if @public_full_uri
-    return unless site
     uri = site.full_uri
-    ancestors.each{|n| uri += "#{n.name}/" if n.name != '/' }
+    ancestors.each { |n| uri += "#{n.name}/" if n.name != '/' }
     uri = uri.gsub(/\/$/, '') if directory == 0
     @public_full_uri = uri
   end
@@ -157,79 +115,12 @@ class Cms::Node < ApplicationRecord
     Cms::Layout.where(id: layout_id).first
   end
 
-  def all_nodes_with_level
-    search = lambda do |current, level|
-      _nodes = {:level => level, :item => current, :children => nil}
-      return _nodes if level >= 10
-      return _nodes if current.children.size == 0
-
-      _tmp = []
-      current.children.each do |child|
-        next unless _c = search.call(child, level + 1)
-        _tmp << _c
-      end
-      _nodes[:children] = _tmp
-      return _nodes
-    end
-
-    search.call(self, 0)
-  end
-
-  def all_nodes_collection(options = {})
-    collection = lambda do |current, level|
-      title = ''
-      if level > 0
-        (level - 0).times {|i| title += options[:indent] || '  '}
-        title += options[:child] || ' ' if level > 0
-      end
-      title += current[:item].title
-      list = [[title, current[:item].id]]
-      return list unless current[:children]
-
-      current[:children].each do |child|
-        list += collection.call(child, level + 1)
-      end
-      return list
-    end
-
-    collection.call(all_nodes_with_level, 0)
-  end
-
   def css_id
     ''
   end
 
   def css_class
     return 'content content' + self.controller.singularize.camelize
-  end
-
-  def candidate_parents
-    nodes = Core.site.root_node.descendants do |child|
-      rel = child.where(directory: 1)
-      rel = rel.where.not(id: id) if new_record?
-      rel
-    end
-    nodes.map{|n| [n.tree_title, n.id]}
-  end
-
-  def candidate_routes
-    nodes = Core.site.root_node.descendants do |child|
-      rel = child.where(directory: 1)
-      rel = rel.where.not(id: id) if new_record?
-      rel
-    end
-    nodes.map{|n| [n.tree_title, n.id]}
-  end
-
-  def locale(name)
-    model = self.class.to_s.underscore
-    label = ''
-    if model != 'cms/node'
-      label = I18n.t name, :scope => [:activerecord, :attributes, model]
-      return label if label !~ /^translation missing:/
-    end
-    label = I18n.t name, :scope => [:activerecord, :attributes, 'cms/node']
-    return label =~ /^translation missing:/ ? name.to_s.humanize : label
   end
 
   def top_page?
@@ -255,7 +146,10 @@ class Cms::Node < ApplicationRecord
     path_changes.each do |src, dest|
       next unless Dir.exist?(src)
 
+      dest_dir = ::File.dirname(dest)
+      FileUtils.mkdir_p(dest_dir) unless Dir.exist?(dest_dir)
       FileUtils.move(src, dest)
+
       src = src.gsub(Rails.root.to_s, '.')
       dest = dest.gsub(Rails.root.to_s, '.')
       Sys::Publisher.where(Sys::Publisher.arel_table[:path].matches("#{src}%"))
@@ -281,6 +175,14 @@ class Cms::Node < ApplicationRecord
     }
   end
 
+  class << self
+    def parent_options(site, origin = nil)
+      nodes = site.nodes.where(directory: 1).sitemap_order
+      nodes = nodes.where.not(id: origin) if origin
+      nodes.to_tree.flat_map(&:descendants).map { |node| [node.tree_title, node.id] }
+    end
+  end
+
   class Directory < Cms::Node
     def close_page(options = {})
       return true
@@ -298,18 +200,14 @@ class Cms::Node < ApplicationRecord
     include Cms::Model::Rel::PublishUrl
     include Cms::Model::Rel::SearchText
 
-    self.linkable_columns = [:body]
-    self.searchable_columns = [:body]
-
     after_save :replace_public_page
 
     after_save     Cms::SearchIndexerCallbacks.new, if: :changed?
-    before_destroy Cms::SearchIndexerCallbacks.new
+    before_destroy Cms::SearchIndexerCallbacks.new, prepend: true
 
-#    validate :validate_inquiry,
-#      :if => %Q(state == 'public')
-    validate :validate_recognizers,
-      :if => %Q(state == "recognize")
+    validate :validate_recognizers, if: -> { state == 'recognize' }
+
+    validates_with Sys::TaskValidator, if: -> { state != 'draft' }
 
     def states
       s = [['下書き保存','draft'],['承認待ち','recognize']]
@@ -336,7 +234,7 @@ class Cms::Node < ApplicationRecord
 #      if inquiry != nil && inquiry.group_id == Core.user.group_id
 #        item.in_inquiry = inquiry.attributes
 #      else
-#        item.in_inquiry = {:group_id => Core.user.group_id}
+#        item.in_inquiry = { group_id: Core.user.group_id }
 #      end
 
       inquiries.each_with_index do |inquiry, i|
@@ -346,7 +244,7 @@ class Cms::Node < ApplicationRecord
         item.inquiries.build(attrs)
       end
 
-      return false unless item.save(:validate => false)
+      return false unless item.save(validate: false)
 
       Sys::ObjectRelation.create(source: item, related: self, relation_type: 'replace') if rel_type == :replace
 
@@ -376,7 +274,7 @@ class Cms::Node < ApplicationRecord
         return false if state != 'public'
 
         run_callbacks :publish_files do
-          rendered = Cms::Admin::RenderService.new(site).render_public(public_uri)
+          rendered = Cms::RenderService.new(site).render_public(public_uri)
           return true unless publish_page(rendered, path: public_path)
 
           if site.use_kana?
@@ -385,7 +283,7 @@ class Cms::Node < ApplicationRecord
           end
 
           if site.publish_for_smart_phone?(self)
-            rendered = Cms::Admin::RenderService.new(site).render_public(public_uri, agent_type: :smart_phone)
+            rendered = Cms::RenderService.new(site).render_public(public_uri, agent_type: :smart_phone)
             publish_page(rendered, path: public_smart_phone_path, dependent: :smart_phone)
           end
         end

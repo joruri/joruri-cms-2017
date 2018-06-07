@@ -74,6 +74,7 @@ ja:
         in_group_id: グループ
         role_name: ロール権限
         admin_creatable: サイト管理者作成
+        sites: 所属サイト
 
       sys/role_name:
         name: ロールID
@@ -103,14 +104,19 @@ ja:
       sys/file:
         file: ファイル
         name: 保存ファイル名
-        title: 表示ファイル名
-        alt_text: 代替テキスト
+        title: 表示ファイル名（TITLE）
+        alt_text: 代替テキスト（ALT）
+        size: ファイルサイズ
+        mime_type: ファイル種別
+        created_at: 作成日時
+        updated_at: 更新日時
 
       sys/operation_log:
         id: ID
         created_at: 操作日時
         updated_at: 更新日時
-        user_id: ユーザーID（内部ID）
+        user_id: ユーザー識別番号
+        user_account: ユーザーID
         user_name: ユーザー名
         ipaddr: IPアドレス
         uri: URL
@@ -143,6 +149,16 @@ ja:
         note: 備考
         sort_no: 並び順
         created_at: 作成日時
+
+      sys/users_session:
+        session_id: セッションID
+        created_at: 作成日時
+        updated_at: 最終アクセス日時
+
+      sys/publisher:
+        path: パス
+        created_at: 作成日時
+        updated_at: 更新日時
 
   activemodel:
     attributes:

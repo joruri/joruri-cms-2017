@@ -1,23 +1,28 @@
 <%- if @content.template_available? -%>
-<div>
-  <div class="label1"><%= f.label :template_id %></div>
-  <%= f.select :template_id, @content.templates.map {|t| [t.title, t.id] }, include_blank: true %>
-</div>
+  <%- if @content.templates.size == 1 && @item.template -%>
+    <%= f.hidden_field :template_id %>
+  <%- else -%>
+    <div>
+      <div class="label1"><%= f.label :template_id %></div>
+      <%= f.select :template_id, @content.templates.map {|t| [t.title, t.id] }, include_blank: true %>
+    </div>
+  <%- end -%>
 <%- end -%>
+
 <div>
   <div class="label1"><%= f.label :title %> <span class="note">※</span></div>
   <%= f.text_field :title, class: 'title', style: 'width: 290px;' %>
 </div>
 <div>
   <div class="label1">タイトル設定</div>
-  <%= link_to '開く▼', "javascript:void(0);", { onclick: "toggle_form(this, '#title_settings')" } %>
+  <%= link_to '開く▼', "javascript:void(0);", { onclick: "$(this).toggleOpen('#title_settings');" } %>
 </div>
 
 <div id="title_settings" style="display: none;">
   <div>
     <div class="label1"><%= f.label :href %></div>
     <%= f.text_field :href, style: 'width: 290px;' %><br />
-    <%= f.radio_buttons :target, GpArticle::Doc::TARGET_OPTIONS %>
+    <%= f.collection_radio_buttons :target, @item.class.target_options, :last, :first %>
   </div>
   <div>
     <div class="label1"><%= f.label :subtitle %></div>
@@ -45,14 +50,14 @@
 </div>
 
 <div>
-  <%= submit_tag 'リンクチェック', name: 'link_check_in_body' if @content.site.link_check_enabled? %>
-  <%= submit_tag 'アクセシビリティチェック', name: 'accessibility_check' if @content.site.accessibility_check_enabled? %>
+  <%= submit_tag 'リンクチェック', name: 'link_check_in_body' if @content.link_check_enabled? %>
+  <%= submit_tag 'アクセシビリティチェック', name: 'accessibility_check' if @content.accessibility_check_enabled? %>
 </div>
 
 <%- if @content.blog_functions_available? -%>
 <p class="form">追記を入力する</p>
 
-<div><%= link_to '開く▼',"javascript:void(0);", { onclick: "toggle_form(this, '#body_more')" } %></div>
+<div><%= link_to '開く▼',"javascript:void(0);", { onclick: "$(this).toggleOpen('#body_more')" } %></div>
 
 <div id="body_more" style="display: none;">
   <div>
@@ -86,7 +91,7 @@
 
 <div>
   <div class="label1"><%= f.label :feature_1 %></div>
-  <%= f.radio_buttons :feature_1, @item.class::FEATURE_1_OPTIONS %>
+  <%= f.collection_radio_buttons :feature_1, @item.class.feature_1_options, :last, :first %>
 </div>
 
 <%- if @content.tag_related? && @content.tag_content_tag.present? -%>
@@ -96,7 +101,7 @@
 </div>
 <%- end -%>
 
-<div class="label1"><%= f.label :in_rel_doc_ids %></div>
+<div class="label1"><%= f.label :related_docs %></div>
 <div>
   <div class="label2"><%= Sys::Creator.human_attribute_name(:group_id) %></div>
   <%= select_tag 'rel_group_id', options_for_select(Core.site.groups_for_option, Core.user_group.id), include_blank: true %>
@@ -131,8 +136,8 @@
                                                        doc_link: link_to_if(doc.state_public?, doc.title, doc.public_full_uri, target: 'preview'),
                                                        doc_user_name: doc.creator.user.try(:name),
                                                        doc_group_name: doc.creator.group.try(:name),
-                                                       doc_updated_at: i18n_l(doc.updated_at),
-                                                       doc_status: doc.status.name %>
+                                                       doc_updated_at: l(doc.updated_at),
+                                                       doc_status: doc.state_text %>
     <%- end -%>
   <%- end -%>
 </div>
@@ -223,8 +228,8 @@ $(document).ready(function() {
     var doc_select = $('#rel_doc');
     doc_select.html('<option value="">更新中...</option>');
     $.get('<%= gp_article_docs_path(content: @content) %>', {
-          options: true,
-          exclude: '<%= @item.name %>',
+          doc_options: true,
+          exclude: '<%==j @item.name %>',
           category_id: category_id,
           group_id: group_id,
           user_id: user_id }, function (data) {

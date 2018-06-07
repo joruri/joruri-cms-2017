@@ -1,67 +1,70 @@
 <table class="show">
   <tr>
-    <th><%= @item.locale(:in_group_id) %></th>
+    <th><%= f.label :in_group_id %></th>
     <td><%= f.select :in_group_id, Core.site.groups_for_option, include_blank: true %></td>
   </tr><tr>
-    <th><%= @item.locale(:account) %></th>
-    <td><%= f.text_field :account, :class => 'id' %></td>
+    <th><%= f.label :account %></th>
+    <td><%= f.text_field :account, class: 'id' %></td>
   </tr><tr>
-    <th><%= @item.locale(:name) %></th>
-    <td><%= f.text_field :name, :class => 'name' %></td>
+    <th><%= f.label :name %></th>
+    <td><%= f.text_field :name, class: 'name' %></td>
   </tr><tr>
-    <th><%= @item.locale(:name_en) %></th>
-    <td><%= f.text_field :name_en, :class => 'nameEn' %></td>
+    <th><%= f.label :name_en %></th>
+    <td><%= f.text_field :name_en, class: 'nameEn' %></td>
   </tr><tr>
-    <th><%= @item.locale(:email) %></th>
-    <td><%= f.text_field :email, :class => 'email' %></td>
+    <th><%= f.label :email %></th>
+    <td><%= f.text_field :email, class: 'email' %></td>
   </tr><tr>
-    <th><%= @item.locale(:state) %></th>
+    <th><%= f.label :state %></th>
     <td>
       <%- if @item.root? -%>
-        <%= @item.status.name %>
+        <%= @item.state_text %>
       <%- else -%>
-        <%= f.radio_buttons :state, @item.states, :class => 'status' %>
+        <%= f.collection_radio_buttons :state, @item.class.state_options, :last, :first %>
       <%- end -%>
     </td>
   </tr><tr>
-    <th><%= @item.locale(:auth_no) %></th>
+    <th><%= f.label :auth_no %></th>
     <td>
       <%- if @item.root? -%>
         <%= @item.auth_name %>
       <%- else -%>
         <%- if Core.user.root? || Core.user.admin_creatable? || Core.user == @item -%>
-          <%= f.radio_buttons :auth_no, @item.authes, :class => 'status' %>
+          <%= f.collection_radio_buttons :auth_no, @item.authes, :last, :first %>
         <%- else -%>
           <%- if @item.has_auth?(:manager) -%>
             <%- if @item.admin_creatable? -%>
               <%= @item.auth_name %>
             <%- else -%>
-              <%= f.radio_buttons :auth_no, @item.authes, :class => 'status' %>
+              <%= f.collection_radio_buttons :auth_no, @item.authes, :last, :first %>
             <%- end -%>
           <%- else -%>
-            <%= f.radio_buttons :auth_no, @item.authes_exclude_admin, :class => 'status' %>
+            <%= f.collection_radio_buttons :auth_no, @item.authes_exclude_admin, :last, :first %>
           <%- end -%>
         <%- end -%>
       <%- end -%>
       <%- if Core.user.root? -%>
       <table id="auth_extra_settings" class="noDesign" style="margin-top: 10px; <%= 'display: none;' if @item.auth_no != 5 %>">
         <tr>
-          <td><%= @item.locale(:admin_creatable) %></td>
-          <td><%= f.radio_buttons :admin_creatable, @item.class::ADMIN_CREATABLE_OPTIONS %></td>
+          <td><%= f.label :admin_creatable %></td>
+          <td><%= f.collection_radio_buttons :admin_creatable, @item.class.admin_creatable_options, :last, :first %></td>
         </tr>
       </table>
       <%- end -%>
     </td>
   </tr><tr>
-    <th><%= @item.locale(:role_name) %></th>
+    <th><%= f.label :role_name %></th>
     <td><%= render 'sys/admin/_partial/role_names/form', f: f, item: @item %></td>
   </tr>
 </table>
 
 <table class="show">
   <tr>
-    <th><%= @item.locale(:password) %></th>
-    <td><%= f.text_field :password, :class => 'id' %></td>
+    <th><%= f.label :password %></th>
+    <td>
+      <%= f.text_field :password, class: 'id' %>
+      <span style="margin-left: 10px;"><%= button_tag 'ランダムパスワード設定', type: 'button', id: 'genRandomPass' %></span>
+    </td>
   </tr>
 </table>
 
@@ -73,6 +76,14 @@ $(document).ready(function() {
     } else {
       $('#auth_extra_settings').hide();
     }
+  });
+  $('#genRandomPass').on('click', function() {
+    var str = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
+    var pass = '';
+    for (var i=0; i<8; i++) {
+      pass += str[Math.floor(Math.random() * str.length)];
+    }
+    $('#item_password').val(pass);
   });
 });
 </script>

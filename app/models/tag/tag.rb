@@ -1,18 +1,17 @@
 class Tag::Tag < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Site
-  include Cms::Model::Base::Page::Publisher
-  include Cms::Model::Base::Page::TalkTask
+  include Cms::Model::Base::Page
   include Cms::Model::Rel::Content
 
   # Content
-  belongs_to :content, :foreign_key => :content_id, :class_name => 'Tag::Content::Tag'
-  validates :content_id, presence: true
+  belongs_to :content, class_name: 'Tag::Content::Tag', required: true
 
   # Proper
   has_and_belongs_to_many :docs, -> { order(display_published_at: :desc, published_at: :desc) },
-    :class_name => 'GpArticle::Doc', :join_table => 'gp_article_docs_tag_tags',
-    :after_add => :update_last_tagged_at, :after_remove => :update_last_tagged_at
+                                 class_name: 'GpArticle::Doc',
+                                 join_table: 'gp_article_docs_tag_tags',
+                                 after_add: :update_last_tagged_at,
+                                 after_remove: :update_last_tagged_at
 
   def public_uri
     return @public_uri if @public_uri
@@ -46,10 +45,6 @@ class Tag::Tag < ApplicationRecord
     end
 
     Cms::Lib::BreadCrumbs.new(crumbs)
-  end
-
-  def public_docs
-    docs.mobile(::Page.mobile?).public_state
   end
 
   def update_last_tagged_at(doc=nil)

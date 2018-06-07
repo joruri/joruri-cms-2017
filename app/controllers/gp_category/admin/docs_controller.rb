@@ -1,7 +1,7 @@
 class GpCategory::Admin::DocsController < Cms::Controller::Admin::Base
   include Sys::Controller::Scaffold::Base
 
-  before_action :find_doc, :only => [ :show, :edit, :update ]
+  before_action :find_doc, only: [:show, :edit, :update]
 
   def pre_dispatch
     @content = GpCategory::Content::CategoryType.find(params[:content])
@@ -12,7 +12,7 @@ class GpCategory::Admin::DocsController < Cms::Controller::Admin::Base
   end
 
   def index
-    @items = find_docs.paginate(page: params[:page], per_page: 30)
+    @items = find_docs.paginate(page: params[:page], per_page: params[:limit])
                       .preload(:categorizations, creator: [:user, :group])
     _index @items
   end
@@ -29,13 +29,13 @@ class GpCategory::Admin::DocsController < Cms::Controller::Admin::Base
     if (categorization = @item.categorizations.find_by(category_id: @category.id))
       categorization.sort_no = params[:sort_no]
       if categorization.save
-        redirect_to({:action => :index}, notice: '更新処理が完了しました。')
+        redirect_to url_for(action: :index), notice: '更新処理が完了しました。'
       else
         flash.now[:alert] = '更新処理に失敗しました。'
-        render :action => :edit
+        render :edit
       end
     else
-      redirect_to({:action => :show}, alert: '更新処理に失敗しました。')
+      redirect_to url_for(action: :show), alert: '更新処理に失敗しました。'
     end
   end
 
@@ -43,7 +43,7 @@ class GpCategory::Admin::DocsController < Cms::Controller::Admin::Base
 
   def find_docs
     criteria = params[:criteria] || {}
-    docs = GpArticle::Doc.categorized_into(@category.id)
+    docs = GpArticle::Doc.categorized_into(@category)
     GpArticle::DocsFinder.new(docs, Core.user).search(criteria)
   end
 

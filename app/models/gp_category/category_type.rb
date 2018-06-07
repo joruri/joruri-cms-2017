@@ -1,53 +1,49 @@
 class GpCategory::CategoryType < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
-  include Cms::Model::Site
   include Cms::Model::Auth::Content
   include Cms::Model::Base::Page
-  include Cms::Model::Base::Page::Publisher
-  include Cms::Model::Base::Page::TalkTask
   include Cms::Model::Base::Sitemap
   include Cms::Model::Rel::Content
 
-  include StateText
-
-  STATE_OPTIONS = [['公開', 'public'], ['非公開', 'closed']]
-  DOCS_ORDER_OPTIONS = [['コンテンツ設定を継承', ''],
-                        ['公開日（降順）', 'display_published_at DESC, published_at DESC'], ['公開日（昇順）', 'display_published_at ASC, published_at ASC'],
-                        ['更新日（降順）', 'display_updated_at DESC, updated_at DESC'], ['更新日（昇順）', 'display_updated_at ASC, updated_at ASC']]
-
   default_scope { order(sort_no: :asc, name: :asc) }
 
+  column_attribute :sort_no, default: 10
+
+  enum_ish :state, [:public, :closed], default: :public, predicate: true
+  enum_ish :docs_order, ['',
+                         'display_published_at DESC, published_at DESC',
+                         'display_published_at ASC, published_at ASC',
+                         'display_updated_at DESC, updated_at DESC',
+                         'display_updated_at ASC, updated_at ASC'], default: 'display_published_at DESC, published_at DESC'
+
   # Content
-  belongs_to :content, :foreign_key => :content_id, :class_name => 'GpCategory::Content::CategoryType'
-  validates :content_id, presence: true
+  belongs_to :content, class_name: 'GpCategory::Content::CategoryType', required: true
 
   # Page
-  belongs_to :concept, :foreign_key => :concept_id, :class_name => 'Cms::Concept'
-  belongs_to :layout, :foreign_key => :layout_id,  :class_name => 'Cms::Layout'
+  belongs_to :concept, class_name: 'Cms::Concept'
+  belongs_to :layout, class_name: 'Cms::Layout'
   belongs_to :template
-  belongs_to :internal_category_type, :class_name => self.name
+  belongs_to :internal_category_type, class_name: self.name
 
-  has_many :categories, :foreign_key => :category_type_id, :class_name => 'GpCategory::Category', :dependent => :destroy
-  has_many :marker_icons, :class_name => 'Map::MarkerIcon', :as => :relatable, :dependent => :destroy
+  has_many :categories, foreign_key: :category_type_id, class_name: 'GpCategory::Category', dependent: :destroy
+  has_many :marker_icons, class_name: 'Map::MarkerIcon', as: :relatable, dependent: :destroy
 
   # conditional associations
   has_many :root_categories, -> { with_root },
-    :foreign_key => :category_type_id, :class_name => 'GpCategory::Category'
+                             foreign_key: :category_type_id, class_name: 'GpCategory::Category'
   has_many :public_categories, -> { public_state },
-    :foreign_key => :category_type_id, :class_name => 'GpCategory::Category'
+                               foreign_key: :category_type_id, class_name: 'GpCategory::Category'
   has_many :public_root_categories, -> { public_state.with_root },
-    :foreign_key => :category_type_id, :class_name => 'GpCategory::Category'
+                                    foreign_key: :category_type_id, class_name: 'GpCategory::Category'
 
   validates :name, presence: true, uniqueness: { scope: :content_id },
-                   format: { with: /\A[0-9A-Za-z@\.\-_\+\s]+\z/ }
+                   format: { with: /\A[0-9A-Za-z@\.\-_\+]+\z/ }
   validates :title, presence: true
   validates :state, presence: true
 
-  after_initialize :set_defaults
-
   after_save     GpCategory::Publisher::CategoryTypeCallbacks.new, if: :changed?
-  before_destroy GpCategory::Publisher::CategoryTypeCallbacks.new
+  before_destroy GpCategory::Publisher::CategoryTypeCallbacks.new, prepend: true
 
   scope :public_state, -> { where(state: 'public') }
 
@@ -58,7 +54,7 @@ class GpCategory::CategoryType < ApplicationRecord
   end
 
   def categories_for_option
-    root_categories.map{|c| c.descendants_for_option }.flatten(1)
+    categories.to_tree.flat_map(&:descendants).map { |c| [c.tree_title, c.id] }
   end
 
   def find_category_by_path_from_root_category(path_from_root_category)
@@ -116,27 +112,21 @@ class GpCategory::CategoryType < ApplicationRecord
 
   private
 
-  def set_defaults
-    self.state         = STATE_OPTIONS.first.last         if self.has_attribute?(:state) && self.state.nil?
-    self.docs_order    = DOCS_ORDER_OPTIONS.second.last   if self.has_attribute?(:docs_order) && self.docs_order.nil?
-    self.sort_no = 10 if self.has_attribute?(:sort_no) && self.sort_no.nil?
-  end
-
   def clean_published_files
-    return if !destroyed? && public?
+    return if !destroyed? && state_public?
     FileUtils.rm_r(public_path) if public_path.present? && ::File.exist?(public_path)
     FileUtils.rm_r(public_smart_phone_path) if public_smart_phone_path.present? && ::File.exist?(public_smart_phone_path)
   end
 
   class << self
-    def public_docs_for_template_module(categoty_type, template_module, mobile: false)
-      category_ids = case template_module.module_type
-                     when 'docs_1', 'docs_3', 'docs_5', 'docs_7', 'docs_8'
-                       categoty_type.public_categories.map(&:id)
-                     else
-                       []
-                     end
-      docs = GpArticle::Doc.categorized_into(category_ids).except(:order).mobile(mobile).public_state
+    def docs_for_template_module(categoty_type, template_module)
+      categories = case template_module.module_type
+                   when 'docs_1', 'docs_3', 'docs_5', 'docs_7', 'docs_8'
+                     categoty_type.public_categories
+                   else
+                     []
+                   end
+      docs = GpArticle::Doc.categorized_into(categories).except(:order)
       docs = docs.where(content_id: template_module.gp_article_content_ids) if template_module.gp_article_content_ids.present?
       docs
     end

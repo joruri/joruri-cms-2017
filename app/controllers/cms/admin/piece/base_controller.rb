@@ -5,7 +5,11 @@ class Cms::Admin::Piece::BaseController < Cms::Controller::Admin::Base
 
   def pre_dispatch_piece
     return error_auth unless Core.user.has_auth?(:designer)
-    return error_auth unless @piece = find_piece
+
+    if params[:id].present?
+      @piece = find_piece
+      return error_auth unless @piece
+    end
   end
 
   def model
@@ -17,7 +21,7 @@ class Cms::Admin::Piece::BaseController < Cms::Controller::Admin::Base
   end
 
   def index
-    exit
+    redirect_to cms_pieces_path
   end
 
   def show
@@ -66,8 +70,8 @@ class Cms::Admin::Piece::BaseController < Cms::Controller::Admin::Base
     else
       flash[:notice] = "複製処理に失敗しました。"
       respond_to do |format|
-        format.html { redirect_to url_for(:action => :show) }
-        format.xml  { render :xml => item.errors, :status => :unprocessable_entity }
+        format.html { redirect_to url_for(action: :show) }
+        format.xml  { render xml: item.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -82,8 +86,8 @@ class Cms::Admin::Piece::BaseController < Cms::Controller::Admin::Base
     else
       flash[:notice] = "複製処理に失敗しました。"
       respond_to do |format|
-        format.html { redirect_to url_for(:action => :show) }
-        format.xml  { render :xml => item.errors, :status => :unprocessable_entity }
+        format.html { redirect_to url_for(action: :show) }
+        format.xml  { render xml: item.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -91,7 +95,7 @@ class Cms::Admin::Piece::BaseController < Cms::Controller::Admin::Base
   private
 
   def find_piece
-    model.readable.find(params[:id])
+    model.readable.find(params[:id]) if params[:id].present?
   end
 
   def base_params

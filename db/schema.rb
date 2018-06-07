@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171016045853) do
+ActiveRecord::Schema.define(version: 20180516021926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20171016045853) do
     t.integer  "thumb_height"
     t.integer  "thumb_size"
     t.text     "alt_text"
+    t.string   "sp_url"
     t.index ["token"], name: "index_ad_banner_banners_on_token", using: :btree
   end
 
@@ -599,6 +600,19 @@ ActiveRecord::Schema.define(version: 20171016045853) do
     t.index ["searchable_type", "searchable_id"], name: "index_cms_search_texts_on_searchable_type_and_searchable_id", using: :btree
   end
 
+  create_table "cms_site_access_controls", force: :cascade do |t|
+    t.integer  "site_id"
+    t.string   "state"
+    t.string   "target_type"
+    t.string   "target_location"
+    t.text     "basic_auth"
+    t.text     "ip_order"
+    t.text     "ip"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["site_id"], name: "index_cms_site_access_controls_on_site_id", using: :btree
+  end
+
   create_table "cms_site_basic_auth_users", force: :cascade do |t|
     t.string   "state"
     t.integer  "site_id"
@@ -830,6 +844,7 @@ ActiveRecord::Schema.define(version: 20171016045853) do
     t.string   "lang"
     t.text     "event_note"
     t.text     "remark"
+    t.integer  "marker_sort_no"
     t.index ["concept_id"], name: "index_gp_article_docs_on_concept_id", using: :btree
     t.index ["content_id"], name: "index_gp_article_docs_on_content_id", using: :btree
     t.index ["event_started_on", "event_ended_on"], name: "index_gp_article_docs_on_event_started_on_and_event_ended_on", using: :btree
@@ -1068,6 +1083,7 @@ ActiveRecord::Schema.define(version: 20171016045853) do
     t.datetime "updated_at"
     t.string   "name"
     t.integer  "icon_category_id"
+    t.integer  "sort_no"
   end
 
   create_table "organization_groups", force: :cascade do |t|
@@ -1234,6 +1250,27 @@ ActiveRecord::Schema.define(version: 20171016045853) do
     t.index ["question_id"], name: "index_survey_answers_on_question_id", using: :btree
   end
 
+  create_table "survey_attachments", force: :cascade do |t|
+    t.integer  "site_id"
+    t.integer  "answer_id"
+    t.string   "name"
+    t.text     "title"
+    t.text     "mime_type"
+    t.integer  "size"
+    t.integer  "image_is"
+    t.integer  "image_width"
+    t.integer  "image_height"
+    t.binary   "data"
+    t.integer  "thumb_width"
+    t.integer  "thumb_height"
+    t.integer  "thumb_size"
+    t.binary   "thumb_data"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["answer_id"], name: "index_survey_attachments_on_answer_id", using: :btree
+    t.index ["site_id"], name: "index_survey_attachments_on_site_id", using: :btree
+  end
+
   create_table "survey_form_answers", force: :cascade do |t|
     t.integer  "form_id"
     t.string   "answered_url"
@@ -1262,6 +1299,7 @@ ActiveRecord::Schema.define(version: 20171016045853) do
     t.string   "sitemap_state"
     t.string   "index_link"
     t.string   "mail_to"
+    t.datetime "recognized_at"
     t.index ["content_id"], name: "index_survey_forms_on_content_id", using: :btree
   end
 
@@ -1278,6 +1316,8 @@ ActiveRecord::Schema.define(version: 20171016045853) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "form_text_max_length"
+    t.integer  "form_file_max_size"
+    t.string   "form_file_extension"
     t.index ["form_id"], name: "index_survey_questions_on_form_id", using: :btree
   end
 
@@ -1463,6 +1503,7 @@ ActiveRecord::Schema.define(version: 20171016045853) do
     t.integer  "item_id"
     t.string   "item_name"
     t.integer  "site_id"
+    t.string   "user_account"
     t.index ["site_id"], name: "index_sys_operation_logs_on_site_id", using: :btree
   end
 
@@ -1685,12 +1726,32 @@ ActiveRecord::Schema.define(version: 20171016045853) do
     t.index ["user_id", "group_id"], name: "index_sys_users_groups_on_user_id_and_group_id", using: :btree
   end
 
+  create_table "sys_users_holds", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "holdable_type"
+    t.integer  "holdable_id"
+    t.string   "session_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["holdable_type", "holdable_id"], name: "index_sys_users_holds_on_holdable_type_and_holdable_id", using: :btree
+    t.index ["user_id"], name: "index_sys_users_holds_on_user_id", using: :btree
+  end
+
   create_table "sys_users_roles", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "role_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["user_id", "role_id"], name: "index_sys_users_roles_on_user_id_and_role_id", using: :btree
+  end
+
+  create_table "sys_users_sessions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "session_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "session_id"], name: "index_sys_users_sessions_on_user_id_and_session_id", unique: true, using: :btree
+    t.index ["user_id"], name: "index_sys_users_sessions_on_user_id", using: :btree
   end
 
   create_table "tag_tags", force: :cascade do |t|

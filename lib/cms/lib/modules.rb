@@ -1,6 +1,6 @@
 module Cms::Lib::Modules
   def self.modules
-    Cms::Lib::Modules::ModuleSet.load_modules.sort { |a, b| a.sort_no <=> b.sort_no }
+    Cms::Lib::Modules::ModuleSet.load_modules
   end
   
   def self.find(type, model)
@@ -83,5 +83,11 @@ module Cms::Lib::Modules
       mod.pieces.each {|c| list << [c.label, c.model] }
     end
     list
+  end
+
+  def self.public_models(model = nil)
+    model = model.to_s.underscore.pluralize.split('/')[0] if model
+    modules.reject { |mod| model && model != mod.name.to_s }
+           .flat_map { |mod| mod.public_models.map(&:model) }
   end
 end

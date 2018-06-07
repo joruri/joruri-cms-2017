@@ -4,24 +4,30 @@
 
 <table class="show">
   <tr>
-    <th><%= @item.locale(:name) %> <span class="note">※</span></th>
-    <td><%= f.text_field :name, :class => 'name' %></td>
+    <th><%= f.label :name %> <span class="note">※</span></th>
+    <td><%= f.text_field :name, class: 'name' %></td>
   </tr>
   <tr>
-    <th><%= @item.locale(:full_uri) %> <span class="note">※</span></th>
-    <td><%= f.text_field :full_uri, :class => 'url' %></td>
+    <th><%= f.label :full_uri %> <span class="note">※</span></th>
+    <td><%= f.text_field :full_uri, class: 'url' %></td>
   </tr>
   <tr>
-    <th><%= @item.locale(:mobile_full_uri) %></th>
-    <td><%= f.text_field :mobile_full_uri, :class => 'url' %></td>
+    <th><%= f.label :admin_full_uri %></th>
+    <td><%= f.text_field :admin_full_uri, class: 'url' %></td>
   </tr>
   <tr>
-    <th><%= @item.locale(:admin_full_uri) %></th>
-    <td><%= f.text_field :admin_full_uri, :class => 'url' %></td>
+    <th><%= f.label :state %></th>
+    <td>
+      <%- if Core.user.root? -%>
+        <%= f.collection_radio_buttons :state, @item.class.state_options, :last, :first %>
+      <%- else -%>
+        <%= @item.state_text %><%= f.hidden_field :state %>
+      <%- end -%>
+    </td>
   </tr>
   <%- if false && @item.new_record? -%>
   <tr>
-    <th><%= @item.locale(:in_root_group_id) %></th>
+    <th><%= f.label :in_root_group_id %></th>
     <td><%= f.select :in_root_group_id, options_for_select([['(新規作成)',0]] + Sys::Group.roots.pluck(:name, :id)) %></td>
   </tr>
   <%- end -%>
@@ -30,33 +36,16 @@
 <%= f.hidden_field :in_root_group_id, value: 0 %>
 
 <br />
-<p class="form">サイト紹介</p>
-
-<table class="show">
-  <tr>
-    <th><%= @item.locale(:site_image) %></th>
-    <td>
-      <%= f.file_field :site_image, :size => 64, :style => 'width: 450px;' %><br />
-      <% if uri = @item.site_image_uri %>
-      <div style="margin: 10px 0px;">
-        <%= f.check_box :del_site_image, {}, 'on', '' %> <label for="item_del_site_image">削除する</label><br />
-        <img src="<%=h uri %>" alt="" title="" />
-      </div>
-      <% end %>
-    </td>
-  </tr><tr>
-    <th><%= @item.locale(:body) %></th>
-    <td><%= f.text_area :body, :class => 'head' %></td>
-  </tr>
-</table>
-
-<br />
 <p class="form">携帯サイト</p>
 
 <table class="show">
   <tr>
-    <th><%= @item.locale(:mobile_feature) %></th>
-    <td><%= f.radio_buttons :mobile_feature, @item.class::MOBILE_FEATURE_OPTIONS %></td>
+    <th><%= f.label :mobile_feature %></th>
+    <td><%= f.collection_radio_buttons :mobile_feature, @item.class.mobile_feature_options, :last, :first %></td>
+  </tr>
+  <tr>
+    <th><%= f.label :mobile_full_uri %></th>
+    <td><%= f.text_field :mobile_full_uri, class: 'url' %></td>
   </tr>
 </table>
 
@@ -65,17 +54,17 @@
 
 <table class="show">
   <tr>
-    <th><%= @item.locale(:smart_phone_layout) %></th>
-    <td><%= f.radio_buttons :smart_phone_layout, @item.class::SMART_PHONE_LAYOUT_OPTIONS %></td>
+    <th><%= f.label :smart_phone_layout %></th>
+    <td><%= f.collection_radio_buttons :smart_phone_layout, @item.class.smart_phone_layout_options, :last, :first %></td>
   </tr>
   <tr>
-    <th><%= @item.locale(:smart_phone_publication) %></th>
-    <td><%= f.radio_buttons :smart_phone_publication, @item.class::SMART_PHONE_PUBLICATION_OPTIONS,
-                                                      onchange: 'confirm_smart_phone_deletion(this)' %></td>
+    <th><%= f.label :smart_phone_publication %></th>
+    <td><%= f.collection_radio_buttons :smart_phone_publication, @item.class.smart_phone_publication_options, :last, :first, {},
+                                                                 onchange: 'confirm_smart_phone_deletion(this)' %></td>
   </tr>
   <tr>
-    <th><%= @item.locale(:spp_target) %></th>
-    <td><%= f.select :spp_target, @item.class::SPP_TARGET_OPTIONS %></td>
+    <th><%= f.label :spp_target %></th>
+    <td><%= f.select :spp_target, @item.class.spp_target_options %></td>
   </tr>
 </table>
 
@@ -85,7 +74,7 @@
 <table class="show">
   <tr>
     <th>Google Map API Key</th>
-    <td><%= f.text_field :google_map_api_key, :class => 'url', :style => 'ime-mode: disabled;' %></td>
+    <td><%= f.text_field :google_map_api_key, class: 'url', style: 'ime-mode: disabled;' %></td>
   </tr>
 </table>
 
@@ -96,7 +85,7 @@
 <table class="show">
   <tr>
     <th><%= f.label :og_type %></th>
-    <td><%= f.select :og_type, @item.class::OGP_TYPE_OPTIONS, include_blank: true %></td>
+    <td><%= f.select :og_type, @item.class.og_type_options, include_blank: true %></td>
   </tr>
   <tr>
     <th><%= f.label :og_title %></th>
@@ -104,11 +93,11 @@
   </tr>
   <tr>
     <th><%= f.label :og_description %></th>
-    <td><%= f.text_area :og_description, :size => '100x3' %></td>
+    <td><%= f.text_area :og_description, size: '100x3' %></td>
   </tr>
   <tr>
     <th><%= f.label :og_image %></th>
-    <td><%= f.text_field :og_image, :style => 'width: 200px;' %></td>
+    <td><%= f.text_field :og_image, style: 'width: 200px;' %></td>
   </tr>
 </table>
 

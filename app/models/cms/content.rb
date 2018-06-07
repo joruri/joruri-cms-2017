@@ -1,28 +1,19 @@
 class Cms::Content < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Base::Content
   include Sys::Model::Rel::Creator
-  include Cms::Model::Site
   include Cms::Model::Rel::Site
   include Cms::Model::Rel::Concept
   include Cms::Model::Auth::Concept
+  include Cms::Model::Base::Content
 
-  REBUILDABLE_MODELS = ['AdBanner::Banner', 'BizCalendar::Place', 'Feed::Feed',
-                        'Gnav::MenuItem', 'GpArticle::Doc', 'GpCalendar::Event', 'GpCategory::CategoryType',
-                        'Map::Marker', 'Organization::Group', 'Rank::Rank',
-                        'Survey::Form', 'Tag::Tag']
-
-  has_many :settings, -> { order(:sort_no) },
-    :foreign_key => :content_id, :class_name => 'Cms::ContentSetting', :dependent => :destroy
-  has_many :pieces, :foreign_key => :content_id, :class_name => 'Cms::Piece',
-    :dependent => :destroy
-  has_many :nodes, :foreign_key => :content_id, :class_name => 'Cms::Node',
-    :dependent => :destroy
+  has_many :settings, -> { order(:sort_no) }, class_name: 'Cms::ContentSetting', dependent: :destroy
+  has_many :pieces, dependent: :destroy
+  has_many :nodes, dependent: :destroy
 
   # conditional
-  has_one :main_node, -> { order(:id) }, foreign_key: :content_id, class_name: 'Cms::Node'
-  has_many :public_nodes, -> { public_state }, foreign_key: :content_id, class_name: 'Cms::Node'
-  has_many :public_pieces, -> { public_state }, foreign_key: :content_id, class_name: 'Cms::Piece'
+  has_one :main_node, -> { order(:id) }, class_name: 'Cms::Node'
+  has_many :public_nodes, -> { public_state }, class_name: 'Cms::Node'
+  has_many :public_pieces, -> { public_state }, class_name: 'Cms::Piece'
 
   validates :concept_id, :state, :model, :name, presence: true
   validates :code, presence: true,
@@ -32,7 +23,10 @@ class Cms::Content < ApplicationRecord
   before_create :set_default_settings_from_configs
   after_save :save_settings
 
-  scope :rebuildable_models, -> { where(model: REBUILDABLE_MODELS) }
+  scope :rebuildable_models, -> {
+    models = Cms::Lib::Modules.modules.flat_map(&:contents).select { |d| d.options[:publishable] }.map(&:model)
+    where(model: models)
+  }
 
   def inherited_concept
     main_node.try!(:inherited_concept) || concept
@@ -62,23 +56,8 @@ class Cms::Content < ApplicationRecord
     @in_settings = values
   end
 
-  def locale(name)
-    model = self.class.to_s.underscore
-    label = ''
-    if model != 'cms/content'
-      label = I18n.t name, :scope => [:activerecord, :attributes, model]
-      return label if label !~ /^translation missing:/
-    end
-    label = I18n.t name, :scope => [:activerecord, :attributes, 'cms/content']
-    return label =~ /^translation missing:/ ? name.to_s.humanize : label
-  end
-
-  def states
-    [['公開','public']]
-  end
-
   def new_setting(name = nil)
-    Cms::ContentSetting.new({:content_id => id, :name => name.to_s})
+    Cms::ContentSetting.new(content_id: id, name: name.to_s)
   end
 
   def setting_value(name, default = nil)

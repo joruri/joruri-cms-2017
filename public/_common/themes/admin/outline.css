@@ -1,4 +1,4 @@
-/* =========================================================
+﻿/* =========================================================
     Outline.
 ========================================================= */
 body {
@@ -44,6 +44,7 @@ body {
 }
 #header .menu .loginGroup,
 #header .menu .loginUser,
+#header .menu .preview,
 #header .menu .web {
   margin: 0 8px 0 0;
   color: #fff;
@@ -59,6 +60,7 @@ body {
 }
 #header .menu .loginGroup::after,
 #header .menu .loginUser::after,
+#header .menu .preview::after,
 #header .menu .web::after {
   content: "｜";
   padding-left: 8px;
@@ -94,9 +96,9 @@ body {
 }
 #navi .mainMenu {
   display: flex;
-  height: 32px;
-  overflow: hidden;
+  min-height: 32px;
   background-color: #3C5082;
+  overflow: auto;
 }
 #navi .mainMenu li {
   flex: 0 0 100px;
@@ -115,12 +117,32 @@ body {
   color: #fff;
   text-decoration: none;
   display: block;
-  line-height: 32px;
-}
-#navi .mainMenu li a:hover {
-  color: #FFCC00;
+  min-height: 24px;
+  padding: 8px 0 0 0;
 }
 #navi .mainMenu li a.current {
+  background-color: #4A5C8A;
+}
+#navi .mainMenu li > ul {
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+  width: 100px;
+  position: absolute;
+  z-index: 999;
+  background-color: #3C5082;
+  border-top: 1px solid #fff;
+  transition-property: visibility;
+  transition-delay: 0.3s;
+}
+#navi .mainMenu li:hover > ul {
+  visibility: visible;
+  transition-delay: 0.1s;
+}
+#navi .mainMenu li > ul > li {
+  flex: 0 0 32px;
+}
+#navi .mainMenu li > ul > li:hover {
   background-color: #4A5C8A;
 }
 #navi .contentMenu {
@@ -149,6 +171,7 @@ body {
 /* Main
 --------------------------------------------------------- */
 #main {
+  padding: 12px 12px 0px 12px;
 }
 
 /* Wrapper
@@ -159,7 +182,8 @@ body {
 /* Content
 --------------------------------------------------------- */
 #content {
-  margin: 20px 12px 0px 12px;
+  display: flex;
+  width: 100%;
 }
 #content h2 {
   margin: 15px 0px 15px 5px;
@@ -226,6 +250,8 @@ body {
   line-height: 2.0;
 }
 #contentContainer {
+  max-width: auto;
+  flex: 1;
 }
 #contentHeader {
   margin-bottom: 15px;
@@ -243,7 +269,6 @@ body {
 }
 #contentBody {
 }
-
 
 /* Menu
 --------------------------------------------------------- */

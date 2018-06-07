@@ -1,7 +1,6 @@
 class Sys::StorageFile < ApplicationRecord
   include Sys::Model::Base
-  include Sys::Model::TextExtraction
-  include Cms::Model::Site
+  include Sys::Model::Base::TextExtraction
 
   before_save :set_mime_type
 
@@ -31,6 +30,10 @@ class Sys::StorageFile < ApplicationRecord
     nil
   end
 
+  def upload_path
+    path
+  end
+
   private
 
   def file_existence
@@ -38,8 +41,7 @@ class Sys::StorageFile < ApplicationRecord
   end
 
   def set_mime_type
-    result = `file -b --mime #{path}`
-    self.mime_type = result.split(/[:;]\s+/).first
+    self.mime_type = Util::File.mime_type(path)
   rescue => e
     warn_log e.message
   end

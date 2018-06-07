@@ -4,7 +4,7 @@
 
 <table class="index">
   <tr>
-    <th style="width: 60px; text-align: center;">詳細</th>
+    <th class="action_link">詳細</th>
     <th style="width: 35%;">ファイルパス</th>
     <th style="width: ;">タイトル</th>
     <th style="width: 120px; text-align: center;">更新日時</th>
@@ -12,13 +12,13 @@
     <th style="width: 100px; text-align: center;">プレビュー</th>
   </tr>
   
-  <% for item in @items %>
+  <% @items.each do |item| %>
   <tr class="<%= cycle '', 'cycle' %>">
-    <td style="text-align: center;"><%= link_to :show, item.admin_uri %></td>
-    <td><%= truncate(item.public_uri, :length => 40) %></td>
-    <td><%= truncate(item.title, :length => 30) %></td>
-    <td style="text-align: center;"><%= safe{item.updated_at.strftime('%Y-%m-%d %H:%M')} %></td>
-    <td style="text-align: center;"><%= safe{item.status.name} %></td>
+    <td class="action_link"><%= link_to :show, item.admin_uri %></td>
+    <td><%= truncate(item.public_uri, length: 40) %></td>
+    <td><%= truncate(item.title, length: 30) %></td>
+    <td style="text-align: center;"><%=l item.updated_at %></td>
+    <td style="text-align: center;"><%= item.state_text %></td>
     <td style="text-align: center;">
       <%= preview_links(item.site, item.preview_uri,
                                    item.preview_uri(terminal: :smart_phone),

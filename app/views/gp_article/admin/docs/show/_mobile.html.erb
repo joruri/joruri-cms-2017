@@ -1,23 +1,25 @@
 <table class="show">
   <tr>
-    <th><%= @item.locale :mobile_title %></th>
+    <th><%= @item.class.human_attribute_name :mobile_title %></th>
     <td><%= @item.mobile_title %></td>
   </tr>
   <tr>
-    <th colspan="2"><%= @item.locale :mobile_body %></th>
+    <th colspan="2"><%= @item.class.human_attribute_name :mobile_body %></th>
   </tr>
   <tr>
     <td colspan="2" class="cke_editor_wrapper">
-      <%= text_area_tag :mobile_body, @item.mobile_body.gsub('"file_contents/', %Q("#{gp_article_doc_path(@content, id: @item.id)}/file_contents/)), class: 'ckeditor' %>
+      <%= text_area_tag :mobile_body, replace_file_path(@item.mobile_body, base: @item.file_base_uri), class: 'ckeditor' %>
     </td>
   </tr>
   <%- if (links = @item.links.where(linkable_column: 'mobile_body')).present? -%>
   <tr>
-    <th><%= @item.locale :mobile_body %>に含まれるリンク</th>
+    <th><%= @item.class.human_attribute_name :mobile_body %>に含まれるリンク</th>
     <td>
       <ul>
         <%- links.each do |link| -%>
-        <li><%= link.body %> (<%= link_to link.url, link.url, target: 'preview' %>)</li>
+        <li>
+          <%= link.body %> (<%= link_to link.url, replace_file_path_for_link(link.url, base: @item.file_base_uri), target: 'preview' %>)
+        </li>
         <%- end -%>
       </ul>
     </td>

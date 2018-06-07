@@ -1,5 +1,4 @@
 module Storage
-  require "mime/types"
   require "nkf"
   
   @@env_key  = :file
@@ -40,7 +39,7 @@ module Storage
   
   def self.entries(path)
     paths = []
-    ::Dir::entries(path).each do |p|
+    Dir::entries(path).each do |p|
       p = p.force_encoding(Encoding.default_external).encode('utf-8', undef: :replace, invalid: :replace, replace: '?')
       paths << p if p !~ /^\.+$/
     end
@@ -73,38 +72,38 @@ module Storage
   end
   
   def self.mime_type(path)
-    mime   = MIME::Types.type_for(path).first.content_type rescue nil
+    mime   = MiniMime.lookup_by_filename(path).content_type rescue nil
     mime ||= "text/html" if path =~ /\.html\.r$/
     mime
   end
   
   def self.mkdir(path)
-    ::FileUtils.mkdir(path)
+    FileUtils.mkdir(path)
   end
   
   def self.mkdir_p(path)
-    ::FileUtils.mkdir_p(path)
+    FileUtils.mkdir_p(path)
   end
   
   def self.mv(src, dst)
-    ::FileUtils.mv(src, dst)
+    FileUtils.mv(src, dst)
   end
   
   def self.cp(src, dst)
-    ::FileUtils.cp(src, dst)
+    FileUtils.cp(src, dst)
   end
   
   def self.rmdir(path)
-    ::FileUtils.rmdir(path)
+    FileUtils.rmdir(path)
   end
   
   def self.rm_rf(path)
-    ::FileUtils.rm_rf(path)
-    #::FileUtils.remove_entry_secure(path, true) 
+    FileUtils.rm_rf(path)
+    #FileUtils.remove_entry_secure(path, true) 
   end
   
   def self.touch(path)
-    ::FileUtils.touch(path)
+    FileUtils.touch(path)
   end
   
   def self.read(path)

@@ -1,7 +1,7 @@
 module ApplicationHelper
   ## nl2br
   def br(str)
-    str.gsub(/\r\n|\r|\n/, '<br />')
+    str.to_s.gsub(/\r\n|\r|\n/, '<br />')
   end
 
   ## nl2br and escape
@@ -10,44 +10,9 @@ module ApplicationHelper
     str.gsub(/\r\n|\r|\n/, '<br />').html_safe
   end
 
-  ## safe calling
-  def safe(alt = nil, &block)
-    begin
-      yield
-#    rescue PassiveRecord::RecordNotFound => e
-    rescue NoMethodError => e
-      # nil判定を追加
-      #if e.respond_to? :args and (e.args.nil? or (!e.args.blank? and e.args.first.nil?))
-        alt
-      #else
-        # 原因がnilクラスへのアクセスでない場合は例外スロー
-      #  raise
-      #end
-    end
-  end
-
-  ## number format
-  def number_format(num)
-    number_to_currency(num, :unit => '', :precision => 0)
-  end
-
-  ## furigana
-  def ruby(str, ruby = nil)
-    ruby = Page.ruby unless ruby
-    return ruby == true ? Cms::Lib::Navi::Kana.convert(str) : str
-  end
-
-  def i18n_l(value, format=nil)
-    return value if value.nil?
-    if format.nil?
-      I18n.l value
-    else
-      I18n.l value, format: format
-    end
-  end
-
-  def i18n_view(path)
-    I18n.t("view.#{controller.controller_path}.#{path}")
+  # I18n.localize
+  def l(object, options = {})
+    super(object, options) if object
   end
 
   def menu_header(*texts, with_action_name: true)

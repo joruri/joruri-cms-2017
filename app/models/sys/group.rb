@@ -1,21 +1,21 @@
 class Sys::Group < ApplicationRecord
   include Sys::Model::Base
-  include Sys::Model::Base::Config
   include Sys::Model::Tree
-  include Cms::Model::Site
   include Cms::Model::Auth::Site
 
-  include StateText
+  enum_ish :state, [:enabled, :disabled]
+  enum_ish :ldap_state, [1, 0]
+  enum_ish :web_state, [:public, :closed]
 
-  belongs_to :parent, :foreign_key => :parent_id, :class_name => 'Sys::Group'
-
+  belongs_to :parent, class_name: self.name
   has_many :children, -> { order(:sort_no, :code) },
-    :foreign_key => :parent_id, :class_name => 'Sys::Group', :dependent => :destroy
-  has_many :users_groups, :class_name => 'Sys::UsersGroup'
-  has_many :users, -> { order(:id) }, :through => :users_groups
+                      foreign_key: :parent_id, class_name: self.name, dependent: :destroy
 
-  has_many :site_belongings, :dependent => :destroy, :class_name => 'Cms::SiteBelonging'
-  has_many :sites, -> { order(:id) }, :through => :site_belongings, :class_name => 'Cms::Site'
+  has_many :users_groups, class_name: 'Sys::UsersGroup'
+  has_many :users, -> { order(:id) }, through: :users_groups
+
+  has_many :site_belongings, class_name: 'Cms::SiteBelonging', dependent: :destroy
+  has_many :sites, -> { order(:id) }, through: :site_belongings, class_name: 'Cms::Site'
 
   before_save :disable_users, if: -> { state_changed? && state == 'disabled' }
   before_destroy :disable_users
@@ -29,7 +29,7 @@ class Sys::Group < ApplicationRecord
   validate :validate_disable_state
   validate :validate_code_uniqueness_in_site
 
-  define_site_scope :site_belongings
+  nested_scope :in_site, through: :site_belongings
 
   scope :in_group, ->(group) { where(parent_id: group.id) }
 
@@ -40,44 +40,16 @@ class Sys::Group < ApplicationRecord
       !Sys::Creator.where(group_id: group_ids, creatable_type: 'GpArticle::Doc').exists?
   end
 
-  def ldap_states
-    [['同期',1],['非同期',0]]
-  end
-  
-  def web_states
-    [['公開','public'],['非公開','closed']]
-  end
-  
-  def ldap_label
-    ldap_states.each {|a| return a[0] if a[1] == ldap }
-    return nil
-  end
-  
   def ou_name
     "#{code}#{name}"
   end
   
   def full_name
-    n = name
-    n = "#{parent.name}　#{n}" if parent && parent.level_no > 1
-    n
+    ancestors.drop(1).map(&:name).join('　')
   end
 
-  def tree_name(opts = {})
-    opts.reverse_merge!(prefix: '　　', depth: 0)
-    opts[:prefix] * [level_no - 1 + opts[:depth], 0].max + name
-  end
-
-  def descendants_in_site(site)
-    descendants do |child|
-      rel = child.in_site(site)
-      rel = yield(rel) || rel if block_given?
-      rel
-    end
-  end
-
-  def descendants_for_option(groups=[])
-    descendants.map {|g| [g.tree_name(depth: -1), g.id] }
+  def tree_name(prefix: '　　', depth: 0)
+    prefix * [level_no - 1 + depth, 0].max + name
   end
 
   private
@@ -124,6 +96,12 @@ class Sys::Group < ApplicationRecord
   class << self
     def readable
       all
+    end
+
+    def parent_options(site, origin = nil)
+      groups = site.groups
+      groups = groups.where.not(id: origin) if origin
+      groups.to_tree.flat_map(&:descendants).map { |g| [g.tree_name, g.id] }
     end
   end
 end

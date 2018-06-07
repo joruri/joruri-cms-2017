@@ -32,6 +32,10 @@ class Survey::Content::Setting < Cms::ContentSetting
       upper_reply_text: nil,
       lower_reply_text: nil,
     }
+  set_config :block_word,
+    name: '禁止語句',
+    form_type: :text,
+    lower_text: 'スペースまたは改行で複数指定できます。'
 
   belongs_to :content, foreign_key: :content_id, class_name: 'Survey::Content::Form'
 
@@ -55,7 +59,11 @@ class Survey::Content::Setting < Cms::ContentSetting
   def validate_value
     case name
     when 'mail_from', 'mail_to'
-      errors.add :value, :blank if value.blank?
+      if value.blank?
+        errors.add :value, :blank
+      elsif value !~ /\A.+@.+\z/
+        errors.add :value, :email
+      end
     end
   end
 end

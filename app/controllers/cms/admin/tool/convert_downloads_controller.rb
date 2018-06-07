@@ -4,7 +4,7 @@ class Cms::Admin::Tool::ConvertDownloadsController < Cms::Controller::Admin::Bas
   def pre_dispatch
     return error_auth unless Core.user.has_auth?(:manager)
     @item = ::Tool::ConvertDownload.find(params[:id]) if params[:id].present?
-    @items = ::Tool::ConvertDownload.order('created_at desc').paginate(page: params[:page], per_page: 10)
+    @items = ::Tool::ConvertDownload.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
   end
 
   def index
@@ -20,7 +20,7 @@ class Cms::Admin::Tool::ConvertDownloadsController < Cms::Controller::Admin::Bas
     @item = Tool::ConvertDownload.new(convert_download_params)
     if @item.creatable? && @item.save
       @item.download
-      redirect_to url_for(:action => :index), :notice => "ダウンロード処理が終了しました。"
+      redirect_to url_for(action: :index), notice: "ダウンロード処理が終了しました。"
     else
       render :index
     end

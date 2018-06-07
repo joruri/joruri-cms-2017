@@ -10,13 +10,13 @@ class GpTemplate::Admin::TemplatesController < Cms::Controller::Admin::Base
   def index
     if params[:check_boxes]
       @items = @content.templates.public_state
-      return render 'index_check_boxes', :layout => false
+      return render 'index_check_boxes', layout: false
     elsif params[:options]
       @items = @content.templates.public_state
-      return render 'index_options', :layout => false
+      return render 'index_options', layout: false
     end
     
-    @items = @content.templates.paginate(page: params[:page], per_page: 30)
+    @items = @content.templates.paginate(page: params[:page], per_page: params[:limit])
     _index @items
   end
 
@@ -52,8 +52,8 @@ class GpTemplate::Admin::TemplatesController < Cms::Controller::Admin::Base
     else
       flash[:notice] = "複製処理に失敗しました。"
       respond_to do |format|
-        format.html { redirect_to url_for(:action => :show) }
-        format.xml  { render :xml => item.errors, :status => :unprocessable_entity }
+        format.html { redirect_to url_for(action: :show) }
+        format.xml  { render xml: item.errors, status: :unprocessable_entity }
       end
     end
   end

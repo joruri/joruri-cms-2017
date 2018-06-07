@@ -1,7 +1,7 @@
 <table class="show">
   <tr>
     <th><%= GpArticle::Piece::RecentTabXml.human_attribute_name(:name) %> <span class="note">※</span></th>
-    <td><%= f.text_field :name, :class => 'id' %></td>
+    <td><%= f.text_field :name, class: 'id' %></td>
   </tr>
   <tr>
     <th><%= GpArticle::Piece::RecentTabXml.human_attribute_name(:title) %> <span class="note">※</span></th>
@@ -17,7 +17,7 @@
       <table class="noDesign">
         <tr>
           <td><%= GpArticle::Piece::RecentTabXml.human_attribute_name(:condition) %></td>
-          <td><%= f.radio_buttons :condition, @item.class::CONDITION_OPTIONS %></td>
+          <td><%= f.collection_radio_buttons :condition, @item.class::CONDITION_OPTIONS, :last, :first %></td>
         </tr>
         <tr>
           <td>表示カテゴリ</td>
@@ -54,15 +54,13 @@
   </tr>
   <tr>
     <th><%= GpArticle::Piece::RecentTabXml.human_attribute_name(:sort_no) %> <span class="note">※</span></th>
-    <td><%= f.text_field :sort_no, :class => 'number' %></td>
+    <td><%= f.text_field :sort_no, class: 'number' %></td>
   </tr>
 </table>
 
 <%- if @piece.content.gp_category_content_category_type -%>
 <%= javascript_tag do -%>
 $(document).ready(function () {
-  <%= disable_enter_script -%>
-
   $('#categories > tbody > tr > td.category_type > select').on('change', function (event) {
     var category_type_id = parseInt(event.target.value);
     var category_select = $(event.target).closest('tr').find('td.category > select');

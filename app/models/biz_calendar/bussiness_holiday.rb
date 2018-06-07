@@ -1,21 +1,18 @@
 class BizCalendar::BussinessHoliday < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
-  include Cms::Model::Site
   include Cms::Model::Auth::Content
   include BizCalendar::Model::Base::Date
 
-  include StateText
-
-  STATE_OPTIONS = [['公開', 'public'], ['非公開', 'closed']]
-  REPEAT_OPTIONS = [['毎日', 'daily'], ['平日（月～金）', 'weekday'], ['土日祝日', 'saturdays'], ['祝日', 'holiday'],
-    ['毎週', 'weekly'], ['毎月', 'monthly'], ['毎年', 'yearly']]
   REPEAT_WEEK_OPTIONS = [['月', 'mon'], ['火', 'tue'], ['水', 'wed'], ['木', 'thurs'], ['金', 'fri'], ['土', 'sat'],['日', 'sun']]
-  REPEAT_CRITERION_OPTIONS = [['日付', 'day'], ['曜日', 'week']]
-  END_TYPE_OPTIONS = [['なし', 0], ['回数指定', 1], ['日指定', 2]]
 
-  belongs_to :place,  :foreign_key => :place_id, :class_name => 'BizCalendar::Place'
-  belongs_to :type,   :foreign_key => :type_id,  :class_name => 'BizCalendar::HolidayType'
+  enum_ish :state, [:public, :closed], default: :public, predicate: true
+  enum_ish :repeat_type, [:daily, :weekday, :saturdays, :holiday, :weekly, :monthly, :yearly]
+  enum_ish :repeat_criterion, [:day, :week]
+  enum_ish :end_type, [0, 1, 2], default: 0
+
+  belongs_to :place, class_name: 'BizCalendar::Place'
+  belongs_to :type, class_name: 'BizCalendar::HolidayType'
 
   delegate :content, to: :place
 
@@ -24,29 +21,14 @@ class BizCalendar::BussinessHoliday < ApplicationRecord
   validate :repeat_setting
   validate :ended_setting
 
-  after_initialize :set_defaults
-
   after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
-  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true), prepend: true
 
   attr_accessor :repeat_num
 
-  define_site_scope :place
+  nested_scope :in_site, through: :place
 
   scope :public_state, -> { where(state: 'public') }
-  scope :search_with_params, ->(params = {}) {
-    rel = all
-    params.each do |n, v|
-      next if v.to_s == ''
-      case n
-      when 's_event_date'
-        rel.where!(event_date: v)
-      when 's_title'
-        rel = rel.search_with_text(:title, v)
-      end
-    end
-    rel
-  }
 
   def self.all_with_place_and_criteria(place, criteria)
     holidays = self.arel_table
@@ -114,18 +96,6 @@ class BizCalendar::BussinessHoliday < ApplicationRecord
           end
 
     return rel
-  end
-
-  def state_public?
-    state == 'public'
-  end
-
-  def repeat_type_text
-    REPEAT_OPTIONS.detect{|o| o.last == self.repeat_type }.try(:first).to_s
-  end
-
-  def repeat_criterion_text
-    REPEAT_CRITERION_OPTIONS.detect{|o| o.last == self.repeat_criterion }.try(:first).to_s
   end
 
   def check(day, week_index=false)
@@ -303,7 +273,7 @@ class BizCalendar::BussinessHoliday < ApplicationRecord
   end
 
   def repeat_weeks
-    repeat_week_ary.map{ |w| REPEAT_WEEK_OPTIONS.detect{|o| o.last == w[0] }.try(:first).to_s }
+    repeat_week_ary.map{ |w| self.class::REPEAT_WEEK_OPTIONS.detect{|o| o.last == w[0] }.try(:first).to_s }
   end
 
   def holiday_date
@@ -413,10 +383,5 @@ class BizCalendar::BussinessHoliday < ApplicationRecord
     if self.end_type == 2
       errors.add(:end_date, "を入力してください。") if self.end_date.blank?
     end
-  end
-
-  def set_defaults
-    self.state    ||= STATE_OPTIONS.first.last if self.has_attribute?(:state)
-    self.end_type ||= END_TYPE_OPTIONS.first.last if self.has_attribute?(:end_type)
   end
 end

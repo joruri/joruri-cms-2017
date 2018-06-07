@@ -8,10 +8,10 @@ class Tool::Convert
     site_dir = ::File.join(SITE_BASE_DIR, conf.site_url_without_scheme)
     FileUtils.rm_rf(site_dir) if File.exist?(site_dir)
 
-    com = "wget -rqN --restrict-file-names=nocontrol -P #{SITE_BASE_DIR} #{conf.site_url}"
-    com << " -I #{conf.include_dir}" if conf.include_dir.present?
-    com << " -l #{conf.recursive_level}" if conf.recursive_level
-    system com
+    com = ['wget', '-rqN', '--restrict-file-names=nocontrol', '-P', SITE_BASE_DIR, conf.site_url]
+    com += ['-I', conf.include_dir] if conf.include_dir.present?
+    com += ['-l', conf.recursive_level.to_s] if conf.recursive_level
+    system(*com)
   end
 
   def self.htmlfiles(site_url, options = {})
@@ -103,7 +103,7 @@ class Tool::Convert
   def self.process_link(conf, updated_at = nil)
     items = Tool::ConvertDoc.in_site(Core.site).where(content_id: conf.content_id)
     items = items.where('updated_at >= ?', updated_at) if updated_at
-    items = items.order('id')
+    items = items.order(:id)
 
     conf.link_total_num = items.count
     conf.save
