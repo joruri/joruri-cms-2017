@@ -4,11 +4,9 @@
 <%= @dirs.count + @pages.count %>件表示
 </div>
 
-<%#= link_to :up, url_for(:parent => @parent.parent_id) if @parent.parent_id > 0 %>
-
 <table class="index directories">
   <tr>
-    <th style="width: 60px; text-align: center;">詳細</th>
+    <th class="action_link">詳細</th>
     <th style="width: 20%;">ファイル名</th>
     <th><%= Cms::Node.human_attribute_name :title %></th>
     <th><%= Cms::Node.human_attribute_name :model %></th>
@@ -21,14 +19,14 @@
 
   <% @dirs.each do |item| %>
   <tr class="directory <%= cycle '', 'cycle' %>">
-    <td style="text-align: center;"><%= link_to :show, item.admin_uri %></td>
-    <td class="name"><%= link_to h(item.name), url_for(:action => :index, :parent => item) %></td>
-    <td><%= truncate(item.title, :length => 36) %></td>
+    <td class="action_link"><%= link_to :show, item.admin_uri %></td>
+    <td class="name"><%= link_to h(item.name), url_for(action: :index, parent: item) %></td>
+    <td><%= truncate(item.title, length: 36) %></td>
     <td><%= item.content_model_name(:wo_type) %></td>
     <td><%= item.sitemap_state_text %></td>
     <td><%= item.sitemap_sort_no %></td>
-    <td style="text-align: center;"><%= safe{item.updated_at.strftime('%Y-%m-%d %H:%M')} %></td>
-    <td style="text-align: center;"><%= safe{item.status.name} %></td>
+    <td style="text-align: center;"><%=l item.updated_at %></td>
+    <td style="text-align: center;"><%= item.state_text %></td>
     <td style="text-align: center;">
       <%= preview_links(item.site, item.preview_uri,
                                    item.preview_uri(terminal: :smart_phone),
@@ -39,14 +37,14 @@
 
   <% @pages.each do |item| %>
   <tr class="file <%= cycle '', 'cycle' %>">
-    <td style="text-align: center;"><%= link_to :show, item.admin_uri %></td>
-    <td class="name"><%= truncate(item.name, :length => 20) %></td>
-    <td><%= truncate(item.title, :length => 36) %><%= " （更新用）" if item.related_objects_for_replace.present? %></td>
+    <td class="action_link"><%= link_to :show, item.admin_uri %></td>
+    <td class="name"><%= truncate(item.name, length: 20) %></td>
+    <td><%= truncate(item.title, length: 36) %><%= " （更新用）" if item.related_objects_for_replace.present? %></td>
     <td><%= item.content_model_name(:wo_type) %></td>
     <td><%= item.sitemap_state_text %></td>
     <td><%= item.sitemap_sort_no %></td>
-    <td style="text-align: center;"><%= safe{item.updated_at.strftime('%Y-%m-%d %H:%M')} %></td>
-    <td style="text-align: center;"><%= safe{item.status.name} %></td>
+    <td style="text-align: center;"><%=l item.updated_at %></td>
+    <td style="text-align: center;"><%= item.state_text %></td>
     <td style="text-align: center;">
       <%= preview_links(item.site, item.preview_uri(params: { node_id: item.id }),
                                    item.preview_uri(terminal: :smart_phone, params: { node_id: item.id }),

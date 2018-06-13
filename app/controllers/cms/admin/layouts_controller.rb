@@ -6,7 +6,9 @@ class Cms::Admin::LayoutsController < Cms::Controller::Admin::Base
   end
 
   def index
-    @items = Cms::Layout.readable.order(:name, :id).paginate(page: params[:page], per_page: params[:limit])
+    @items = Cms::Layout.readable
+                        .order(:name, :id)
+                        .paginate(page: params[:page], per_page: params[:limit] || 100)
 
     _index @items
   end
@@ -37,7 +39,7 @@ class Cms::Admin::LayoutsController < Cms::Controller::Admin::Base
   def update
     @item = Cms::Layout.find(params[:id])
     @item.attributes = layout_params
-    _update(@item, :location => url_for(:action => :edit, :concept => @item.concept_id))
+    _update(@item, location: url_for(action: :edit, concept: @item.concept_id))
   end
 
   def destroy
@@ -49,14 +51,14 @@ class Cms::Admin::LayoutsController < Cms::Controller::Admin::Base
     if dupe_item = item.duplicate
       flash[:notice] = '複製処理が完了しました。'
       respond_to do |format|
-        format.html { redirect_to url_for(:action => :index) }
+        format.html { redirect_to url_for(action: :index) }
         format.xml  { head :ok }
       end
     else
       flash[:notice] = "複製処理に失敗しました。"
       respond_to do |format|
-        format.html { redirect_to url_for(:action => :show) }
-        format.xml  { render :xml => item.errors, :status => :unprocessable_entity }
+        format.html { redirect_to url_for(action: :show) }
+        format.xml  { render xml: item.errors, status: :unprocessable_entity }
       end
     end
   end

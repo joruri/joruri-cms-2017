@@ -1,20 +1,19 @@
 class Survey::Question < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Site
   include Cms::Model::Auth::Content
 
-  include StateText
+  default_scope { order(:sort_no, :id) }
 
-  STATE_OPTIONS = [['公開', 'public'], ['非公開', 'closed']]
-  FORM_TYPE_OPTIONS = [['入力/1行（テキストフィールド）', 'text_field'], ['入力/複数行（テキストエリア）', 'text_area'],
-                       ['選択/単数回答（プルダウン）', 'select'], ['選択/単数回答（ラジオボタン）', 'radio_button'],
-                       ['選択/複数回答（チェックボックス）', 'check_box'],['自由形式','free'],['入力/1行（メールアドレス）', 'text_field_email']]
-  REQUIRED_OPTIONS = [['必須', true], ['任意', false]]
+  column_attribute :description, html: true
+  column_attribute :sort_no, default: 10
 
-  default_scope { order("#{self.table_name}.sort_no IS NULL, #{self.table_name}.sort_no") }
+  enum_ish :state, [:public, :closed], default: :public
+  enum_ish :form_type, [:text_field, :text_field_email, :text_area,
+                        :select, :radio_button, :check_box, :attachment, :free], default: :text_field
+  enum_ish :required, [true, false], default: true
 
-  belongs_to :form
-  validates :form_id, presence: true
+  belongs_to :form, required: true
+  has_many :answers
 
   delegate :content, to: :form
 
@@ -22,9 +21,7 @@ class Survey::Question < ApplicationRecord
   validates :title, presence: true
   validates :sort_no, presence: true
 
-  after_initialize :set_defaults
-
-  define_site_scope :form
+  nested_scope :in_site, through: :form
 
   scope :public_state, -> { where(state: 'public') }
 
@@ -36,12 +33,7 @@ class Survey::Question < ApplicationRecord
     form_type == 'text_field_email'
   end
 
-  private
-
-  def set_defaults
-    self.state     = STATE_OPTIONS.first.last     if self.has_attribute?(:state) && self.state.nil?
-    self.form_type = FORM_TYPE_OPTIONS.first.last if self.has_attribute?(:form_type) && self.form_type.nil?
-    self.required  = REQUIRED_OPTIONS.first.last  if self.has_attribute?(:required) && self.required.nil?
-    self.sort_no = 10 if self.has_attribute?(:sort_no) && self.sort_no.nil?
+  def form_file_extensions
+    form_file_extension.to_s.split(',').map(&:strip).select(&:present?)
   end
 end

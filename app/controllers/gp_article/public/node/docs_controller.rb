@@ -1,30 +1,15 @@
 require 'will_paginate/array'
-
-class GpArticle::Public::Node::DocsController < Cms::Controller::Public::Base
+class GpArticle::Public::Node::DocsController < GpArticle::Public::NodeController
   include GpArticle::Controller::Feed
-  skip_after_action :render_public_layout, :only => [:file_content, :qrcode]
+
+  skip_after_action :render_public_layout, only: [:file_content, :qrcode]
 
   def pre_dispatch
-    if (organization_content = Page.current_node.content).kind_of?(Organization::Content::Group)
-      return http_error(404) unless organization_content.article_related?
-      @group = organization_content.find_group_by_path_from_root(params[:group_names])
-      return http_error(404) unless @group
-      @content = organization_content.related_article_content
-    else
-      @content = GpArticle::Content::Doc.find_by(id: Page.current_node.content.id)
-      # Block if organization relation available
-      if (organization_content = @content.organization_content_group) &&
-          organization_content.article_related? &&
-          organization_content.related_article_content == @content
-        return http_error(404)
-      end
-    end
-
-    return http_error(404) unless @content
+    @content = GpArticle::Content::Doc.find(Page.current_node.content_id)
   end
 
   def index
-    @docs = @content.public_docs_for_list.order(@content.docs_order_as_hash)
+    @docs = @content.docs_for_list.order(@content.docs_order_as_hash)
     if params[:format].in?(['rss', 'atom'])
       @docs = @docs.date_after(@content.docs_order_column, @content.feed_docs_period.to_i.days.ago.beginning_of_day) if @content.feed_docs_period.present?
       @docs = @docs.paginate(page: params[:page], per_page: @content.feed_docs_number)
@@ -44,32 +29,27 @@ class GpArticle::Public::Node::DocsController < Cms::Controller::Public::Base
     end
 
     @items = @docs.group_by { |doc| doc[@content.docs_order_column].try(:strftime, @content.date_style) }
-    render :index_mobile if Page.mobile?
   end
 
   def show
     params[:filename_base], params[:format] = 'index', 'html' unless params[:filename_base]
 
-    @item = public_or_preview_docs(id: params[:id], name: params[:name])
-    return http_error(404) if @item.nil? || @item.filename_base != params[:filename_base]
-    if @group
-      return http_error(404) unless @item.creator.group == @group.sys_group
-    end
+    @item = public_or_preview_doc(id: params[:id], name: params[:name])
+    return http_error(404) if @item.filename_base != params[:filename_base]
     return http_error(404) if @item.external_link?
+    return http_error(404) if !@item.terminal_mobile? && request.mobile?
+    return http_error(404) if !@item.terminal_pc_or_smart_phone? && !request.mobile?
+
     Page.current_item = @item
-    Page.title = unless Page.mobile?
-                   @item.title
-                 else
+    Page.title = if request.mobile?
                    @item.mobile_title.presence || @item.title
+                 else
+                   @item.title
                  end
   end
 
   def file_content
-    @doc = public_or_preview_docs(id: params[:id], name: params[:name])
-    return http_error(404) unless @doc
-    if @group
-      return http_error(404) unless @doc.creator.group == @group.sys_group
-    end
+    @doc = public_or_preview_doc(id: params[:id], name: params[:name])
 
     params[:file] = File.basename(params[:path])
     params[:type] = :thumb if params[:path] =~ /(\/|^)thumb\//
@@ -79,8 +59,7 @@ class GpArticle::Public::Node::DocsController < Cms::Controller::Public::Base
   end
 
   def qrcode
-    @doc = public_or_preview_docs(id: params[:id], name: params[:name])
-    return http_error(404) unless @doc
+    @doc = public_or_preview_doc(id: params[:id], name: params[:name])
     return http_error(404) unless @doc.qrcode_visible?
 
     qrcode = Util::Qrcode.create(@doc.public_full_uri)
@@ -99,25 +78,15 @@ class GpArticle::Public::Node::DocsController < Cms::Controller::Public::Base
     end
   end
 
-  def public_or_preview_docs(id: nil, name: nil)
-    unless Core.mode == 'preview'
-      @content.public_docs.find_by(name: name)
-    else
-      if Core.publish
-        case
-        when id
-          nil
-        when name
-          @content.public_docs.where(name: name).order(:id).first
-        end
-      else
-        case
-        when id
-          @content.docs.find_by(id: id)
-        when name
-          @content.public_docs.find_by(name: name) || @content.preview_docs.find_by(name: name)
-        end
-      end
+  def public_or_preview_doc(id: nil, name: nil)
+    docs = GpArticle::Doc.all
+    docs = docs.unscoped if Core.preview_mode?
+    docs.where!(content_id: @content.id)
+
+    if id
+      docs.find_by!(id: id)
+    elsif name
+      docs.order(:id).find_by!(name: name)
     end
   end
 end

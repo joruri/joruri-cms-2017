@@ -14,10 +14,6 @@ module Sys::Model::Base::File
   attr_accessor :file, :allowed_types, :image_resize
 
   included do
-    include Sys::Model::TextExtraction
-
-    alias :path :upload_path
-
     validates :file, presence: true, unless: :skip_upload?
     validates :name, :title, presence: true
     validate :validate_file_name, if: -> { name.present? }
@@ -240,7 +236,7 @@ module Sys::Model::Base::File
   end
 
   def remove_exif_from_image
-    if image_file?
+    if image_file? && mime_type =~ %r{^image/(jpeg|png)}
       { size: upload_path, thumb_size: upload_path(type: :thumb) }.each do |column, path|
         if ::File.exist?(path)
           Util::File.remove_exif(path)

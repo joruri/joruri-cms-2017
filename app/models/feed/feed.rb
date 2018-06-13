@@ -1,32 +1,26 @@
 class Feed::Feed < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
-  include Cms::Model::Site
   include Cms::Model::Rel::Content
   include Cms::Model::Auth::Content
 
-  include StateText
-
-  STATE_OPTIONS = [['公開', 'public'], ['非公開', 'closed']]
-  TARGET_OPTIONS = [['同一ウィンドウ', '_self'], ['別ウィンドウ', '_blank']]
-
   default_scope { order(created_at: :desc) }
 
-  # Content
-  belongs_to :content, :foreign_key => :content_id, :class_name => 'Feed::Content::Feed'
-  validates :content_id, presence: true
+  column_attribute :entry_count, default: 20
 
-  has_many   :entries,        :foreign_key => :feed_id,         :class_name => 'Feed::FeedEntry',
-    :dependent => :destroy
+  enum_ish :state, [:public, :closed], default: :public
+
+  # Content
+  belongs_to :content, class_name: 'Feed::Content::Feed', required: true
+
+  has_many :entries, foreign_key: :feed_id, class_name: 'Feed::FeedEntry', dependent: :destroy
 
   validates :name, presence: true
   validates :title, presence: true
   validates :uri, presence: true
 
-  after_initialize :set_defaults
-
   after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
-  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true), prepend: true
 
   def safe(alt = nil, &block)
     begin
@@ -253,12 +247,4 @@ class Feed::Feed < ApplicationRecord
       end
     end
   end
-
-  private
-
-  def set_defaults
-    self.state       ||= STATE_OPTIONS.first.last if self.has_attribute?(:state)
-    self.entry_count ||= 20 if self.has_attribute?(:entry_count)
-  end
-
 end

@@ -16,7 +16,6 @@ class Core
   cattr_accessor :dispatched
   cattr_accessor :concept
   cattr_accessor :messages
-  cattr_accessor :publish
 
   ## Initializes.
   def self.initialize(env = {})
@@ -36,7 +35,6 @@ class Core
     @@dispatched   = nil
     @@concept      = nil
     @@messages     = []
-    @@publish      = nil # for mobile
 
     #require 'page'
     Page.initialize
@@ -159,18 +157,18 @@ class Core
   end
 
   def self.set_concept(session, concept_id = nil)
+    concepts = Core.site.concepts.where(state: 'public')
     if concept_id
-      @@concept = Cms::Concept.find_by(id: concept_id)
-      @@concept = Cms::Concept.new.readable_children[0] unless @@concept
+      @@concept = concepts.find_by(id: concept_id) || concepts.roots.readable_for(Core.user).first
       session[:cms_concept] = (@@concept ? @@concept.id : nil)
     else
       concept_id = session[:cms_concept]
-      @@concept = Cms::Concept.find_by(id: concept_id) || Cms::Concept.new.readable_children[0]
+      @@concept = concepts.find_by(id: concept_id) || concepts.roots.readable_for(Core.user).first
     end
   end
 
-  def self.mode_system?
-    @@mode == ZomekiCMS::ADMIN_URL_PREFIX.sub(/\A_/, '')
+  def self.preview_mode?
+    @@mode == 'preview'
   end
 
 private
@@ -196,6 +194,7 @@ private
       Page.site        = @@site
       Page.mobile      = @@request_uri =~ /^\/_[a-z]+\/([0-9]+)m/
       Page.smart_phone = @@request_uri =~ /^\/_[a-z]+\/([0-9]+)s/
+      Page.preview_at  = @@request_uri.scan(/^\/_[a-z]+\/[0-9]+\w{0,1}_([0-9]+)/).flatten.first.to_time rescue nil
       @@internal_uri   = @@request_uri
       @@internal_uri  += "index.html" if @@internal_uri =~ /\/$/
     when 'ssl'

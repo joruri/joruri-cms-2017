@@ -2,34 +2,28 @@ class GpCalendar::Event < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
   include Sys::Model::Rel::File
-  include Cms::Model::Site
   include Cms::Model::Rel::Content
   include Cms::Model::Auth::Content
   include GpCategory::Model::Rel::Category
 
-  include StateText
-
-  STATE_OPTIONS = [['公開中', 'public'], ['非公開', 'closed']]
-  TARGET_OPTIONS = [['同一ウィンドウ', '_self'], ['別ウィンドウ', '_blank']]
   ORDER_OPTIONS = [['作成日時（降順）', 'created_at_desc'], ['作成日時（昇順）', 'created_at_asc']]
 
   # Not saved to database
   attr_accessor :doc
 
+  enum_ish :state, [:public, :closed], default: :public
+  enum_ish :target, [:_self, :_blank], default: :_self
+
   # Content
-  belongs_to :content, :foreign_key => :content_id, :class_name => 'GpCalendar::Content::Event'
-  validates :content_id, :presence => true
+  belongs_to :content, class_name: 'GpCalendar::Content::Event', required: true
 
-  # Proper
-  validates :state, :presence => true
-
-  after_initialize :set_defaults
   before_save :set_name
   before_destroy :close_files
 
   after_save     GpCalendar::Publisher::EventCallbacks.new, if: :changed?
-  before_destroy GpCalendar::Publisher::EventCallbacks.new
+  before_destroy GpCalendar::Publisher::EventCallbacks.new, prepend: true
 
+  validates :state, presence: true
   validates :started_on, presence: true
   validates :ended_on, presence: true
   validates :title, presence: true
@@ -95,15 +89,18 @@ class GpCalendar::Event < ApplicationRecord
     GpCalendar::Holiday.public_state.content_and_criteria(content, criteria).first.try(:title)
   end
 
+  def public_uri
+    return '' unless node = content.public_node
+    "#{node.public_uri}#{name}/"
+  end
+
   def public_path
-    node = content.public_nodes.where(model: 'GpCalendar::Event').first
-    return '' unless node
+    return '' unless node = content.public_node
     "#{node.public_path}#{name}/"
   end
 
   def public_smart_phone_path
-    node = content.public_nodes.where(model: 'GpCalendar::Event').first
-    return '' unless node
+    return '' unless node = content.public_node
     "#{node.public_smart_phone_path}#{name}/"
   end
 
@@ -113,17 +110,6 @@ class GpCalendar::Event < ApplicationRecord
   end
 
   private
-
-  def set_defaults
-    self.state ||= STATE_OPTIONS.first.last if self.has_attribute?(:state)
-    self.target ||= TARGET_OPTIONS.first.last if self.has_attribute?(:target)
-
-    set_defaults_from_content if new_record?
-  end
-
-  def set_defaults_from_content
-    return unless content
-  end
 
   def set_name
     return if self.name.present?
@@ -141,16 +127,8 @@ class GpCalendar::Event < ApplicationRecord
 
   class << self
     def from_doc(doc, calendar_content = nil)
-      options = doc.link_to_options
-      doc_uri = unless options.kind_of?(Array)
-                  doc.public_uri
-                else
-                  options[0].to_s
-                end
-
       event = self.new(
         title: doc.title,
-        href: doc_uri,
         target: '_self',
         started_on: doc.event_started_on,
         ended_on: doc.event_ended_on,

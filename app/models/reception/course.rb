@@ -2,26 +2,26 @@ class Reception::Course < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
   include Sys::Model::Rel::File
-  include Cms::Model::Site
   include Cms::Model::Rel::Content
   include Cms::Model::Auth::Content
   include GpCategory::Model::Rel::Category
 
-  include StateText
+  column_attribute :body, html: true
+  column_attribute :remark, html: true
+  column_attribute :description, html: true
 
-  STATE_OPTIONS = [['下書き','draft'],['公開中','public'],['非公開','closed']]
+  enum_ish :state, [:draft, :public, :closed], default: :public, predicate: true
 
   # Content
-  belongs_to :content, foreign_key: :content_id, class_name: 'Reception::Content::Course'
+  belongs_to :content, class_name: 'Reception::Content::Course', required: true
 
   has_many :opens, -> { order_by_open_at }, dependent: :destroy
   has_many :public_opens, -> { public_state.order_by_open_at }, class_name: 'Reception::Open'
 
-  before_save :set_defaults
   after_save :set_name
 
   after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
-  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true), prepend: true
 
   validates :title, presence: true
   validates :name, exclusion: { in: %w(categories) }
@@ -30,7 +30,7 @@ class Reception::Course < ApplicationRecord
   scope :with_target, ->(target) { target.present? ? where(state: target) : all }
   scope :search_with_criteria, ->(criteria) {
     rel = all
-    rel = rel.where(:state => criteria[:state]) if criteria[:state].present?
+    rel = rel.where(state: criteria[:state]) if criteria[:state].present?
     rel = rel.search_with_text(:title, :subtitle, :body, :remark, :description, criteria[:keyword]) if criteria[:keyword].present?
     rel
   }
@@ -44,16 +44,11 @@ class Reception::Course < ApplicationRecord
             .where(state: 'public')
             .merge(Reception::Open.available_period)
   }
-  scope :categorized_into, ->(categories) {
-    cats = GpCategory::Categorization.arel_table
-    where(id: GpCategory::Categorization.select(:categorizable_id)
-                                        .where(cats[:category_id].in(Array(categories).map(&:id))))
-  }
   scope :order_by_min_open_at, ->(sort = 'asc') {
     sql = Reception::Open.select(%Q|MIN("reception_opens"."open_on" + "reception_opens"."start_at")|)
                          .where(%Q|"reception_courses"."id" = "reception_opens"."course_id"|).to_sql
     sort = sort.downcase == 'asc' ? 'ASC' : 'DESC'
-    order("(#{sql}) #{sort}")
+    order(Arel.sql("(#{sql}) #{sort}"))
   }
 
   def applicants
@@ -71,31 +66,19 @@ class Reception::Course < ApplicationRecord
          .merge(Reception::Open.within_capacity)
   end
 
-  def state_draft?
-    state == 'draft'
-  end
-
-  def state_public?
-    state == 'public'
-  end
-
-  def state_closed?
-    state == 'closed'
-  end
-
   def public_uri
     return nil unless content.public_node
-    "#{content.public_node.public_uri}#{name}"
+    "#{content.public_node.public_uri}#{name}/"
   end
 
   def public_full_uri
     return nil unless content.public_node
-    "#{content.public_node.public_full_uri}#{name}"
+    "#{content.public_node.public_full_uri}#{name}/"
   end
 
   def public_path
     return '' if public_uri.blank?
-    "#{content.public_path}#{public_uri}/index.html"
+    "#{content.public_path}#{public_uri}index.html"
   end
 
   def bread_crumbs(node)
@@ -115,7 +98,7 @@ class Reception::Course < ApplicationRecord
     if content
       if (node = content.public_node)
         crumb = node.bread_crumbs.crumbs.first
-        crumb << [title, "#{self.public_uri}/"]
+        crumb << [title, public_uri]
         crumbs << crumb
       end
     end
@@ -142,25 +125,7 @@ class Reception::Course < ApplicationRecord
 
   private
 
-  def set_defaults
-    self.state ||= 'public'
-  end
-
   def set_name
     update_column(:name, id) if name.blank?
-  end
-
-  concerning :File do
-    def admin_uri
-      "#{content.admin_uri}/#{id}"
-    end
-
-    def replace_file_path_for_admin(text)
-      text.gsub(%r{("|')file_contents/(.+?)("|')}, "\\1#{admin_uri}/file_contents/\\2\\3") if text.present?
-    end
-
-    def replace_file_path_for_public(text)
-      text.gsub(%r{("|')file_contents/(.+?)("|')}, "\\1#{public_uri}/file_contents/\\2\\3") if text.present?
-    end
   end
 end

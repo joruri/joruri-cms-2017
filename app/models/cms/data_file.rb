@@ -1,23 +1,25 @@
 class Cms::DataFile < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Base::File
+  include Sys::Model::Base::TextExtraction
   include Sys::Model::Rel::Creator
-  include Cms::Model::Site
   include Cms::Model::Rel::Site
   include Cms::Model::Rel::Concept
   include Cms::Model::Rel::Bracketee
-  include Cms::Model::Auth::Concept::Creator
+  include Cms::Model::Auth::Concept
 
-  include StateText
+  enum_ish :state, [:public, :closed]
 
-  belongs_to :concept, :foreign_key => :concept_id, :class_name => 'Cms::Concept'
-  belongs_to :node   , :foreign_key => :node_id   , :class_name => 'Cms::DataFileNode'
+  belongs_to :concept
+  belongs_to :node, class_name: 'Cms::DataFileNode'
 
   after_save     Cms::Publisher::BracketeeCallbacks.new, if: :changed?
-  before_destroy Cms::Publisher::BracketeeCallbacks.new
+  before_destroy Cms::Publisher::BracketeeCallbacks.new, prepend: true
 
   after_save     Cms::SearchIndexerCallbacks.new, if: :changed?
-  before_destroy Cms::SearchIndexerCallbacks.new
+  before_destroy Cms::SearchIndexerCallbacks.new, prepend: true
+
+  validates :concept_id, presence: true
 
   scope :public_state, -> { where(state: 'public') }
 
@@ -91,7 +93,7 @@ class Cms::DataFile < ApplicationRecord
       end
       self.state        = 'public'
       self.published_at = Time.now
-      return false unless save(:validate => false)
+      return false unless save(validate: false)
 
       run_callbacks :publish_files do
         remove_public_file
@@ -102,7 +104,7 @@ class Cms::DataFile < ApplicationRecord
     def close
       self.state        = 'closed'
       self.published_at = nil
-      return false unless save(:validate => false)
+      return false unless save(validate: false)
 
       run_callbacks :close_files do
         remove_public_file

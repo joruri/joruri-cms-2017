@@ -9,14 +9,16 @@ class Sys::Admin::OperationLogsController < Cms::Controller::Admin::Base
   end
   
   def index
-    @item = Sys::OperationLog.new
-    
-    @item_type_options = ["all", "article", "directory", "page", "piece"]
-    @action_type_options = [["作成","create"], ["更新","update"], ["承認","recognize"], ["削除","destroy"], ["公開","publish"], ["非公開","close"], ["ログイン","login"], ["ログアウト","logout"]]
-   
-    items = Core.site.operation_logs.search_with_params(params).order(id: :desc)
-    return destroy_items(items) if params[:destroy].present?
-    return export_csv(items) if params[:csv].present?
+    items = Sys::OperationLogsFinder.new(Core.site.operation_logs)
+                                    .search(params)
+                                    .order(id: :desc)
+
+    if params[:destroy].present?
+      return destroy_items(items)
+    elsif params[:csv].present?
+      csv = generate_csv(items)
+      return send_data platform_encode(csv), type: 'text/csv', filename: "sys_operation_logs_#{Time.now.to_i}.csv"
+    end 
 
     @items = items.paginate(page: params[:page], per_page: params[:limit])
 
@@ -41,12 +43,12 @@ protected
     num = items.delete_all
 
     flash[:notice] = "削除処理が完了しました。##{num}件"
-    redirect_to url_for(:action => :index)
+    redirect_to url_for(action: :index)
   end
 
-  def export_csv(items)
-    csv = CSV.generate do |csv|
-      fields = ["ログID", :created_at, :user_id, :user_name, :ipaddr, :uri, :action, :item_model, :item_id, :item_name]
+  def generate_csv(items)
+    CSV.generate do |csv|
+      fields = ["ログID", :created_at, :user_id, :user_account, :user_name, :ipaddr, :uri, :action, :item_model, :item_id, :item_name]
       csv << fields.map {|c| c.is_a?(Symbol) ? Sys::OperationLog.human_attribute_name(c) : c }
 
       items.each do |item|
@@ -54,6 +56,7 @@ protected
         row << item.id
         row << item.created_at.strftime("%Y-%m-%d %H:%M:%S")
         row << item.user_id
+        row << item.user_account
         row << item.user_name
         row << item.ipaddr
         row << item.uri
@@ -64,8 +67,5 @@ protected
         csv << row
       end
     end
-
-    csv = NKF.nkf('-s', csv)
-    send_data(csv, :type => 'text/csv', :filename => "sys_operation_logs_#{Time.now.to_i}.csv")
   end
 end

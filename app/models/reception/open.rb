@@ -2,12 +2,9 @@ class Reception::Open < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
   include Sys::Model::Rel::Task
-  include Cms::Model::Site
   include Cms::Model::Auth::Content
 
-  include StateText
-
-  STATE_OPTIONS = [['下書き','draft'],['公開','public']]
+  enum_ish :state, [:draft, :public, :closed], default: :public, predicate: true
 
   belongs_to :course
   has_many :applicants, dependent: :destroy
@@ -17,14 +14,14 @@ class Reception::Open < ApplicationRecord
   before_save :prepare_expire_task
 
   after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
-  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true), prepend: true
 
   validates :title, presence: true
   validates :open_on, presence: true
   validates :start_at, presence: true
   validates :end_at, presence: true
 
-  define_site_scope :course
+  nested_scope :in_site, through: :course
 
   scope :public_state, -> { where(state: 'public' ) }
   scope :order_by_open_at, -> { order(:open_on, :start_at, :end_at) }
@@ -56,18 +53,6 @@ class Reception::Open < ApplicationRecord
     d = open_on.to_datetime
     d += start_at.seconds_since_midnight.seconds if start_at
     d
-  end
-
-  def state_draft?
-    state == 'draft'
-  end
-
-  def state_public?
-    state == 'public'
-  end
-
-  def state_closed?
-    state == 'closed'
   end
 
   def available_period?(time = Time.now)

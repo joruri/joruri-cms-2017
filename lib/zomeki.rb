@@ -1,6 +1,6 @@
 module Zomeki
   def self.version
-    "2017 Release 2"
+    "2017 Release 3"
   end
 
   def self.default_config

@@ -2,7 +2,7 @@
 <table class="show">
   <tr>
     <th><%= @item.class.human_attribute_name :state %></th>
-    <td><%= @item.status.name %></td>
+    <td><%= @item.state_text %></td>
   </tr>
   <tr>
     <th><%= @item.class.human_attribute_name :title %></th>
@@ -13,8 +13,8 @@
     <td class="cke_editor_wrapper"><%= text_area_tag :description, @item.description, class: 'ckeditor' %></td>
   </tr>
   <tr>
-    <th><%= @item.locale :form_type %></th>
-    <td><%= @item.class::FORM_TYPE_OPTIONS.detect{|o| o.last == @item.form_type }.try(:first) %></td>
+    <th><%= @item.class.human_attribute_name :form_type %></th>
+    <td><%= @item.form_type_text %></td>
   </tr>
   <tr>
     <th><%= @item.class.human_attribute_name :form_text_max_length %><br />（種別が入力の時に使用）</th>
@@ -25,8 +25,16 @@
     <td><%=simple_format @item.form_options %></td>
   </tr>
   <tr>
+    <th><%= @item.class.human_attribute_name :form_file_max_size %><br />（種別が添付の時に使用）</th>
+    <td><%= "#{@item.form_file_max_size} MB" if @item.form_file_max_size %></td>
+  </tr>
+  <tr>
+    <th><%= @item.class.human_attribute_name :form_file_extension %><br />（種別が添付の時に使用）</th>
+    <td><%= @item.form_file_extension %></td>
+  </tr>
+  <tr>
     <th><%= @item.class.human_attribute_name :required %></th>
-    <td><%= @item.class::REQUIRED_OPTIONS.detect{|o| o.last == @item.required }.try(:first) %></td>
+    <td><%= @item.required_text %></td>
   </tr>
   <tr>
     <th><%= @item.class.human_attribute_name :style_attribute %></th>

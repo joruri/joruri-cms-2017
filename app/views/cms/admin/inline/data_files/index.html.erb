@@ -7,11 +7,11 @@ _input = Proc.new do |name, count, path, width|
 end
 %>
 <%= render 'menu' %>
-<%= render file: "cms/admin/data/files/_search.html.erb" %>
+<%= render file: "cms/admin/data_files/_search.html.erb" %>
 
 <table class="index">
   <tr>
-    <th style="width: 40px; text-align: center;">詳細</th>
+    <th class="action_link">詳細</th>
     <th style="width: 40px; text-align: center;">挿入</th>
     <th style="width: 90px; text-align: center;">サムネイル</th>
     <th style="width: 20%;">フォルダ名</th>
@@ -22,7 +22,7 @@ end
   </tr>
   <%- @items.each_with_index do |item, i| -%>
   <tr class="<%= cycle '', 'cycle' %>">
-    <td style="text-align: center;"><%= link_to :show, { action: :show, id: item } %></td>
+    <td class="action_link"><%= link_to :show, { action: :show, id: item } %></td>
     <td style="text-align: center;">
       <%= hidden_field_tag "node_name[]", item.node.try(:name), id: "nodeName#{item.id}" %>
       <%= hidden_field_tag "item_name[]", item.name, id: "itemName#{item.id}" %>
@@ -45,21 +45,21 @@ end
         <%= hidden_field_tag "imageAlt[]", item.alt, id: "imageAlt#{item.id}" %>
         <div class="pasteLinks">
           <%= link_to "画像貼付 (#{item.image_width}x#{item.image_height})", "#",
-            onclick: %Q(ckeInsertContent('<img src="#{item.public_uri}" alt="#{item.alt_text}" title="#{item.alt}" />'); return false;), id: "link_image#{item.id}" %>
+            onclick: %Q(ckeInsertContent('<img src="#{item.public_uri}" alt="#{h(item.alt_text)}" title="#{h(item.alt)}" />'); return false;), id: "link_image#{item.id}" %>
           <% if item.has_thumbnail? %>
           | <%= link_to "画像貼付 (#{item.thumb_width}x#{item.thumb_height})", "#",
-            onclick: %Q(ckeInsertContent('<img src="#{item.public_thumbnail_uri}" alt="#{item.alt_text}" title="#{item.alt}" />'); return false;), id: "link_image#{item.id}thumb" %>
+            onclick: %Q(ckeInsertContent('<img src="#{item.public_thumbnail_uri}" alt="#{h(item.alt_text)}" title="#{h(item.alt)}" />'); return false;), id: "link_image#{item.id}thumb" %>
           <% end %>
         </div>
       <% end %>
     </td>
     <td style="text-align: center;"><%= item.eng_unit %><br /><%= item.image_size if item.image_file? %></td>
-    <td style="text-align: center;"><%= _input.call('file_url', i, safe{item.public_uri}, 120) %></td>
+    <td style="text-align: center;"><%= _input.call('file_url', i, item.public_uri, 120) %></td>
 
     <% if item.public? %>
-    <td style="text-align: center;"><%= link_to item.status.name, item.public_full_uri, target: '_blank' %></td>
+    <td style="text-align: center;"><%= link_to item.state_text, item.public_full_uri, target: '_blank' %></td>
     <% else %>
-    <td style="text-align: center;"><%= item.status.name %></td>
+    <td style="text-align: center;"><%= item.state_text %></td>
     <% end %>
   </tr>
   <%- end -%>

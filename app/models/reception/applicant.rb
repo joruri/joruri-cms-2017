@@ -1,15 +1,14 @@
 class Reception::Applicant < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
-  include Cms::Model::Site
   include Cms::Model::Auth::Content
-
-  STATE_OPTIONS = [['申込','applied'],['受付','received'],['キャンセル','canceled']]
-  APPLIED_FROM_OPTIONS = [['フォーム','public'],['登録','admin']]
 
   attr_accessor :email_confirmation
   attr_accessor :in_register_from_admin, :in_register_from_public
   has_secure_token :token
+
+  enum_ish :state, [:applied, :received, :canceled, :tmp_applied, :tmp_canceled]
+  enum_ish :applied_from, [:public, :admin]
 
   belongs_to :open
   has_one :applicant_token, dependent: :destroy
@@ -37,7 +36,7 @@ class Reception::Applicant < ApplicationRecord
   validate :validate_capacity_for_admin, if: :in_register_from_admin
   validate :validate_capacity_for_public, if: :in_register_from_public
 
-  define_site_scope :open
+  nested_scope :in_site, through: :open
 
   scope :received_state, -> { where(state: 'received') }
   scope :canceled_state, -> { where(state: 'canceled') }
@@ -49,14 +48,6 @@ class Reception::Applicant < ApplicationRecord
     end
     rel
   }
-
-  def state_text
-    STATE_OPTIONS.rassoc(state).try(:first)
-  end
-
-  def applied_from_text
-    APPLIED_FROM_OPTIONS.rassoc(applied_from).try(:first)
-  end
 
   def temporary_state?
     state.in?(%w(tmp_applied tmp_canceled))

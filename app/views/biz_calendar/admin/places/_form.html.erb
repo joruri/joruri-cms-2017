@@ -10,31 +10,31 @@ $(function() {
 
 <table class="show">
   <tr>
-    <th><%= @item.locale(:state) %></th>
-    <td><%= f.radio_buttons :state, @item.class::STATE_OPTIONS, :class => 'states' %></td>
+    <th><%= f.label :state %></th>
+    <td><%= f.collection_radio_buttons :state, @item.class.state_options, :last, :first %></td>
   </tr><tr>
-    <th><%= @item.locale(:url) %> <span class="note">※</span></th>
-    <td><%= f.text_field :url, :class => 'name', :style => 'ime-mode: disabled;' %></td>
+    <th><%= f.label :url %> <span class="note">※</span></th>
+    <td><%= f.text_field :url, class: 'name', style: 'ime-mode: disabled;' %></td>
   </tr><tr>
-    <th><%= @item.locale(:title) %> <span class="note">※</span></th>
-    <td><%= f.text_field :title, :class => 'title' %></td>
+    <th><%= f.label :title %> <span class="note">※</span></th>
+    <td><%= f.text_field :title, class: 'title' %></td>
   </tr><tr>
-    <th><%= @item.locale(:summary) %></th>
-    <td><%= f.text_area :summary, :class => 'body ckeditor' %></td>
+    <th><%= f.label :summary %></th>
+    <td><%= f.text_area :summary, class: 'body ckeditor' %></td>
   </tr><tr>
-    <th><%= @item.locale(:description) %></th>
-    <td><%= f.text_area :description, :class => 'body ckeditor' %></td>
+    <th><%= f.label :description %></th>
+    <td><%= f.text_area :description, class: 'body ckeditor' %></td>
   </tr><tr>
-    <th><%= @item.locale(:business_hours_state) %></th>
-    <td><%= f.radio_buttons :business_hours_state, @item.class::BUSINESS_HOURS_STATE_OPTIONS, :class => 'states' %>
-      &nbsp;&nbsp;&nbsp;&nbsp;見出しタイトル：<%= f.text_field :business_hours_title, :class => 'name' %></td>
+    <th><%= f.label :business_hours_state %></th>
+    <td><%= f.collection_radio_buttons :business_hours_state, @item.class.business_hours_state_options, :last, :first %>
+      &nbsp;&nbsp;&nbsp;&nbsp;見出しタイトル：<%= f.text_field :business_hours_title, class: 'name' %></td>
   </tr><tr>
-    <th><%= @item.locale(:business_holiday_state) %></th>
-    <td><%= f.radio_buttons :business_holiday_state, @item.class::BUSINESS_HOLIDAY_STATE_OPTIONS, :class => 'states' %>
-      &nbsp;&nbsp;&nbsp;&nbsp;見出しタイトル：<%= f.text_field :business_holiday_title, :class => 'name' %></td>
+    <th><%= f.label :business_holiday_state %></th>
+    <td><%= f.collection_radio_buttons :business_holiday_state, @item.class.business_holiday_state_options, :last, :first %>
+      &nbsp;&nbsp;&nbsp;&nbsp;見出しタイトル：<%= f.text_field :business_holiday_title, class: 'name' %></td>
   </tr><tr>
-    <th><%= @item.locale(:sort_no) %></th>
-    <td><%= f.text_field :sort_no, :class => 'name', :style => 'ime-mode: disabled;' %></td>
+    <th><%= f.label :sort_no %></th>
+    <td><%= f.text_field :sort_no, class: 'number' %></td>
   </tr>
 </table>
 

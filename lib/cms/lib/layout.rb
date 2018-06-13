@@ -39,14 +39,8 @@ module Cms::Lib::Layout
         rel.where(concept_id: [nil] + concepts.map(&:id))
       end
     end
-    pieces = Cms::Piece.union(relations).index_by(&:bracket_description)
 
-    if Core.mode == 'preview' && params[:piece_id]
-      item = Cms::Piece.find_by(id: params[:piece_id])
-      pieces[item.name] = item if item
-    end
-
-    pieces
+    relations.reduce(:union).index_by(&:bracket_description)
   end
 
   def self.find_data_texts(html, concepts)
@@ -61,7 +55,7 @@ module Cms::Lib::Layout
                    .order(concepts_order(concepts)).limit(1)
     end
 
-    Cms::DataText.union(relations).index_by(&:bracket_description)
+    relations.reduce(:union).index_by(&:bracket_description)
   end
 
   def self.find_data_files(html, concepts)
@@ -84,6 +78,6 @@ module Cms::Lib::Layout
       end
     end
 
-    Cms::DataFile.union(relations).index_by(&:bracket_description)
+     relations.reduce(:union).index_by(&:bracket_description)
   end
 end

@@ -6,27 +6,27 @@
 <table class="show">
   <tr>
     <th><%= f.label :state %></th>
-    <td><%= f.radio_buttons :state, @item.class::STATE_OPTIONS %></td>
+    <td><%= f.collection_radio_buttons :state, @item.class.state_options, :last, :first %></td>
   </tr>
   <tr>
-    <th><%= @item.locale(:name) %></th>
+    <th><%= f.label :name %></th>
     <td><%= @item.name %></td>
   </tr>
   <tr>
-    <th><%= @item.locale(:title) %></th>
+    <th><%= f.label :title %></th>
     <td><%= @item.sys_group.name %></td>
   </tr>
   <tr>
     <th><%= f.label :sitemap_state %></th>
-    <td><%= f.radio_buttons :sitemap_state, @item.class::SITEMAP_STATE_OPTIONS %></td>
+    <td><%= f.collection_radio_buttons :sitemap_state, @item.class.sitemap_state_options, :last, :first %></td>
   </tr>
   <tr>
     <th><%= f.label :docs_order %></th>
-    <td><%= f.select :docs_order, @item.class::DOCS_ORDER_OPTIONS %></td>
+    <td><%= f.select :docs_order, @item.class.docs_order_options %></td>
   </tr>
   <tr>
     <th><%= f.label :sort_no %></th>
-    <td><%= f.text_field :sort_no, :class => 'number' %></td>
+    <td><%= f.text_field :sort_no, class: 'number' %></td>
   </tr>
 </table>
 
@@ -42,19 +42,19 @@
   <tr>
     <th><%= f.label :outline %></th>
     <td class="cke_editor_wrapper">
-      <%= f.text_area :outline, :class => 'body ckeditor' %>
+      <%= f.text_area :outline, class: 'body ckeditor' %>
     </td>
   </tr>
   <tr>
     <th><%= f.label :business_outline %></th>
     <td class="cke_editor_wrapper">
-      <%= f.text_area :business_outline, :class => 'body ckeditor' %>
+      <%= f.text_area :business_outline, class: 'body ckeditor' %>
     </td>
   </tr>
   <tr>
     <th><%= f.label :contact_information %></th>
     <td class="cke_editor_wrapper">
-      <%= f.text_area :contact_information, :class => 'body ckeditor' %>
+      <%= f.text_area :contact_information, class: 'body ckeditor' %>
     </td>
   </tr>
 </table>

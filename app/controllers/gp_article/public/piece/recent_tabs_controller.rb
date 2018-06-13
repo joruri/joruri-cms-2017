@@ -1,7 +1,6 @@
-class GpArticle::Public::Piece::RecentTabsController < Sys::Controller::Public::Base
+class GpArticle::Public::Piece::RecentTabsController < GpArticle::Public::PieceController
   def pre_dispatch
-    @piece = GpArticle::Piece::RecentTab.find_by(id: Page.current_piece.id)
-    render plain: '' unless @piece
+    @piece = GpArticle::Piece::RecentTab.find(Page.current_piece.id)
   end
 
   def index
@@ -18,14 +17,11 @@ class GpArticle::Public::Piece::RecentTabsController < Sys::Controller::Public::
           tab.name
         end
 
-      docs =
-        unless tab.categories_with_layer.empty?
-          @piece.content.public_docs_for_list.where(id: tab.public_doc_ids)
-        else
-          @piece.content.public_docs_for_list
-        end
+      docs = @piece.content.docs_for_list
+      docs = docs.where(id: tab.doc_ids) if tab.categories_with_layer.present?
       docs = docs.order(@piece.docs_order_as_sql)
                  .limit(@piece.list_count)
+
       docs = GpArticle::DocsPreloader.new(docs).preload(:public_node_ancestors)
 
       @tabs.push(name: tab.name,

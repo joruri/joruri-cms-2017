@@ -3,8 +3,11 @@
 
 <div class="body">
   <%-
-  body = @item.template ? template_body(@item.template, @item.template_values, @item.files) : @item.body.to_s
-  body.gsub(/("|')file_contents\//, '\1'+%Q(#{Core.publish || Core.mode != 'preview' ? @item.public_uri(without_filename: true) : @item.preview_uri(without_filename: true)}file_contents/))
+  body = if @item.template
+           template_body(@item.template, @item.template_values, @item.files)
+         else
+           @item.body
+         end
   -%>
   <div class="text-beginning"><%=raw body %></div>
 
@@ -15,12 +18,12 @@
 
 <%= render 'cms/public/_partial/maps/view', item: @item %>
 
-<%- if @item.public_relate_docs.present? -%>
-<%= render 'gp_article/public/node/docs/show/rel_docs', item: @item, content: @content, rel_docs: @item.public_relate_docs %>
+<%- if @item.relate_docs.present? -%>
+<%= render 'gp_article/public/node/docs/show/rel_docs', item: @item, content: @content, rel_docs: @item.relate_docs %>
 <%- end -%>
 
 <%- if (node = @item.content.tag_content_tag.try(:public_node)) &&
-       (tags = !Core.publish && Core.mode == 'preview' ? @item.tags_for_preview : @item.tags).present? -%>
+       (tags = Core.preview_mode? ? @item.tags_for_preview : @item.tags).present? -%>
 <%= render 'gp_article/public/node/docs/show/tags', tags: tags %>
 <%- end -%>
 

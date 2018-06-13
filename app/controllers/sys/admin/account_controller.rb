@@ -2,19 +2,16 @@ class Sys::Admin::AccountController < Sys::Controller::Admin::Base
   layout 'admin/login'
 
   def login
-    admin_uri = "/#{ZomekiCMS::ADMIN_URL_PREFIX}"
+    return redirect_to(admin_root_path) if logged_in?
 
-    return redirect_to(admin_uri) if logged_in?
-
-    @uri = params[:uri] || cookies[:sys_login_referrer] || admin_uri
-    @uri = @uri.gsub(/^http:\/\/[^\/]+/, '')
+    @uri = cookies[:sys_login_referrer] || admin_root_path
     return unless request.post?
 
     unless new_login(params[:account], params[:password])
       flash.now[:alert] = 'ユーザーＩＤ・パスワードを正しく入力してください。'
       respond_to do |format|
         format.html { render }
-        format.xml  { render(:xml => '<errors />') }
+        format.xml  { render(xml: '<errors />') }
       end
       return true
     end
@@ -27,34 +24,38 @@ class Sys::Admin::AccountController < Sys::Controller::Admin::Base
     if params[:remember_me] == "1"
       self.current_user.remember_me
       cookies[:auth_token] = {
-        :value   => self.current_user.remember_token,
-        :expires => self.current_user.remember_token_expires_at
+        value: self.current_user.remember_token,
+        expires: self.current_user.remember_token_expires_at
       }
     end
 
     cookies.delete :sys_login_referrer
-    Sys::OperationLog.log(request, :user => current_user)
+    Sys::OperationLog.log(request, user: current_user)
 
     respond_to do |format|
       format.html { redirect_to @uri }
-      format.xml  { render(:xml => current_user.to_xml) }
+      format.xml  { render(xml: current_user.to_xml) }
     end
   end
 
   def logout
-    self.current_user.forget_me if logged_in?
+    if logged_in?
+      current_user.forget_me
+      current_user.users_sessions.where(session_id: session.id).delete_all
+    end
+
     cookies.delete :auth_token
     cookies.delete :cms_site
     reset_session
 
-    Sys::OperationLog.log(request, :user => current_user)
-    redirect_to('action' => 'login')
+    Sys::OperationLog.log(request, user: current_user)
+    redirect_to(action: :login)
   end
 
   def info
     respond_to do |format|
       format.html { render }
-      format.xml  { render :xml => Core.user.to_xml(:root => 'item', :include => :groups) }
+      format.xml  { render xml: Core.user.to_xml(root: 'item', include: :groups) }
     end
   end
 
@@ -67,21 +68,14 @@ class Sys::Admin::AccountController < Sys::Controller::Admin::Base
       return
     end
 
-    sender = Core.site.admin_mail_sender
-    user   = Sys::User.where(account: params[:account], email: params[:email]).first
+    user = Sys::User.where(account: params[:account], email: params[:email]).first
 
-    if (email = user.try(:email))
+    if user && user.email.present?
       token = Util::String::Token.generate_unique_token(Sys::User, :reset_password_token)
-      user.update_column(:reset_password_token_expires_at, 12.hours.since)
-      user.update_column(:reset_password_token, token)
+      user.update_columns(reset_password_token_expires_at: 12.hours.since,
+                          reset_password_token: token)
 
-      body = <<-EOT
-パスワード変更を受け付けました。12時間以内に下記URLから変更を行ってください。
-
-#{edit_admin_password_url(token: token)}
-      EOT
-
-      send_mail(sender, email, "【#{Core.site.try(:name).presence || 'CMS'}】パスワード再設定", body)
+      Sys::Admin::AccountMailer.password_reminder(Core.site, user: user).deliver_now
     end
 
     redirect_to admin_login_url, notice: 'メールにてパスワード再設定手順をお送りしました。'
@@ -111,14 +105,17 @@ class Sys::Admin::AccountController < Sys::Controller::Admin::Base
       if password.blank? || password_confirmation.blank?
         flash[:alert] = 'パスワードを入力してください。'
         render :edit_password
-      elsif password == password_confirmation
+      elsif password != password_confirmation
+        flash[:alert] = 'パスワードが一致しません。'
+        render :edit_password
+      elsif user.password == password
+        flash[:alert] = '現在のパスワードと同じパスワードは使用できません。'
+        render :edit_password
+      else
         user.update_column(:reset_password_token_expires_at, nil)
         user.update_column(:reset_password_token, nil)
         user.update_column(:password, password)
         redirect_to admin_login_url, notice: 'パスワードを再設定しました。'
-      else
-        flash[:alert] = 'パスワードが一致しません。'
-        render :edit_password
       end
     end
   end

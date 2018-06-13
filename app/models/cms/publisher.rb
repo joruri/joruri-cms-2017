@@ -1,9 +1,8 @@
 class Cms::Publisher < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Site
   include Cms::Model::Rel::Site
 
-  STATE_OPTIONS = [['待機中','queued'],['実行中','performing']]
+  enum_ish :state, [:queued, :performing]
 
   belongs_to :publishable, polymorphic: true
 
@@ -30,7 +29,7 @@ class Cms::Publisher < ApplicationRecord
                pub.priority = determine_priority(item)
                pub
              end
-      self.import(pubs)
+      self.bulk_import(pubs)
 
       Cms::PublisherJob.perform_later unless Cms::PublisherJob.queued?
     end

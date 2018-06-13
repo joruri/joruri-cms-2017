@@ -4,7 +4,7 @@ class Cms::Admin::Tool::ConvertDocsController < Cms::Controller::Admin::Base
 
   def pre_dispatch
     return error_auth unless Core.user.has_auth?(:manager)
-    return redirect_to(request.env['PATH_INFO']) if params[:reset]
+    return redirect_to url_for(action: :index) if params[:reset]
     @item = ::Tool::ConvertDoc.find(params[:id]) if params[:id].present?
   end
 
@@ -26,7 +26,7 @@ class Cms::Admin::Tool::ConvertDocsController < Cms::Controller::Admin::Base
 
   def destroy_all
     ::Tool::ConvertDoc.in_site(Core.site).delete_all
-    redirect_to url_for(:action => :index)
+    redirect_to url_for(action: :index)
   end
 
   def export
@@ -52,12 +52,12 @@ class Cms::Admin::Tool::ConvertDocsController < Cms::Controller::Admin::Base
                 item.page_published_at,
                 item.page_group_code,
                 item.page_category_names,
-                item.docable.creator.try(:group).try(:name),
-                item.docable.categories.map(&:title).join(',')]
+                item.latest_doc&.creator&.group&.name,
+                item.latest_doc&.categories&.map(&:title)&.join(',')]
       end
     end
 
-    send_data csv_string.encode(Encoding::WINDOWS_31J, :invalid => :replace, :undef => :replace),
+    send_data csv_string.encode(Encoding::WINDOWS_31J, invalid: :replace, undef: :replace),
       type: Rack::Mime.mime_type('.csv'), filename: "export_#{Time.now.strftime('%Y%m%d_%H%M%S')}.csv"
   end
 end

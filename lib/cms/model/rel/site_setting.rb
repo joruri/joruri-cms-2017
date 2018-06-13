@@ -10,8 +10,8 @@ module Cms::Model::Rel::SiteSetting
     after_save :save_site_settings
   end
 
-  def use_basic_auth?
-    setting_value(:basic_auth_state) == 'enabled'
+  def use_access_control?
+    setting_value(:access_control_state) == 'enabled'
   end
 
   def use_common_ssl?
@@ -67,10 +67,6 @@ module Cms::Model::Rel::SiteSetting
     regexps.present? ? Regexp.union(regexps) : nil
   end
 
-  def accessibility_check_enabled?
-    setting_value(:accessibility_check) == 'enabled'
-  end
-
   def adobe_reader_link_enabled?
     setting_value(:adobe_reader_link) == 'enabled'
   end
@@ -89,6 +85,10 @@ module Cms::Model::Rel::SiteSetting
 
   def zip_download_max_size
     setting_value(:zip_download_max_size).to_i * (1024**2)
+  end
+
+  def use_datetime_preview?
+    setting_value(:datetime_preview) == 'enabled'
   end
 
   def load_site_settings

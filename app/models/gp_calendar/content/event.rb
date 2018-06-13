@@ -1,14 +1,13 @@
 class GpCalendar::Content::Event < Cms::Content
   default_scope { where(model: 'GpCalendar::Event') }
 
-  has_one :public_node, -> { public_state.order(:id) },
-    foreign_key: :content_id, class_name: 'Cms::Node'
-
-  has_many :settings, -> { order(:sort_no) },
-    foreign_key: :content_id, class_name: 'GpCalendar::Content::Setting', dependent: :destroy
-
+  has_many :settings, foreign_key: :content_id, class_name: 'GpCalendar::Content::Setting', dependent: :destroy
   has_many :events, foreign_key: :content_id, class_name: 'GpCalendar::Event', dependent: :destroy
   has_many :holidays, foreign_key: :content_id, class_name: 'GpCalendar::Holiday', dependent: :destroy
+
+  # node
+  has_one :public_node, -> { public_state.where(model: 'GpCalendar::Event').order(:id) },
+                        foreign_key: :content_id, class_name: 'Cms::Node'
 
   after_create :create_default_holidays
 
@@ -95,15 +94,14 @@ class GpCalendar::Content::Event < Cms::Content
     false
   end
 
-  def public_event_docs(start_date, end_date, categories = nil)
+  def event_docs(start_date, end_date, categories = nil)
     doc_content_ids = Cms::ContentSetting.where(name: 'calendar_relation', value: 'enabled')
                                          .select { |cs| cs.extra_values[:calendar_content_id] == id }
                                          .map(&:content_id)
     if doc_content_ids.blank?
       GpArticle::Doc.none
     else
-      GpArticle::Doc.mobile(::Page.mobile?).public_state
-                    .where(content_id: doc_content_ids, event_state: 'visible')
+      GpArticle::Doc.where(content_id: doc_content_ids, event_state: 'visible')
                     .event_scheduled_between(start_date, end_date, categories)
     end
   end

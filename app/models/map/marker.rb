@@ -1,47 +1,37 @@
 class Map::Marker < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::File
-  include Cms::Model::Site
   include Cms::Model::Rel::Content
   include Cms::Model::Auth::Content
   include GpCategory::Model::Rel::Category
 
-  include StateText
-
-  STATE_OPTIONS = [['公開', 'public'], ['非公開', 'closed']]
-
   attr_accessor :doc # Not saved to database
 
+  column_attribute :sort_no, default: 10
+
+  enum_ish :state, [:public, :closed], default: :public
+
   # Content
-  belongs_to :content, :foreign_key => :content_id, :class_name => 'Map::Content::Marker'
-  validates :content_id, :presence => true
+  belongs_to :content, class_name: 'Map::Content::Marker', required: true
 
-  belongs_to :icon_category, :class_name => 'GpCategory::Category'
+  belongs_to :icon_category, class_name: 'GpCategory::Category'
 
-  # Proper
-  validates_presence_of :state
+  validates :state, presence: true
+  validates :title, presence: true
+  validates :latitude, presence: true, numericality: true
+  validates :longitude, presence: true, numericality: true
 
-  validates :title, :presence => true
-  validates :latitude, :presence => true, :numericality => true
-  validates :longitude, :presence => true, :numericality => true
-
-  after_initialize :set_defaults
   before_save :set_name
   before_destroy :close_files
 
   after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
-  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true), prepend: true
 
   scope :public_state, -> { where(state: 'public') }
 
   def public_uri
     return '' unless content.public_node
     "#{content.public_node.public_uri}#{name}/"
-  end
-
-  def public_file_uri
-    return '' if public_uri.blank? || files.empty?
-    "#{public_uri}file_contents/#{files.first.name}"
   end
 
   def public_path
@@ -61,11 +51,6 @@ class Map::Marker < ApplicationRecord
 
   private
 
-  def set_defaults
-    self.state ||= STATE_OPTIONS.first.last if self.has_attribute?(:state)
-    self.target ||= TARGET_OPTIONS.first.last if self.has_attribute?(:target)
-  end
-
   def set_name
     return if self.name.present?
     date = (created_at || Time.now).strftime('%Y%m%d')
@@ -84,6 +69,7 @@ class Map::Marker < ApplicationRecord
           longitude: m.lng,
           window_text: %Q(<p>#{m.name}</p><p><a href="#{doc.public_uri}">詳細</a></p>),
           doc: doc,
+          sort_no: doc.marker_sort_no,
           created_at: doc.display_published_at,
           updated_at: doc.display_published_at
         )

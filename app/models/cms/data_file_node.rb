@@ -1,18 +1,18 @@
 class Cms::DataFileNode < ApplicationRecord
   include Sys::Model::Base
   include Sys::Model::Rel::Creator
-  include Cms::Model::Site
   include Cms::Model::Rel::Site
   include Cms::Model::Rel::Concept
-  include Cms::Model::Auth::Concept::Creator
+  include Cms::Model::Auth::Concept
 
-  has_many :files, :foreign_key => :node_id, :class_name => 'Cms::DataFile', :primary_key => :id
+  has_many :files, foreign_key: :node_id, class_name: 'Cms::DataFile'
 
+  validates :concept_id, presence: true
   validates :name, presence: true, uniqueness: { scope: :concept_id, case_sensitive: false }
   validate :validate_name
 
   after_save     Cms::Publisher::BracketeeCallbacks.new, if: :changed?
-  before_destroy Cms::Publisher::BracketeeCallbacks.new
+  before_destroy Cms::Publisher::BracketeeCallbacks.new, prepend: true
 
   after_destroy :remove_files
 

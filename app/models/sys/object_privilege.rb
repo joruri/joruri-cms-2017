@@ -1,11 +1,12 @@
 class Sys::ObjectPrivilege < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Site
   include Cms::Model::Auth::Site::Role
+
+  enum_ish :action, [:read, :create, :update, :delete]
 
   belongs_to :privilegable, polymorphic: true
   belongs_to :concept, class_name: 'Cms::Concept'
-  belongs_to :role_name, :foreign_key => 'role_id', :class_name => 'Sys::RoleName'
+  belongs_to :role_name, foreign_key: :role_id, class_name: 'Sys::RoleName'
 
   after_save :save_actions
   after_destroy :destroy_actions
@@ -15,7 +16,7 @@ class Sys::ObjectPrivilege < ApplicationRecord
 
   attr_accessor :in_actions
 
-  define_site_scope :role_name
+  nested_scope :in_site, through: :role_name
 
   def in_actions
     @in_actions ||= actions
@@ -23,15 +24,7 @@ class Sys::ObjectPrivilege < ApplicationRecord
 
   def in_actions=(values)
     @_in_actions_changed = true
-    @in_actions = if values.kind_of?(Hash)
-                    values.map{|k, v| k if v.present? }.compact
-                  else
-                    []
-                  end
-  end
-
-  def action_labels
-    [['閲覧','read'], ['作成','create'], ['編集','update'], ['削除','delete']]
+    @in_actions = values
   end
 
   def privileges
@@ -44,7 +37,7 @@ class Sys::ObjectPrivilege < ApplicationRecord
   
   def action_names
     _actions = actions
-    action_labels.map { |label, name| _actions.include?(name) ? label : nil }.compact
+    self.class.action_options.map { |label, name| _actions.include?(name) ? label : nil }.compact
   end
 
   private

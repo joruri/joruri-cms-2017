@@ -9,15 +9,16 @@ class AdBanner::Admin::BannersController < Cms::Controller::Admin::Base
   def index
     items = @content.banners.except(:order).order(sort_no: :asc, created_at: :desc)
 
-    items = if params[:published].present?
+    items = case params[:target]
+            when 'published'
               items.published
-            elsif params[:closed].present?
+            when 'closed'
               items.closed
             else
               items
             end
 
-    @items = items.paginate(page: params[:page], per_page: 50)
+    @items = items.paginate(page: params[:page], per_page: params[:limit])
 
     _index @items
   end
@@ -59,7 +60,7 @@ class AdBanner::Admin::BannersController < Cms::Controller::Admin::Base
   def banner_params
     params.require(:item).permit(
       :advertiser_contact, :advertiser_email, :advertiser_name, :advertiser_phone,
-      :closed_at, :file, :group_id, :name, :published_at, :sort_no, :state, :title, :alt_text, :url, :target,
+      :closed_at, :file, :group_id, :name, :published_at, :sort_no, :state, :title, :alt_text, :url, :sp_url, :target,
       :creator_attributes => [:id, :group_id, :user_id]
     )
   end

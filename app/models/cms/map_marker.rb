@@ -1,12 +1,11 @@
 class Cms::MapMarker < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Site
 
-  belongs_to :map, class_name: 'Cms::Map'
+  belongs_to :map
 
-  validates :lat, :lng, presence: true
+  validates :lat, :lng, presence: true, numericality: true
 
-  define_site_scope :map
+  nested_scope :in_site, through: :map
 
   def js_params
     name = self.name.gsub(/'/, "\\\\'").gsub(/\r\n|\r|\n/, "<br />")

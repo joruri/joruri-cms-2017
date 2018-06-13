@@ -1,14 +1,13 @@
 class Approval::Assignment < ApplicationRecord
   include Sys::Model::Base
-  include Cms::Model::Site
+
+  enum_ish :assign_type, [:user, :group_users], default: :user
 
   belongs_to :assignable, polymorphic: true
   belongs_to :user, class_name: 'Sys::User'
   belongs_to :group, class_name: 'Sys::Group'
 
-  after_initialize :set_defaults
-
-  define_site_scope :assignable
+  nested_scope :in_site, through: :assignable
 
   def assign_type_group_users?
     assign_type == 'group_users'
@@ -45,11 +44,5 @@ class Approval::Assignment < ApplicationRecord
     else
       [user].compact
     end
-  end
-
-  private
-
-  def set_defaults
-    self.assign_type ||= 'user' if self.has_attribute?(:assign_type)
   end
 end

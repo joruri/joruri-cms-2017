@@ -1,8 +1,8 @@
 <%- if @item.name == 'common_ssl' -%>
 <table class="show">
   <tr>
-    <th><%= @site.locale :in_setting_site_common_ssl %></th>
-    <td><%= f.radio_buttons :in_setting_site_common_ssl, @item.class.configs[:common_ssl][:options] %></td>
+    <th><%= @site.class.human_attribute_name :in_setting_site_common_ssl %></th>
+    <td><%= f.collection_radio_buttons :in_setting_site_common_ssl, @item.class.configs[:common_ssl][:options], :last, :first %></td>
   </tr>
 </table>
 <%- end -%>
@@ -10,7 +10,7 @@
 <%- if @item.name == 'admin_mail_sender' -%>
 <table class="show">
   <tr>
-    <th><%= @site.locale :in_setting_site_admin_mail_sender %></th>
+    <th><%= @site.class.human_attribute_name :in_setting_site_admin_mail_sender %></th>
     <td><%= f.text_field :in_setting_site_admin_mail_sender, class: 'name' %></td>
   </tr>
 </table>
@@ -19,7 +19,7 @@
 <%- if @item.name == 'allowed_attachment_type' -%>
 <table class="show">
   <tr>
-    <th><%= @site.locale :in_setting_site_allowed_attachment_type %></th>
+    <th><%= @site.class.human_attribute_name :in_setting_site_allowed_attachment_type %></th>
     <td>
       <div>例: gif,jpg,png,pdf,doc,docx,xls,xlsx,ppt,pptx,odt,ods,odp</div>
       <%= f.text_field :in_setting_site_allowed_attachment_type, style: 'width: 500px; ime-mode:disabled;' %>
@@ -31,11 +31,11 @@
 <%- if @item.name == 'file_upload_max_size' -%>
 <table class="show">
   <tr>
-    <th><%= @site.locale :in_setting_site_file_upload_max_size %></th>
+    <th><%= @site.class.human_attribute_name :in_setting_site_file_upload_max_size %></th>
     <td><%= f.text_field :in_setting_site_file_upload_max_size %> MB</td>
   </tr>
   <tr>
-    <th><%= @site.locale :in_setting_site_extension_upload_max_size %></th>
+    <th><%= @site.class.human_attribute_name :in_setting_site_extension_upload_max_size %></th>
     <td>
       <%= f.text_area :in_setting_site_extension_upload_max_size, size: '100x10' %>
       <div>
@@ -51,22 +51,22 @@
 <%- if @item.name == 'link_check' -%>
 <table class="show">
   <tr>
-    <th><%= @site.locale :in_setting_site_link_check %></th>
-    <td><%= f.radio_buttons :in_setting_site_link_check, @item.class.configs[:link_check][:options] %></td>
+    <th><%= @site.class.human_attribute_name :in_setting_site_link_check %></th>
+    <td><%= f.collection_radio_buttons :in_setting_site_link_check, @item.class.configs[:link_check][:options], :last, :first %></td>
   </tr>
   <tr>
-    <th><%= @site.locale :in_setting_site_link_check_hour %></th>
+    <th><%= @site.class.human_attribute_name :in_setting_site_link_check_hour %></th>
     <td>
       <%= f.text_field :in_setting_site_link_check_hour, class: 'number' %> 時
       <span style="margin-left: 10px;">0-23時を指定。使用しない場合は空白</span>
     </td>
   </tr>
   <tr>
-    <th><%= @site.locale :in_setting_site_link_check_domain_type %></th>
-    <td><%= f.radio_buttons :in_setting_site_link_check_domain_type, @item.class.configs[:link_check_domain_type][:options] %></td>
+    <th><%= @site.class.human_attribute_name :in_setting_site_link_check_domain_type %></th>
+    <td><%= f.collection_radio_buttons :in_setting_site_link_check_domain_type, @item.class.configs[:link_check_domain_type][:options], :last, :first %></td>
   </tr>
   <tr>
-    <th><%= @site.locale :in_setting_site_link_check_exclusion %><br/ >（改行区切り）</th>
+    <th><%= @site.class.human_attribute_name :in_setting_site_link_check_exclusion %><br/ >（改行区切り）</th>
     <td>
       <%= f.text_area :in_setting_site_link_check_exclusion, rows: 10 %>
       <p>例：http://example.com/</p>
@@ -75,20 +75,11 @@
 </table>
 <%- end -%>
 
-<%- if @item.name == 'accessibility_check' -%>
-<table class="show">
-  <tr>
-    <th><%= @site.locale :in_setting_site_accessibility_check %></th>
-    <td><%= f.radio_buttons :in_setting_site_accessibility_check, @item.class.configs[:accessibility_check][:options] %></td>
-  </tr>
-</table>
-<%- end -%>
-
 <%- if @item.name == 'adobe_reader_link' -%>
 <table class="show">
   <tr>
-    <th><%= @site.locale :in_setting_site_adobe_reader_link %></th>
-    <td><%= f.radio_buttons :in_setting_site_adobe_reader_link, @item.class.configs[:adobe_reader_link][:options] %></td>
+    <th><%= @site.class.human_attribute_name :in_setting_site_adobe_reader_link %></th>
+    <td><%= f.collection_radio_buttons :in_setting_site_adobe_reader_link, @item.class.configs[:adobe_reader_link][:options], :last, :first %></td>
   </tr>
 </table>
 <%- end -%>
@@ -96,8 +87,8 @@
 <%- if @item.name == 'kana_talk' -%>
 <table class="show">
   <tr>
-    <th><%= @site.locale :in_setting_site_kana_talk %></th>
-    <td><%= f.radio_buttons :in_setting_site_kana_talk, @item.class.configs[:kana_talk][:options] %></td>
+    <th><%= @site.class.human_attribute_name :in_setting_site_kana_talk %></th>
+    <td><%= f.collection_radio_buttons :in_setting_site_kana_talk, @item.class.configs[:kana_talk][:options], :last, :first %></td>
   </tr>
 </table>
 <%- end -%>
@@ -105,7 +96,7 @@
 <%- if @item.name == 'map_coordinate' -%>
 <table class="show">
   <tr>
-    <th><%= @site.locale :in_setting_site_map_coordinate %></th>
+    <th><%= @site.class.human_attribute_name :in_setting_site_map_coordinate %></th>
     <td><%= f.text_field :in_setting_site_map_coordinate, size: "60" %> （緯度,経度）</td>
   </tr>
 </table>
@@ -114,8 +105,17 @@
 <%- if @item.name == 'zip_download_max_size' -%>
 <table class="show">
   <tr>
-    <th><%= @site.locale :in_setting_site_zip_download_max_size %></th>
+    <th><%= @site.class.human_attribute_name :in_setting_site_zip_download_max_size %></th>
     <td><%= f.text_field :in_setting_site_zip_download_max_size %> MB</td>
+  </tr>
+</table>
+<%- end -%>
+
+<%- if @item.name == 'datetime_preview' -%>
+<table class="show">
+  <tr>
+    <th><%= @site.class.human_attribute_name :in_setting_site_datetime_preview %></th>
+    <td><%= f.collection_radio_buttons :in_setting_site_datetime_preview, @item.class.configs[:datetime_preview][:options], :last, :first %></td>
   </tr>
 </table>
 <%- end -%>

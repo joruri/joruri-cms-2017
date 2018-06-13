@@ -3,7 +3,6 @@ class Survey::Form < ApplicationRecord
   include Sys::Model::Rel::Creator
   include Sys::Model::Rel::EditableGroup
   include Sys::Model::Rel::Task
-  include Cms::Model::Site
   include Cms::Model::Base::Sitemap
   include Cms::Model::Rel::Content
   include Cms::Model::Auth::Content
@@ -11,34 +10,55 @@ class Survey::Form < ApplicationRecord
 
   include Approval::Model::Rel::Approval
 
-  include StateText
+  default_scope { order(:sort_no, :id) }
 
-  CONFIRMATION_OPTIONS = [['あり', true], ['なし', false]]
-  INDEX_LINK_OPTIONS = [['表示', 'visible'], ['非表示', 'hidden']]
+  column_attribute :summary, html: true
+  column_attribute :description, html: true
+  column_attribute :receipt, html: true
+  column_attribute :sort_no, default: 10
 
-  default_scope { order("#{self.table_name}.sort_no IS NULL, #{self.table_name}.sort_no") }
+  enum_ish :state, [:draft, :approvable, :approved, :prepared, :public, :closed], predicate: true
+  enum_ish :confirmation, [true, false], default: true
+  enum_ish :index_link, [:visible, :hidden], default: :visible
 
   # Content
-  belongs_to :content, :foreign_key => :content_id, :class_name => 'Survey::Content::Form'
-  validates :content_id, presence: true
+  belongs_to :content, class_name: 'Survey::Content::Form', required: true
 
   has_many :operation_logs, -> { where(item_model: 'Survey::Form') },
-    foreign_key: :item_id, class_name: 'Sys::OperationLog'
+                            foreign_key: :item_id, class_name: 'Sys::OperationLog'
 
-  has_many :questions, :dependent => :destroy
-  has_many :form_answers, :dependent => :destroy
+  has_many :questions, dependent: :destroy
+  has_many :form_answers, dependent: :destroy
+  has_many :answers, through: :form_answers
 
   validates :state, presence: true
   validates :name, presence: true, uniqueness: { scope: :content_id }, format: { with: /\A[-\w]*\z/ }
   validates :title, presence: true
   validates :mail_to, format: { with: /\A.+@.+\z/ }, if: -> { mail_to.present? }
 
-  after_initialize :set_defaults
+  validates_with Sys::TaskValidator, if: -> { !state_draft? }
 
   after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
-  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true)
+  before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true), prepend: true
 
   scope :public_state, -> { where(state: 'public') }
+
+  def public_uri(with_closed_preview: false)
+    node = if with_closed_preview
+             content.form_node
+           else
+             content.public_node
+           end
+    return nil unless node
+    "#{node.public_uri}#{name}/"
+  end
+
+  def preview_uri(terminal: nil, params: {})
+    return if (path = public_uri(with_closed_preview: true)).blank?
+    flag = { mobile: 'm', smart_phone: 's' }[terminal]
+    query = "?#{params.to_query}" if params.present?
+    "#{site.main_admin_uri}_preview/#{format('%04d', site.id)}#{flag}#{path}#{query}"
+  end
 
   def public_questions
     questions.public_state
@@ -54,30 +74,6 @@ class Survey::Form < ApplicationRecord
       return q if q.email_field?
     end
     return nil
-  end
-
-  def state_draft?
-    state == 'draft'
-  end
-
-  def state_approvable?
-    state == 'approvable'
-  end
-
-  def state_approved?
-    state == 'approved'
-  end
-
-  def state_prepared?
-    state == 'prepared'
-  end
-
-  def state_public?
-    state == 'public'
-  end
-
-  def state_closed?
-    state == 'closed'
   end
 
   def duplicate
@@ -123,32 +119,7 @@ class Survey::Form < ApplicationRecord
     save(validate: false)
   end
 
-  def public_uri(with_closed_preview: false)
-    node = if with_closed_preview
-             content.form_node
-           else
-             content.public_node
-           end
-    return nil unless node
-    "#{node.public_uri}#{name}"
-  end
-
-  def preview_uri(terminal: nil, params: {})
-    return if (path = public_uri(with_closed_preview: true)).blank?
-    flag = { mobile: 'm', smart_phone: 's' }[terminal]
-    query = "?#{params.to_query}" if params.present?
-    "#{site.main_admin_uri}_preview/#{format('%04d', site.id)}#{flag}#{path}#{query}"
-  end
-
   def index_visible?
     self.index_link != 'hidden'
-  end
-
-  private
-
-  def set_defaults
-    self.confirmation = CONFIRMATION_OPTIONS.first.last if self.has_attribute?(:confirmation) && self.confirmation.nil?
-    self.index_link   = INDEX_LINK_OPTIONS.first.last   if self.has_attribute?(:index_link) && self.index_link.nil?
-    self.sort_no      = 10 if self.has_attribute?(:sort_no) && self.sort_no.nil?
   end
 end

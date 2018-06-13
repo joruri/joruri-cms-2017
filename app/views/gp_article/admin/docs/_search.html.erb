@@ -1,5 +1,5 @@
 <%-
-category_types = @content.visible_category_types
+category_types = @content.visible_category_types.to_a
 category_type_options = category_types.map { |type| [type.title, type.id] }
 category_type_ids = params.dig(:criteria, :category_type_ids) || []
 category_ids = params.dig(:criteria, :category_ids) || []
@@ -9,19 +9,20 @@ category_ids = params.dig(:criteria, :category_ids) || []
   <a href="#" id="toggleSearch"><%= params[:detail_flag] != '1' ? '拡張検索' : '基本検索' %></a>
 </div>
 
-<%= form_tag url_for(action: :index), method: 'get', class: 'search' do -%>
-<%= hidden_field_tag :target, params[:target] %>
-<%= hidden_field_tag :target_state, params[:target_state] %>
-<%= hidden_field_tag :target_public, params[:target_public] %>
+<%= form_tag url_for(action: :index), method: :get, class: 'search' do -%>
 <%= hidden_field_tag :detail_flag, params[:detail_flag] %>
+<%- controller.keep_params_keys.each do |key| -%>
+  <%= hidden_field_tag key, params[key] %>
+<%- end -%>
 <table>
   <tr>
     <th>記事番号</th>
     <th>タイトル・内容・ディレクトリ名など</th>
-    <%- if @content.visible_category_types.present? -%>
+    <%- if category_types.present? -%>
     <th>カテゴリ種別</th>
     <th>カテゴリ<a href="#" id="addCategory" style="margin-left: 10px; <%= 'display: none;' if params[:detail_flag] != '1' %>">追加</a></th>
     <%- end -%>
+    <th>表示件数</th>
     <td rowspan="2" class="submitters">
       <%= submit_tag '検索', data: { disable_with: false } %>
       <%= submit_tag 'リセット', name: 'reset_criteria', data: { disable_with: false } %>
@@ -30,9 +31,9 @@ category_ids = params.dig(:criteria, :category_ids) || []
     </td>
   </tr>
   <tr>
-    <td><%= text_field_tag 'criteria[serial_no]', params.dig(:criteria, :serial_no), style: 'width: 100px;' %></td>
-    <td><%= text_field_tag 'criteria[free_word]', params.dig(:criteria, :free_word), style: 'width: 400px;' %></td>
-    <%- if @content.visible_category_types.present? -%>
+    <td><%= text_field_tag 'criteria[serial_no]', params.dig(:criteria, :serial_no), class: 'number', maxlength: 10, style: 'width: 80px;' %></td>
+    <td><%= text_field_tag 'criteria[free_word]', params.dig(:criteria, :free_word), style: 'width: 280px;' %></td>
+    <%- if category_types.present? -%>
     <td>
       <%-
         selected_category_type = category_types.detect { |type| type.id.to_s == category_type_ids[0] }
@@ -46,11 +47,12 @@ category_ids = params.dig(:criteria, :category_ids) || []
             include_blank: true, id: "criteria_category_ids_0" %>
     </td>
     <%- end -%>
+    <td><%= select_tag 'limit', options_for_select([['30件', '30'], ['100件', '100']], params[:limit]) %></td>
   </tr>
 </table>
 
 <div id="detailSearch" style="<%= 'display: none;' if params[:detail_flag] != '1' %>">
-  <%- if @content.visible_category_types.present? -%>
+  <%- if category_types.present? -%>
   <table id="categoryContainer">
     <tr>
       <%- category_type_ids.drop(1).each_with_index do |_, i| -%>
@@ -84,12 +86,12 @@ category_ids = params.dig(:criteria, :category_ids) || []
     </tr>
     <tr>
       <td>
-        <%= select_tag 'criteria[date_column]', options_for_select(GpArticle::Doc::Criteria::DATE_COLUMN_OPTIONS, params.dig(:criteria, :date_column)), include_blank: true %>
-        <%= select_tag 'criteria[date_operation]', options_for_select(GpArticle::Doc::Criteria::DATE_OPERATION_OPTIONS, params.dig(:criteria, :date_operation)), include_blank: true %>
+        <%= select_tag 'criteria[date_column]', options_for_select(GpArticle::Doc::Criteria.date_column_options, params.dig(:criteria, :date_column)), include_blank: true %>
+        <%= select_tag 'criteria[date_operation]', options_for_select(GpArticle::Doc::Criteria.date_operation_options, params.dig(:criteria, :date_operation)), include_blank: true %>
         <%= text_field_tag 'criteria[dates][]', params.dig(:criteria, :dates, 0), id: 'criteria_dates_0', class: 'datepicker', style: 'width: 120px;' %> ～
         <%= text_field_tag 'criteria[dates][]', params.dig(:criteria, :dates, 1), id: 'criteria_dates_1', class: 'datepicker', style: 'width: 120px;' %>
       </td>
-      <td><%= select_tag 'criteria[state]', options_for_select(GpArticle::Doc::Criteria::STATE_OPTIONS, params.dig(:criteria, :state)), include_blank: true %></td>
+      <td><%= select_tag 'criteria[state]', options_for_select(GpArticle::Doc::Criteria.state_options, params.dig(:criteria, :state)), include_blank: true %></td>
     </tr>
   </table>
   <table>
@@ -98,7 +100,7 @@ category_ids = params.dig(:criteria, :category_ids) || []
     </tr>
     <tr>
       <td>
-        <%= select_tag 'criteria[user_operation]', options_for_select(GpArticle::Doc::Criteria::USER_OPERATION_OPTIONS, params.dig(:criteria, :user_operation)), include_blank: true %>
+        <%= select_tag 'criteria[user_operation]', options_for_select(GpArticle::Doc::Criteria.user_operation_options, params.dig(:criteria, :user_operation)), include_blank: true %>
         <%= select_tag 'criteria[user_group_id]', options_for_select(Core.site.groups_for_option, params.dig(:criteria, :user_group_id)), include_blank: true %>
         <%= text_field_tag 'criteria[user_name]', params.dig(:criteria, :user_name), style: 'width: 200px;' %>
       </td>
@@ -176,7 +178,7 @@ $(function() {
   $(document).on('change', 'select[name="criteria[category_type_ids][]"]', function() {
     var id = $(this).attr('id').replace(/category_type/, 'category');
     $('#' + id).html('<option value="">更新中...</option>');
-    $('form').submit();
+    $('form.search').submit();
   });
 });
 </script>

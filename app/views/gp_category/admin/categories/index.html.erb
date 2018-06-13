@@ -2,7 +2,7 @@
 
 <table class="index">
   <tr>
-    <th style="text-align: center; width: 60px;">詳細</th>
+    <th class="action_link">詳細</th>
     <th style="text-align: center; width: 60px;"><%= GpArticle::Doc.model_name.human %>一覧</th>
     <th><%= @category_type.title %>ID</th>
     <th><%= @category_type.title %>名</th>
@@ -13,20 +13,18 @@
 
   <% @items.each do |item| %>
   <tr class="<%= cycle '', 'cycle' %>">
-    <td style="text-align: center;"><%= link_to :show, gp_category_category_type_category_category_path(content: @content,
-                                                                                                        category_type_id: @category_type.id,
-                                                                                                        category_id: @parent_category.try(:id).to_i,
-                                                                                                        id: item.id) %></td>
+    <td class="action_link"><%= link_to :show, { action: :show, category_type_id: @category_type.id,
+                                                            category_id: @parent_category.try(:id).to_i,
+                                                            id: item } %></td>
     <td style="text-align: center;"><%= link_to :index, gp_category_category_type_category_docs_path(content: @content,
                                                                                                      category_type_id: @category_type.id,
                                                                                                      category_id: item.id) %></td>
     <td><%= item.name %></td>
-    <td><%= link_to item.title, gp_category_category_type_category_categories_path(content: @content,
-                                                                                   category_type_id: @category_type.id,
-                                                                                   category_id: item.id) %></td>
+    <td><%= link_to item.title, { action: :index, category_type_id: @category_type.id,
+                                                  category_id: item.id } %></td>
     <td style="text-align: right;"><%= item.sort_no %></td>
-    <td style="text-align: center;"><%= item.updated_at.strftime('%Y-%m-%d %H:%M') %></td>
-    <td style="text-align: center;"><%= item.status.try(:name) %></td>
+    <td style="text-align: center;"><%=l item.updated_at %></td>
+    <td style="text-align: center;"><%= item.state_text %></td>
   </tr>
   <% end %>
 </table>
