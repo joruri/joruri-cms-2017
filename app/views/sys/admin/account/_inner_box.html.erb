@@ -1,5 +1,5 @@
 <h1><%= image_tag '/_common/themes/admin/images/login_logo.png', alt: ZomekiCMS::TITLE %></h1>
 <span><%= ZomekiCMS::TITLE %> Contents Management System</span>
-<p class="version">Ver.<%= Zomeki.version %></p>
+<p class="version"><%= Zomeki.version %></p>
 <%- if flash[:notice] -%><div class="notice"><%=raw flash[:notice] %></div><%- end -%>
 <%- if flash[:alert] -%><div class="alert"><%=raw flash[:alert] %></div><%- end -%>
