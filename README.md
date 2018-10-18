@@ -14,7 +14,7 @@ Joruri CMS 2017 は、自治体サイト向けに開発された国産オープ�
 | Rails     | 5.0            |
 
 ## デモ
-http://joruri.org/demo/joruricms2017/
+https://joruri-cms.jp/2017/about/demo.html
 
 ## インストール
 
