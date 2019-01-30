@@ -39,7 +39,7 @@ class GpArticle::DocCsvService < ApplicationService
 
   def doc_header
     # 基本情報
-    data = ['_ID', '記事番号', '状態', '公開URL', 'タイトル', '記事一覧表示',
+    data = ['_ID', '記事番号', '状態', '公開URL', 'タイトル', '記事一覧表示', '記事フィード表示',
             'ディレクトリ名', '所属', '作成者', '作成日時', '更新日時']
     data += @category_types.map(&:title)
 
@@ -50,11 +50,11 @@ class GpArticle::DocCsvService < ApplicationService
     data += ['連絡先表示', '連絡先']
 
     # イベント
-    data += ['イベントカレンダー表示', 'イベント開始日', 'イベント終了日', 'イベント備考']
+    data += ['イベントカレンダー表示', 'イベント期間', 'イベント備考']
     data += @event_category_types.map(&:title)
 
     # 地図
-    data += ['マップ表示', 'マップ並び順', 'マップ名', '座標', '縮尺', 'マーカー']
+    data += ['マップ表示', 'ルート案内', 'マップ並び順', 'マップ名', '座標', '縮尺', 'マーカー']
     data += @marker_category_types.map(&:title)
 
     # 携帯
@@ -73,6 +73,7 @@ class GpArticle::DocCsvService < ApplicationService
     data << doc.public_uri
     data << doc.title
     data << doc.feature_1_text
+    data << doc.feed_state_text
     data << doc.name
     data << doc.creator&.group&.name
     data << doc.creator&.user&.name
@@ -98,8 +99,7 @@ class GpArticle::DocCsvService < ApplicationService
 
     # イベント
     data << doc.event_state_text
-    data << localize_datetime(doc.event_started_on)
-    data << localize_datetime(doc.event_ended_on)
+    data << doc.periods.map { |p| "#{localize_datetime(p.started_on)} ～ #{p.ended_on}" }.join("\n")
     data << doc.event_note
 
     @event_category_types.each do |category_type|
@@ -108,6 +108,7 @@ class GpArticle::DocCsvService < ApplicationService
 
     # 地図
     data << doc.marker_state_text
+    data << doc.navigation_state_text
     data << doc.marker_sort_no
 
     map = doc.maps.first
@@ -115,6 +116,7 @@ class GpArticle::DocCsvService < ApplicationService
     data << (map && (map.map_lat.present? || map.map_lng.present?) ? "#{map.map_lat},#{map.map_lng}" : nil)
     data << (map ? map.map_zoom : nil)
     data << (map ? map.markers.map { |marker| "#{marker.name} (#{marker.lat},#{marker.lng})" }.join("\n") : nil)
+
 
     @marker_category_types.each do |category_type|
       data << doc.marker_categories.select { |cat| cat.category_type == category_type }.map(&:title).join("\n")

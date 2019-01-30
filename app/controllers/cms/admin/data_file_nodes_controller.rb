@@ -1,14 +1,15 @@
 class Cms::Admin::DataFileNodesController < Cms::Controller::Admin::Base
   include Sys::Controller::Scaffold::Base
 
+  keep_params :s_node_id, to: [:data_files, :data_file_nodes]
+
   def pre_dispatch
     return error_auth unless Core.user.has_auth?(:designer)
-    @parent = params[:parent] || '0'
   end
 
   def index
     @items = Cms::DataFileNode.readable.order(:name, :id)
-      .paginate(page: params[:page], per_page: params[:limit])
+                              .paginate(page: params[:page], per_page: params[:limit])
 
     _index @items
   end
@@ -35,7 +36,7 @@ class Cms::Admin::DataFileNodesController < Cms::Controller::Admin::Base
   def update
     @item = Cms::DataFileNode.find(params[:id])
     @item.attributes = file_node_params
-    @old_concept_id  = @item.concept_id_was
+    @old_concept_id  = @item.concept_id_in_database
 
     _update(@item) do
       if @old_concept_id != @item.concept_id

@@ -23,12 +23,7 @@ ZomekiCMS::Application.routes.draw do
         end
       end
     resources :sites,
-      :controller  => "admin/sites" do
-        member do
-          get :show_portal
-          get :hide_portal
-        end
-      end
+      :controller  => "admin/sites"
     resources :site_access_controls,
       :controller  => "admin/site/access_controls",
       :path        => ":site/access_controls" do
@@ -95,7 +90,7 @@ ZomekiCMS::Application.routes.draw do
 
   scope "#{ZomekiCMS::ADMIN_URL_PREFIX}/#{mod}/c:concept", :module => mod, :as => mod do
     match "stylesheets/(*path)" => "admin/stylesheets#index",
-      :as => :stylesheets, :format => false, via: [:get, :post, :put, :patch]
+      :as => :stylesheets, :format => false, via: [:get, :post, :put, :patch, :delete]
     resources :contents,
       :controller  => "admin/contents"
     resources :nodes,
@@ -120,24 +115,24 @@ ZomekiCMS::Application.routes.draw do
       :controller  => "admin/data_texts"
     resources :data_files,
       :controller  => "admin/data_files",
-      :path        => ":parent/data_files" do
+      :path        => "data_files" do
         member do
           get :download
         end
       end
     resources :data_file_nodes,
       :controller  => "admin/data_file_nodes",
-      :path        => ":parent/data_file_nodes"
+      :path        => "data_file_nodes"
     resources :inline_data_files,
       :controller  => "admin/inline/data_files",
-      :path        => ":parent/inline_data_files" do
+      :path        => "inline_data_files" do
         member do
           get :download
         end
       end
     resources :inline_data_file_nodes,
       :controller  => "admin/inline/data_file_nodes",
-      :path        => ":parent/inline_data_file_nodes"
+      :path        => "inline_data_file_nodes"
 
     ## node
     resources :node_directories,
@@ -149,6 +144,9 @@ ZomekiCMS::Application.routes.draw do
     resources :node_sitemaps,
       :controller  => "admin/node/sitemaps",
       :path        => ":parent/node_sitemaps"
+    resources :node_sitemap_xmls,
+      :controller  => "admin/node/sitemap_xmls",
+      :path        => ":parent/node_sitemap_xmls"
 
     ## piece
     resources :piece_frees,
@@ -180,6 +178,8 @@ ZomekiCMS::Application.routes.draw do
     get "node_pages/"    => "public/node/pages#index",
       :as => nil
     get "node_sitemaps/" => "public/node/sitemaps#index",
+      :as => nil
+    get "node_sitemap_xmls/" => "public/node/sitemap_xmls#index",
       :as => nil
   end
 

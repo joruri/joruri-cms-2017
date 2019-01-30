@@ -1,14 +1,14 @@
 class GpArticle::Content::Doc < Cms::Content
   default_scope { where(model: 'GpArticle::Doc') }
 
-  STATE_OPTIONS = [['下書き保存', 'draft'], ['承認依頼', 'approvable'], ['即時公開', 'public']]
+  STATE_OPTIONS = [['下書き保存', 'draft'], ['承認依頼', 'approvable'], ['公開待ち', 'approved'], ['即時公開', 'public']]
 
   has_many :settings, foreign_key: :content_id, class_name: 'GpArticle::Content::Setting', dependent: :destroy
   has_many :docs, foreign_key: :content_id, class_name: 'GpArticle::Doc', dependent: :destroy
 
   # node
-  has_one :main_node, -> { where(model: 'GpArticle::Doc').order(:id) },
-                      foreign_key: :content_id, class_name: 'Cms::Node'
+  has_one :node, -> { where(model: 'GpArticle::Doc').order(:id) },
+                 foreign_key: :content_id, class_name: 'Cms::Node'
   has_one :public_node, -> { public_state.where(model: 'GpArticle::Doc').order(:id) },
                         foreign_key: :content_id, class_name: 'Cms::Node'
   has_one :public_archives_node, -> { public_state.where(model: 'GpArticle::Archive').order(:id) },
@@ -102,8 +102,11 @@ class GpArticle::Content::Doc < Cms::Content
   def doc_state_options(user)
     options = STATE_OPTIONS.clone
     options.reject! { |o| o.last == 'public' } if !user.has_auth?(:manager) && !save_button_states.include?('public')
-    options.reject! { |o| o.last == 'approvable' } unless approval_related?
-    options
+    if approval_related?
+      options.reject { |o| o.last == 'approved' }
+    else
+      options.reject { |o| o.last == 'approvable' }
+    end
   end
 
   def display_dates(key)
@@ -218,17 +221,14 @@ class GpArticle::Content::Doc < Cms::Content
     setting_value(:broken_link_notification) == 'enabled'
   end
 
-  def public_path
-    site.public_path
-  end
-
   def feature_settings_enabled?
     setting_value(:feature_settings) == 'enabled'
   end
 
   def feature_settings
     {feature_1: setting_extra_value(:feature_settings, :feature_1) != 'false',
-     feature_2: setting_extra_value(:feature_settings, :feature_2) != 'false'}
+     feature_2: setting_extra_value(:feature_settings, :feature_2) != 'false',
+     feed_state: setting_extra_value(:feature_settings, :feed_state)}
   end
 
   def wrapper_tag
@@ -361,5 +361,17 @@ class GpArticle::Content::Doc < Cms::Content
 
   def accessibility_check_enabled?
     setting_value(:accessibility_check) == 'enabled'
+  end
+
+  def navigation_enabled?
+    setting_value(:navigation_setting) == 'enabled'
+  end
+
+  def navigation_target_types
+    setting_extra_value(:navigation_setting, :types)
+  end
+
+  def editor_css
+    setting_value(:editor_css)
   end
 end

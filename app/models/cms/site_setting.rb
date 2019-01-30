@@ -16,6 +16,10 @@ class Cms::SiteSetting < ApplicationRecord
              name: '管理者メール送信元アドレス',
              default_value: 'noreply',
              index: true
+  set_config :admin_mail_sender_for_approval,
+             name: '承認メール送信元',
+             default_value: '0',
+             index: false
   set_config :allowed_attachment_type,
              name: '添付ファイル/許可する種類',
              default_value: '',
@@ -57,7 +61,7 @@ class Cms::SiteSetting < ApplicationRecord
              default_value: nil,
              index: true
   set_config :zip_download_max_size,
-             name: 'ZIPダウンロード最大サイズ',
+             name: 'ファイル管理転送量制限',
              default_value: 100,
              index: true
   set_config :datetime_preview,
@@ -65,6 +69,12 @@ class Cms::SiteSetting < ApplicationRecord
              default_value: 'disabled',
              options: [['使用する', 'enabled'], ['使用しない', 'disabled']],
              index: true
+  set_config :map_source,
+             name: '背景地図',
+             default_value: 'osm',
+             options: [['Open Street Map', 'osm'], ['地理院地図', 'webtis'], ['Googleマップ', 'google']],
+             index: true
+
 
   validates :site_id, presence: true
   validates :name, presence: true,

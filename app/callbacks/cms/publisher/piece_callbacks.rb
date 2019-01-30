@@ -5,6 +5,7 @@ class Cms::Publisher::PieceCallbacks < PublisherCallbacks
 
     @site = @pieces.first.site
     enqueue_layouts
+    enqueue_pieces
   end
 
   private
@@ -12,7 +13,13 @@ class Cms::Publisher::PieceCallbacks < PublisherCallbacks
   def enqueue?
     return unless super
     @pieces = Array(@pieces).select { |piece| piece.name.present? }
-    @pieces.present?
+    @pieces.any? { |piece| [piece.state, piece.state_before_last_save].include?('public') }
+  end
+
+  def enqueue_pieces
+    models = Cms::Piece.publishable_models
+    @pieces.select! { |piece| piece.model.in?(models) }
+    Cms::Publisher.register(@pieces.first.site_id, @pieces) if @pieces.present?
   end
 
   def enqueue_layouts

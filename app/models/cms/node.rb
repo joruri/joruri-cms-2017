@@ -32,8 +32,8 @@ class Cms::Node < ApplicationRecord
   validates :concept_id, presence: true
   validates :parent_id, :state, :title, presence: true
   validates :name, presence: true,
-                   uniqueness: { scope: [:site_id, :parent_id], if: %Q(!replace_page?) },
-                   format: { with: /\A[0-9A-Za-z@\.\-_\+]+\z/, message: :not_a_filename, if: %Q(parent_id != 0) }
+                   uniqueness: { scope: [:site_id, :parent_id], if: -> { !replace_page? } },
+                   format: { with: /\A[0-9A-Za-z@\.\-_\+]+\z/, message: :not_a_filename, if: -> { parent_id != 0 } }
   validates :model, presence: true,
                     uniqueness: { scope: [:content_id], if: :content_id? }
 
@@ -41,12 +41,13 @@ class Cms::Node < ApplicationRecord
     errors.add :parent_id, :invalid if id != nil && id == parent_id
     errors.add :route_id, :invalid if id != nil && id == route_id
   }
+  validate :validate_confliction, if: :saved_change_to_name?
 
   after_initialize :set_defaults
-  after_update :move_directory, if: :path_changed?
+  after_update :move_directory, if: :saved_changes_to_path?
   after_destroy :remove_file
 
-  after_save Cms::Publisher::NodeCallbacks.new, if: :changed?
+  after_save Cms::Publisher::NodeCallbacks.new, if: :saved_changes?
 
   define_model_callbacks :publish_files, :close_files
   after_publish_files Cms::FileTransferCallbacks.new([:public_path, :public_smart_phone_path])
@@ -54,11 +55,15 @@ class Cms::Node < ApplicationRecord
 
   scope :public_state, -> { where(state: 'public') }
   scope :sitemap_order, -> { order(:sitemap_sort_no, :name, :id) }
-  scope :rebuildable_models, -> { where(model: ['Cms::Page', 'Cms::Sitemap']) }
+  scope :rebuildable_models, -> { where(model: ['Cms::Page', 'Cms::Sitemap', 'Cms::SitemapXml']) }
   scope :dynamic_models, -> {
     models = Cms::Lib::Modules.modules.flat_map(&:directories).select { |d| d.options[:dynamic] }.map(&:model)
     where(model: models)
   }
+
+  def deletable?
+    parent && Core.user.has_priv?(:delete, item: parent.concept) && state != 'public'
+  end
 
   def states
     [['公開保存','public'],['非公開保存','closed']]
@@ -70,29 +75,13 @@ class Cms::Node < ApplicationRecord
     opts[:prefix] * [level_no - 1 + opts[:depth], 0].max + title
   end
 
-  def public_path
-    "#{site.public_path}#{public_uri}"
-  end
-
-  def public_smart_phone_path
-    "#{site.public_smart_phone_path}#{public_uri}"
-  end
-
   def public_uri
     return @public_uri if @public_uri
-    return '' if name.blank?
+    return if name.blank?
     uri = site.uri
     ancestors.each { |n| uri += "#{n.name}/" if n.name != '/' }
     uri = uri.gsub(/\/$/, '') if directory == 0
     @public_uri = uri
-  end
-
-  def public_full_uri
-    return @public_full_uri if @public_full_uri
-    uri = site.full_uri
-    ancestors.each { |n| uri += "#{n.name}/" if n.name != '/' }
-    uri = uri.gsub(/\/$/, '') if directory == 0
-    @public_full_uri = uri
   end
 
   def inherited_concept(key = nil)
@@ -142,6 +131,10 @@ class Cms::Node < ApplicationRecord
     self.directory = (model_type == :directory) if self.has_attribute?(:directory) && directory.nil?
   end
 
+  def validate_confliction
+    errors.add(:base, 'ファイルまたはディレクトリが既に存在します。') if public_path && ::File.exist?(public_path)
+  end
+
   def move_directory
     path_changes.each do |src, dest|
       next unless Dir.exist?(src)
@@ -157,21 +150,22 @@ class Cms::Node < ApplicationRecord
     end
   end
 
-  def path_changed?
-    return false if name.blank? || name_was.blank?
+  def saved_changes_to_path?
+    return false if name.blank? || name_before_last_save.blank?
     [:name, :parent_id].any? do |column|
-      changes[column].present? && changes[column][0].present? && changes[column][1].present?
+      saved_changes[column].present? && saved_changes[column][0].present? && saved_changes[column][1].present?
     end
   end
 
   def path_changes
-    return {} unless path_changed?
+    return {} unless saved_changes_to_path?
     parent = self.class.find_by(id: parent_id)
-    parent_was = self.class.find_by(id: parent_id_was)
-    return {} if parent.nil? || parent_was.nil?
+    parent_before = self.class.find_by(id: parent_id_before_last_save)
+    return {} if parent.nil? || parent_before.nil?
+    name_changes = saved_changes[:name]
     {
-      "#{parent_was.public_path}#{name_was}" => "#{parent.public_path}#{name}",
-      "#{parent_was.public_smart_phone_path}#{name_was}" => "#{parent.public_smart_phone_path}#{name}"
+      "#{parent_before.public_path}#{name_changes[0]}" => "#{parent.public_path}#{name_changes[1]}",
+      "#{parent_before.public_smart_phone_path}#{name_changes[0]}" => "#{parent.public_smart_phone_path}#{name_changes[1]}"
     }
   end
 
@@ -180,6 +174,13 @@ class Cms::Node < ApplicationRecord
       nodes = site.nodes.where(directory: 1).sitemap_order
       nodes = nodes.where.not(id: origin) if origin
       nodes.to_tree.flat_map(&:descendants).map { |node| [node.tree_title, node.id] }
+    end
+
+    def find_nodes_by_path(site, path)
+      node = site.root_node
+      path.split('/').map do |path|
+        node = Cms::Node.where(site_id: site.id, parent_id: node.id, name: path).first if node
+      end
     end
   end
 
@@ -192,6 +193,9 @@ class Cms::Node < ApplicationRecord
   class Sitemap < Cms::Node
   end
 
+  class SitemapXml < Cms::Node
+  end
+
   class Page < Cms::Node
     include Sys::Model::Rel::Recognition
     include Cms::Model::Rel::Inquiry
@@ -202,7 +206,7 @@ class Cms::Node < ApplicationRecord
 
     after_save :replace_public_page
 
-    after_save     Cms::SearchIndexerCallbacks.new, if: :changed?
+    after_save     Cms::SearchIndexerCallbacks.new, if: :saved_changes?
     before_destroy Cms::SearchIndexerCallbacks.new, prepend: true
 
     validate :validate_recognizers, if: -> { state == 'recognize' }
@@ -229,7 +233,7 @@ class Cms::Node < ApplicationRecord
         item.title         = item.title.gsub(/^(【複製】)*/, "【複製】")
       end
 
-      item.in_recognizer_ids  = recognition.recognizer_ids if recognition
+      item.in_recognizer_ids  = in_recognizer_ids if in_recognizer_ids.present?
 
 #      if inquiry != nil && inquiry.group_id == Core.user.group_id
 #        item.in_inquiry = inquiry.attributes
@@ -277,7 +281,7 @@ class Cms::Node < ApplicationRecord
           rendered = Cms::RenderService.new(site).render_public(public_uri)
           return true unless publish_page(rendered, path: public_path)
 
-          if site.use_kana?
+          if site.use_kana? && name =~ /\.html$/i
             rendered = Cms::Lib::Navi::Kana.convert(rendered, site_id)
             publish_page(rendered, path: "#{public_path}.r", dependent: :ruby)
           end

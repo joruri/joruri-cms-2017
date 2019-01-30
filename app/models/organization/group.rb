@@ -28,7 +28,7 @@ class Organization::Group < ApplicationRecord
   # Content
   belongs_to :content, class_name: 'Organization::Content::Group', required: true
 
-  after_save     Organization::Publisher::GroupCallbacks.new, if: :changed?
+  after_save     Organization::Publisher::GroupCallbacks.new, if: :saved_changes?
   before_destroy Organization::Publisher::GroupCallbacks.new, prepend: true
 
   validates :sys_group_code, presence: true, uniqueness: { scope: :content_id }
@@ -59,13 +59,8 @@ class Organization::Group < ApplicationRecord
   end
 
   def public_uri
-    return '' unless content.public_node
-    "#{content.public_node.public_uri}#{path_from_root}/"
-  end
-
-  def public_full_uri
-    return '' unless content.public_node
-    "#{content.public_node.public_full_uri}#{path_from_root}/"
+    return unless node = content.node
+    "#{node.public_uri}#{path_from_root}/"
   end
 
   def ancestors(groups=[])

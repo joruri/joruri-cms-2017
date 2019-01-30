@@ -40,7 +40,7 @@ class Sys::Publisher < ApplicationRecord
     transaction do
       self.path = path
       self.content_hash = hash
-      self.save if changed?
+      self.save if has_changes_to_save?
 
       if ::File.exist?(path) && ::File.new(path).read == content
         #FileUtils.touch([path])
@@ -64,7 +64,7 @@ class Sys::Publisher < ApplicationRecord
     transaction do
       self.path = dst
       self.content_hash = hash if hash
-      self.save if changed?
+      self.save if has_changes_to_save?
 
       if FileTest.exists?(dst) && ::File.mtime(dst) >= ::File.mtime(src)
         #FileUtils.touch([dst])
@@ -84,16 +84,17 @@ class Sys::Publisher < ApplicationRecord
   end
 
   def check_path
-    remove_files(path: path_was) if !path_was.blank? && path_changed?
+    remove_files(path: path_in_database) if will_save_change_to_path? && path_in_database.present?
     return true
   end
 
   def remove_files(options = {})
     up_path = options[:path] || path
     up_path = ::File.expand_path(path, Rails.root) if up_path.to_s.slice(0, 1) == '/'
-    FileUtils.rm(up_path) if FileTest.exist?(up_path)
-    #FileUtils.rm("#{up_path}.mp3") if FileTest.exist?("#{up_path}.mp3")
-    FileUtils.rmdir(::File.dirname(up_path)) rescue nil
+
+    pathnm = Pathname(up_path)
+    pathnm.delete if pathnm.exist?
+    pathnm.parent.delete if pathnm.parent.empty?
     return true
   end
 end

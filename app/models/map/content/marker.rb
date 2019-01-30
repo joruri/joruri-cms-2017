@@ -6,6 +6,8 @@ class Map::Content::Marker < Cms::Content
   has_many :marker_icons, foreign_key: :content_id, class_name: 'Map::MarkerIcon', dependent: :destroy
 
   # node
+  has_one :node, -> { where(model: 'Map::Marker').order(:id) },
+                 foreign_key: :content_id, class_name: 'Cms::Node'
   has_one :public_node, -> { public_state.where(model: 'Map::Marker').order(:id) },
                         foreign_key: :content_id, class_name: 'Cms::Node'
 
@@ -15,6 +17,10 @@ class Map::Content::Marker < Cms::Content
 
   def map_coordinate
     setting_value(:lat_lng)
+  end
+
+  def gp_category_content_category_type
+    GpCategory::Content::CategoryType.find_by(id: setting_value(:gp_category_content_category_type_id))
   end
 
   def categories
@@ -66,16 +72,12 @@ class Map::Content::Marker < Cms::Content
     end
   end
 
-  def show_images?
-    setting_value(:show_images) == 'visible'
+  def list_style
+    setting_value(:list_style)
   end
 
   def default_image
     setting_value(:default_image).to_s
-  end
-
-  def title_style
-    setting_value(:title_style).to_s
   end
 
   def sort_markers(markers)
