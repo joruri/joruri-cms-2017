@@ -3,9 +3,9 @@
   site_id: @cms_sites_1.id,
   concept_id: @cms_concepts_0.id,
   name: <<EOS.chomp,
-Cms::Site/#{@cms_sites_1.id}
+Cms::Site/1
 EOS
   title: <<EOS.chomp,
-Cms::Site/#{@cms_sites_1.id}
+Cms::Site/1
 EOS
 )

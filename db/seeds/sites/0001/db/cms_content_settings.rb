@@ -65,7 +65,7 @@ EOS
 comment: disabled
 comment_open: immediate
 comment_notification_mail: disabled
-footer_style: 投稿者：@user@ @publish_time@ コメント(@comment_count@) カテゴリ：@category_link@
+footer_style: 投稿者：@user@ @publish_time@ カテゴリ：@category_link@
 
 EOS
 )
@@ -591,7 +591,7 @@ EOS
 comment: disabled
 comment_open: immediate
 comment_notification_mail: disabled
-footer_style: 投稿者：@user@ @publish_time@ コメント(@comment_count@) カテゴリ：@category_link@
+footer_style: 投稿者：@user@ @publish_time@ カテゴリ：@category_link@
 
 EOS
 )

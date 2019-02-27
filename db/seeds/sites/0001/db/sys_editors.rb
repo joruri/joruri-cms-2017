@@ -3905,3 +3905,15 @@ Sys::Editor.create!(
   editable_id: @gp_article_docs_578.id,
   editable_type: "GpArticle::Doc"
 )
+Sys::Editor.create!(
+  user_id: @sys_users_1.id,
+  group_id: @sys_groups_13.id,
+  editable_id: @gp_article_docs_579.id,
+  editable_type: "GpArticle::Doc"
+)
+Sys::Editor.create!(
+  user_id: @sys_users_1.id,
+  group_id: @sys_groups_13.id,
+  editable_id: @gp_article_docs_580.id,
+  editable_type: "GpArticle::Doc"
+)

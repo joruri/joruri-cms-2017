@@ -86,12 +86,15 @@ puts "loading cms_inquiries..."
 load "db/seeds/sites/0001/db/cms_inquiries.rb"
 puts "loading cms_links..."
 load "db/seeds/sites/0001/db/cms_links.rb"
+puts "loading cms_periods..."
+load "db/seeds/sites/0001/db/cms_periods.rb"
 puts "loading cms_publish_urls..."
 load "db/seeds/sites/0001/db/cms_publish_urls.rb"
 puts "loading cms_maps..."
 load "db/seeds/sites/0001/db/cms_maps.rb"
 puts "loading cms_map_markers..."
 load "db/seeds/sites/0001/db/cms_map_markers.rb"
+
 # copy files
 puts "copying files..."
 src = Rails.root.join("db/seeds/sites/0001/public/.")

@@ -19,3 +19,15 @@
   doc_id: @gp_article_docs_576.id,
   tag_id: @tag_tags_7.id
 )
+@gp_article_docs_tag_tags_70 ||= GpArticle::DocsTagTag.create!(
+  doc_id: @gp_article_docs_579.id,
+  tag_id: @tag_tags_4.id
+)
+@gp_article_docs_tag_tags_71 ||= GpArticle::DocsTagTag.create!(
+  doc_id: @gp_article_docs_579.id,
+  tag_id: @tag_tags_6.id
+)
+@gp_article_docs_tag_tags_72 ||= GpArticle::DocsTagTag.create!(
+  doc_id: @gp_article_docs_579.id,
+  tag_id: @tag_tags_7.id
+)

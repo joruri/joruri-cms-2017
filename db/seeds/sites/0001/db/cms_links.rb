@@ -5501,3 +5501,11 @@ Cms::Link.create!(
   url: "\#",
   linkable_column: "body"
 )
+Cms::Link.create!(
+  content_id: @cms_contents_1.id,
+  linkable_type: "GpArticle::Doc",
+  linkable_id: @gp_article_docs_579.id,
+  body: "平成29年度夏休み子ども・家族ふれあい教室パンフレット[PDF：154KB]",
+  url: "\#",
+  linkable_column: "body"
+)

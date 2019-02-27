@@ -12,7 +12,7 @@
   og_image: "",
   smart_phone_publication: "no",
   spp_target: "only_top",
-  admin_full_uri: "",
+  admin_full_uri: ENV["ADMIN_URL"] || Util::Config.load(:core, :uri) || '',
   smart_phone_layout: "pc",
   mobile_feature: "disabled"
 )
