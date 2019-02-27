@@ -20,13 +20,6 @@ def centos
     db['production']['uri'] = "http://#{`hostname`.chomp}/"
   end
 
-  system "su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake db:setup RAILS_ENV=production'"
-  system "su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake db:seed:demo RAILS_ENV=production'"
-
-  system "su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake joruri:configure RAILS_ENV=production'"
-  system 'ln -s /var/www/joruri/config/nginx/nginx.conf /etc/nginx/conf.d/joruri.conf'
-  system 'mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.org'
-
   secret = `su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake secret RAILS_ENV=production'`
   File.open '/var/www/joruri/config/secrets.yml', File::RDWR do |f|
     f.flock File::LOCK_EX
@@ -41,6 +34,13 @@ def centos
 
     f.flock File::LOCK_UN
   end
+
+  system "su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake db:setup RAILS_ENV=production'"
+  system "su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake db:seed:demo RAILS_ENV=production'"
+
+  system "su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake joruri:configure RAILS_ENV=production'"
+  system 'ln -s /var/www/joruri/config/nginx/nginx.conf /etc/nginx/conf.d/joruri.conf'
+  system 'mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.org'
 end
 
 def others
