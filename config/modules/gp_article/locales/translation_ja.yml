@@ -35,6 +35,7 @@ ja:
         terminal_mobile: 携帯
         editable_groups: 編集可能グループ
         marker_state: マップ表示
+        navigation_state: ルート案内
         marker_sort_no: 並び順
         meta_description: 説明文
         meta_keywords: キーワード
@@ -46,6 +47,7 @@ ja:
         body_more_link_text: 追記リンク表記
         feature_1: 記事一覧表示
         feature_2: 記事表示
+        feed_state: 記事フィード表示
         marker_icon_category_id: マーカーアイコン用カテゴリ
         display_published_at: 公開日
         display_updated_at: 更新日
@@ -63,6 +65,10 @@ ja:
         inquiries/email: 連絡先（メールアドレス）
         inquiries/note: 連絡先（備考）
         related_docs: 関連記事
+        periods: 期間
+      gp_article/doc/periods:
+        started_on: 開始日
+        ended_on: 終了日
       gp_article/doc/maps:
         map_lat: 緯度
         map_lng: 経度

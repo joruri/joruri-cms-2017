@@ -23,7 +23,7 @@ class BizCalendar::Place < ApplicationRecord
   validates :state, :url, :title, presence: true
   validate :url_validity
 
-  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
+  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :saved_changes?
   before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true), prepend: true
 
   scope :public_state, -> { where(state: 'public') }
@@ -65,18 +65,8 @@ class BizCalendar::Place < ApplicationRecord
   end
 
   def public_uri
-    return '' unless node = content.public_node
+    return unless node = content.node
     "#{node.public_uri}#{url}/"
-  end
-
-  def public_path
-    return '' unless node = content.public_node
-    "#{node.public_path}#{url}/"
-  end
-
-  def public_smart_phone_path
-    return '' unless node = content.public_node
-    "#{node.public_smart_phone_path}#{url}/"
   end
 
   def next_holiday(sdate=Date.today)

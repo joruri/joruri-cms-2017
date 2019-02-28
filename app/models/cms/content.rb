@@ -11,14 +11,14 @@ class Cms::Content < ApplicationRecord
   has_many :nodes, dependent: :destroy
 
   # conditional
-  has_one :main_node, -> { order(:id) }, class_name: 'Cms::Node'
+  has_one :node, -> { order(:id) }, class_name: 'Cms::Node'
   has_many :public_nodes, -> { public_state }, class_name: 'Cms::Node'
   has_many :public_pieces, -> { public_state }, class_name: 'Cms::Piece'
 
   validates :concept_id, :state, :model, :name, presence: true
   validates :code, presence: true,
                    uniqueness: { scope: [:site_id], case_sensitive: false },
-                   format: { with: /\A[0-9a-zA-Z\-_]+\z/, if: "name.present?", message: :invalid_bracket_name }
+                   format: { with: /\A[0-9a-zA-Z\-_]+\z/, if: -> { name.present? }, message: :invalid_bracket_name }
 
   before_create :set_default_settings_from_configs
   after_save :save_settings
@@ -29,7 +29,7 @@ class Cms::Content < ApplicationRecord
   }
 
   def inherited_concept
-    main_node.try!(:inherited_concept) || concept
+    node.try!(:inherited_concept) || concept
   end
 
   def readable?
@@ -103,7 +103,7 @@ class Cms::Content < ApplicationRecord
     in_settings.each do |name, value|
       st = settings.where(name: name).first || new_setting(name)
       st.value = value
-      st.save if st.changed?
+      st.save if st.has_changes_to_save?
     end
     return true
   end

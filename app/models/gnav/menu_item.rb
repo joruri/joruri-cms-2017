@@ -19,30 +19,19 @@ class Gnav::MenuItem < ApplicationRecord
 
   has_many :category_sets
 
+  accepts_nested_attributes_for :category_sets, allow_destroy: true
+
+  before_save :mark_destruction_for_blank_category_sets
+
   validates :name, presence: true, uniqueness: { scope: :content_id }
   validates :title, presence: true
 
-  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
+  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :saved_changes?
   before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true), prepend: true
 
   def public_uri
-    return '' unless node = content.public_node
+    return unless node = content.node
     "#{node.public_uri}#{name}/"
-  end
-
-  def public_path
-    return '' unless node = content.public_node
-    "#{node.public_path}#{name}/"
-  end
-
-  def public_smart_phone_path
-    return '' unless node = content.public_node
-    "#{node.public_smart_phone_path}#{name}/"
-  end
-
-  def public_full_uri
-    return '' unless node = content.public_node
-    "#{node.public_full_uri}#{name}/"
   end
 
   def categories
@@ -86,5 +75,13 @@ class Gnav::MenuItem < ApplicationRecord
     end
 
     Cms::Lib::BreadCrumbs.new(crumbs)
+  end
+
+  private
+
+  def mark_destruction_for_blank_category_sets
+    category_sets.each do |cs|
+      cs.mark_for_destruction if cs.category_id.blank?
+    end
   end
 end

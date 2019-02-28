@@ -1,6 +1,9 @@
 class Cms::Admin::PreviewController < Cms::Controller::Admin::Base
-  after_action :add_preview_header, if: :preview_as_html?
-  after_action :replace_links_for_preview, if: :preview_as_html?
+  protect_from_forgery except: :index
+
+  after_action :add_preview_header, if: -> { preview_as_html? && !request.xhr? }
+  after_action :convert_for_talk_order, if: -> { preview_as_html? && params[:talk_order] }
+  after_action :replace_links_for_preview, if: -> { preview_as_html? }
 
   def pre_dispatch
     if params[:commit]
@@ -30,38 +33,19 @@ class Cms::Admin::PreviewController < Cms::Controller::Admin::Base
     Page.smart_phone = options[:smart_phone]
     Page.preview_at = options[:preview_at]
 
-    if path =~ /^\/_files\//
-      ## _files
-      file_path = path.gsub(/^\/_files\//, '')
-      format    = ::File.extname(file_path)
+    node = Core.search_node(path)
+    opt  = Rails.application.routes.recognize_path(node)
 
-      opt  = {
-        path: file_path.gsub(format, ''),
-        format: format.gsub(/^\./, '')
-      }
-      ctl  = "cms/public/files"
-      act  = "down"
-
-    elsif path =~ /^\/_themes\//
-      entry = Sys::Storage::Entry.from_path("#{Core.site.public_path}#{path}")
-      return http_error(404) if entry.nil? || !entry.exists?
-      return send_file(entry.path, type: entry.mime_type, filename: entry.name, disposition: 'inline')
-
-    else
-      node = Core.search_node(path)
-      opt  = Rails.application.routes.recognize_path(node)
-
-      if opt[:controller] == 'cms/public/exception'
-        path += 'index.html' if path.end_with?('/')
-        file_path = File.join(Page.site.public_path, path)
-        if File.exist?(file_path) && File.ftype(file_path) == 'file'
-          return send_file(file_path, type: ::Storage.mime_type(path), filename: ::File.basename(path), disposition: 'inline')
-        end
+    if opt[:controller] == 'cms/public/exception'
+      path += 'index.html' if path.end_with?('/')
+      file_path = File.join(Page.site.public_path, path)
+      if File.exist?(file_path) && File.ftype(file_path) == 'file'
+        return send_file(file_path, type: ::Storage.mime_type(path), filename: ::File.basename(path), disposition: 'inline')
       end
-
-      ctl  = opt[:controller]
-      act  = opt[:action]
     end
+
+    ctl  = opt[:controller]
+    act  = opt[:action]
 
     opt.each {|k,v| params[k] = v }
     #opt[:layout_id] = params[:layout_id] if params[:layout_id]
@@ -88,6 +72,31 @@ private
 
     html = render_to_string(partial: 'cms/admin/preview/mark', formats: [:html])
     response.body = response.body.to_s.sub(/(<body[^>]*?>)/i) { $1.html_safe + html }
+  end
+
+  def convert_for_talk_order
+    nokogiri = Page.mobile? ? Nokogiri::XML : Nokogiri::HTML
+    content = Cms::Lib::Navi::Jtalk.filter_html_tags(nokogiri.parse(response.body, nil, 'utf-8'))
+    return unless content
+
+    content.css('*').each do |node|
+      node.remove_attribute('class')
+      node.remove_attribute('style')
+    end
+
+    html = if (body_node = content.css('body').first)
+             body_node.inner_html
+           else
+             Page.mobile? ? content.to_xhtml : content.to_html
+           end
+
+    converted = nokogiri.parse(response.body, nil, 'utf-8')
+    converted.css('body').first.inner_html = html
+    converted.css('link, script').each do |node|
+      node.remove
+    end
+
+    response.body = Page.mobile? ? converted.to_xhtml : converted.to_html
   end
 
   def replace_links_for_preview

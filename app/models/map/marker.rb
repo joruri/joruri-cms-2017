@@ -24,24 +24,24 @@ class Map::Marker < ApplicationRecord
   before_save :set_name
   before_destroy :close_files
 
-  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :changed?
+  after_save     Cms::Publisher::ContentCallbacks.new(belonged: true), if: :saved_changes?
   before_destroy Cms::Publisher::ContentCallbacks.new(belonged: true), prepend: true
 
   scope :public_state, -> { where(state: 'public') }
 
   def public_uri
-    return '' unless content.public_node
-    "#{content.public_node.public_uri}#{name}/"
+    return unless node = content.node
+    "#{node.public_uri}#{name}/"
   end
 
   def public_path
-    return '' unless content.public_node
-    "#{content.public_node.public_path}#{name}/"
+    return unless uri = public_uri
+    "#{site.public_path}#{uri}"
   end
 
   def public_smart_phone_path
-    return '' unless content.public_node
-    "#{content.public_node.public_smart_phone_path}#{name}/"
+    return unless uri = public_uri
+    "#{site.public_smart_phone_path}#{uri}"
   end
 
   def publish_files
@@ -59,7 +59,7 @@ class Map::Marker < ApplicationRecord
   end
 
   class << self
-    def from_doc(doc)
+    def from_doc(doc, map_content = nil)
       return [] unless doc.maps.first
 
       doc.maps.first.markers.map do |m|
@@ -73,6 +73,7 @@ class Map::Marker < ApplicationRecord
           created_at: doc.display_published_at,
           updated_at: doc.display_published_at
         )
+        marker.content = map_content
         marker.categories = doc.marker_categories
         marker.files = doc.files
         marker.icon_category = doc.marker_icon_category

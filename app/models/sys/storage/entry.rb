@@ -4,6 +4,8 @@ class Sys::Storage::Entry
   include ActiveModel::Callbacks
   include Sys::Model::Auth::Storage
 
+  SYSTEM_DIRS = %w(_common _files _mobile _smartphone _themes _pieces)
+
   define_model_callbacks :initialize, :validation, :save_files, :remove_files
   define_attribute_methods :base_dir, :name
   attr_reader :base_dir, :name
@@ -114,6 +116,10 @@ class Sys::Storage::Entry
     "/_themes/#{path_from_themes_root}"
   end
 
+  def system_dir?
+    site && SYSTEM_DIRS.any? { |dir| path.chomp('/') == "#{site.public_path}/#{dir}" }
+  end
+
   def parent
     return if path == Rails.root
     return if site_id && site_root_path?
@@ -167,6 +173,23 @@ class Sys::Storage::Entry
     error_log e.to_s
     errors.add(:base, e)
     return false
+  end
+
+  def related_node
+    return unless site
+    return @related_node if defined? @related_node
+
+    dir_path = relative_path_from(site.public_path)
+    dir_path.gsub!(/^(_mobile|_smartphone)\//, '')
+    dir_path.gsub!(/(.html.r|.html.mp3)$/, '.html')
+
+    nodes = Cms::Node.find_nodes_by_path(site, dir_path)
+    if nodes.last
+      @related_node = nodes.last
+    else
+      node = nodes.compact.last
+      @related_node = node && node.content_id.blank? ? nil : node
+    end
   end
 
   private

@@ -51,7 +51,7 @@ class GpCategory::Category < ApplicationRecord
 
   before_validation :set_attributes_from_parent
 
-  after_save     GpCategory::Publisher::CategoryCallbacks.new, if: :changed?
+  after_save     GpCategory::Publisher::CategoryCallbacks.new, if: :saved_changes?
   before_destroy GpCategory::Publisher::CategoryCallbacks.new, prepend: true
 
   scope :with_root, -> { where(parent_id: nil) }
@@ -135,24 +135,24 @@ class GpCategory::Category < ApplicationRecord
     Cms::Lib::BreadCrumbs.new(crumbs)
   end
 
-  def public_path
-    return '' if (path = category_type.public_path).blank?
-    "#{path}#{path_from_root_category}/"
-  end
-
-  def public_smart_phone_path
-    return '' if (path = category_type.public_smart_phone_path).blank?
-    "#{path}#{path_from_root_category}/"
-  end
-
   def public_uri
-    return '' if (uri = category_type.public_uri).blank?
+    return if (uri = category_type.public_uri).blank?
     "#{uri}#{path_from_root_category}/"
   end
 
-  def public_full_uri
-    return '' if (uri = category_type.public_full_uri).blank?
-    "#{uri}#{path_from_root_category}/"
+  def admin_uri(options = {})
+    controller = self.class.name.tableize.sub('/', '/admin/')
+    Rails.application.routes.url_helpers.url_for({ controller: controller,
+                                                   action: :show,
+                                                   content: content,
+                                                   concept: content.concept_id,
+                                                   category_type_id: category_type_id,
+                                                   category_id: parent_id,
+                                                   id: id,
+                                                   only_path: true }.merge(options))
+  rescue ActionController::UrlGenerationError => e
+    warn_log e
+    nil
   end
 
   def docs
@@ -199,8 +199,8 @@ class GpCategory::Category < ApplicationRecord
   end
 
   def move_published_files
-    return if changes[:name].blank?
-    old_name, new_name = changes[:name]
+    return if saved_changes[:name].blank?
+    old_name, new_name = saved_changes[:name]
     return if old_name.blank? || new_name.blank?
     rename_directory(new_path: public_path, old_name: old_name)
     rename_directory(new_path: public_smart_phone_path, old_name: old_name)

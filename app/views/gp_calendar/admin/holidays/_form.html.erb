@@ -12,31 +12,27 @@
   <tr>
     <th><%= f.label :date %></th>
     <td><%= f.text_field :date, value: l(@item.date), style: 'width: 150px;', class: 'datepicker' %>
-        <%= f.check_box :repeat, onclick: "$('#rsvp').submit()" %> <%= f.label :repeat %>
+        <%= f.check_box :repeat %> <%= f.label :repeat %>
     </td>
   </tr>
   <tr>
     <th><%= f.label :description %></th>
     <td><%= f.text_field :description, style: 'width: 700px;' %></td>
   </tr>
-  <tr>
-    <th><%= f.label :kind %></th>
-    <td><%= f.collection_radio_buttons :kind, @item.class.kind_options, :last, :first %></td>
-  </tr>
 </table>
 
 <%= creator_form f %>
 
-<%= javascript_tag do %>
-$(document).ready(function () {
+<script type="text/javascript">
+$(function() {
   $('input.datepicker').datepicker();
   datepicker('<%= 'yy年' unless @item.repeat %>');
 
-  $('#item_repeat').change(function() {
+  $('#item_repeat').on('change', function() {
     var checked = $(this).is(':checked');
-    if(checked) {
+    if (checked) {
       yy = '';
-    }else{
+    } else {
       yy = 'yy年';
     }
     datepicker(yy);
@@ -46,4 +42,4 @@ $(document).ready(function () {
     $('input.datepicker').datepicker('option', 'dateFormat', yy + 'mm月dd日');
   }
 });
-<% end %>
+</script>

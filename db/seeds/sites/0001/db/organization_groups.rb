@@ -23,6 +23,7 @@ EOS
 <p>総務課は、主に法制や文書管理などの業務を主に担当しています。また、個人情報保護制度及び情報公開制度ならびに市制施行証明書発行の窓口となっています。</p>\r
 
 EOS
+  title: "総務課"
 )
 @organization_groups_1 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -31,7 +32,8 @@ EOS
   sys_group_code: "1",
   sitemap_state: "visible",
   docs_order: "",
-  sort_no: 10
+  sort_no: 10,
+  title: "総務部"
 )
 @organization_groups_8 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -40,7 +42,8 @@ EOS
   sys_group_code: "2001",
   sitemap_state: "visible",
   docs_order: "",
-  sort_no: 10
+  sort_no: 10,
+  title: "IT推進課"
 )
 @organization_groups_45 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -49,7 +52,8 @@ EOS
   sys_group_code: "2006",
   sitemap_state: "visible",
   docs_order: "",
-  sort_no: 10
+  sort_no: 10,
+  title: "国際交流課"
 )
 @organization_groups_14 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -58,7 +62,8 @@ EOS
   sys_group_code: "3001",
   sitemap_state: "visible",
   docs_order: "",
-  sort_no: 10
+  sort_no: 10,
+  title: "市民課"
 )
 @organization_groups_18 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -67,7 +72,8 @@ EOS
   sys_group_code: "4001",
   sitemap_state: "visible",
   docs_order: "",
-  sort_no: 10
+  sort_no: 10,
+  title: "環境政策課"
 )
 @organization_groups_22 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -76,7 +82,8 @@ EOS
   sys_group_code: "5001",
   sitemap_state: "visible",
   docs_order: "",
-  sort_no: 10
+  sort_no: 10,
+  title: "子育て支援課"
 )
 @organization_groups_29 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -85,7 +92,8 @@ EOS
   sys_group_code: "6001",
   sitemap_state: "visible",
   docs_order: "",
-  sort_no: 10
+  sort_no: 10,
+  title: "下水道課"
 )
 @organization_groups_35 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -94,7 +102,8 @@ EOS
   sys_group_code: "7001",
   sitemap_state: "visible",
   docs_order: "",
-  sort_no: 10
+  sort_no: 10,
+  title: "商工課"
 )
 @organization_groups_39 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -103,7 +112,8 @@ EOS
   sys_group_code: "8001",
   sitemap_state: "visible",
   docs_order: "",
-  sort_no: 10
+  sort_no: 10,
+  title: "消防本部総務課"
 )
 @organization_groups_3 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -115,7 +125,8 @@ EOS
   sort_no: 20,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "職員課"
 )
 @organization_groups_7 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -127,7 +138,8 @@ EOS
   sort_no: 20,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "企画部"
 )
 @organization_groups_9 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -139,7 +151,8 @@ EOS
   sort_no: 20,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "企画経営課"
 )
 @organization_groups_15 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -151,7 +164,8 @@ EOS
   sort_no: 20,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "税務課"
 )
 @organization_groups_19 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -163,7 +177,8 @@ EOS
   sort_no: 20,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "生活経済課"
 )
 @organization_groups_23 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -175,7 +190,8 @@ EOS
   sort_no: 20,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "地域福祉課"
 )
 @organization_groups_30 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -187,7 +203,8 @@ EOS
   sort_no: 20,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "土木課"
 )
 @organization_groups_36 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -199,7 +216,8 @@ EOS
   sort_no: 20,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "農林水産課"
 )
 @organization_groups_40 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -211,7 +229,8 @@ EOS
   sort_no: 20,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "予防課"
 )
 @organization_groups_4 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -223,7 +242,8 @@ EOS
   sort_no: 30,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "契約管理課"
 )
 @organization_groups_10 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -235,7 +255,8 @@ EOS
   sort_no: 30,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "財政課"
 )
 @organization_groups_13 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -247,7 +268,8 @@ EOS
   sort_no: 30,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "生活部"
 )
 @organization_groups_16 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -259,7 +281,8 @@ EOS
   sort_no: 30,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "保健課"
 )
 @organization_groups_20 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -271,7 +294,8 @@ EOS
   sort_no: 30,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "安全安心課"
 )
 @organization_groups_24 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -283,7 +307,8 @@ EOS
   sort_no: 30,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "高齢者支援課"
 )
 @organization_groups_31 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -295,7 +320,8 @@ EOS
   sort_no: 30,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "建築住宅課"
 )
 @organization_groups_37 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -307,7 +333,8 @@ EOS
   sort_no: 30,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "観光振興課"
 )
 @organization_groups_41 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -319,7 +346,8 @@ EOS
   sort_no: 30,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "消防署"
 )
 @organization_groups_5 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -331,7 +359,8 @@ EOS
   sort_no: 40,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "防災課"
 )
 @organization_groups_11 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -343,7 +372,8 @@ EOS
   sort_no: 40,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "秘書広報課"
 )
 @organization_groups_17 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -355,7 +385,8 @@ EOS
   sort_no: 40,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "環境部"
 )
 @organization_groups_25 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -367,7 +398,8 @@ EOS
   sort_no: 40,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "生活福祉課"
 )
 @organization_groups_32 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -379,7 +411,8 @@ EOS
   sort_no: 40,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "道路交通課"
 )
 @organization_groups_6 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -391,7 +424,8 @@ EOS
   sort_no: 50,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "法務課"
 )
 @organization_groups_12 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -403,7 +437,8 @@ EOS
   sort_no: 50,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "情報推進課"
 )
 @organization_groups_21 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -415,7 +450,8 @@ EOS
   sort_no: 50,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "保健福祉部"
 )
 @organization_groups_26 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -427,7 +463,8 @@ EOS
   sort_no: 50,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "健康推進課"
 )
 @organization_groups_33 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -439,7 +476,8 @@ EOS
   sort_no: 50,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "都市計画課"
 )
 @organization_groups_27 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -451,7 +489,8 @@ EOS
   sort_no: 60,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "障害福祉課"
 )
 @organization_groups_28 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -463,7 +502,8 @@ EOS
   sort_no: 60,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "都市整備部"
 )
 @organization_groups_34 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -475,7 +515,8 @@ EOS
   sort_no: 70,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "観光経済部"
 )
 @organization_groups_38 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -487,7 +528,8 @@ EOS
   sort_no: 80,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "消防本部"
 )
 @organization_groups_42 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -499,7 +541,8 @@ EOS
   sort_no: 90,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "議会事務局"
 )
 @organization_groups_43 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -511,7 +554,8 @@ EOS
   sort_no: 100,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "選挙管理委員会事務局"
 )
 @organization_groups_44 ||= Organization::Group.create!(
   content_id: @cms_contents_5.id,
@@ -523,5 +567,6 @@ EOS
   sort_no: 110,
   business_outline: "",
   contact_information: "",
-  outline: ""
+  outline: "",
+  title: "監査委員事務局"
 )

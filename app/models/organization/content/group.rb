@@ -7,7 +7,11 @@ class Organization::Content::Group < Cms::Content
   has_many :settings, foreign_key: :content_id, class_name: 'Organization::Content::Setting', dependent: :destroy
   has_many :groups, foreign_key: :content_id, class_name: 'Organization::Group', dependent: :destroy
 
+  has_many :_reorg_groups, foreign_key: :content_id, class_name: 'Organization::Reorg::Group', dependent: :destroy
+
   # node
+  has_one :node, -> { where(model: 'Organization::Group').order(:id) },
+                 foreign_key: :content_id, class_name: 'Cms::Node'
   has_one :public_node, -> { public_state.where(model: 'Organization::Group').order(:id) },
                         foreign_key: :content_id, class_name: 'Cms::Node'
 

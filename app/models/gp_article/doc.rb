@@ -15,6 +15,7 @@ class GpArticle::Doc < ApplicationRecord
   include Cms::Model::Rel::PublishUrl
   include Cms::Model::Rel::SearchText
   include Cms::Model::Rel::Importation
+  include Cms::Model::Rel::Period
 
   include Cms::Model::Auth::Concept
   include Sys::Model::Auth::Trash
@@ -45,8 +46,10 @@ class GpArticle::Doc < ApplicationRecord
   enum_ish :target, ['', '_self', '_blank', 'attached_file'], default: ''
   enum_ish :event_state, [:visible, :hidden], default: :hidden
   enum_ish :marker_state, [:visible, :hidden], default: :hidden
+  enum_ish :navigation_state, [:enabled, :disabled], default: :disabled, predicate: true
   enum_ish :og_type, [:article]
   enum_ish :feature_1, [true, false], default: true
+  enum_ish :feed_state, [:visible, :hidden]
 
   # Content
   belongs_to :content, class_name: 'GpArticle::Content::Doc', required: true
@@ -92,10 +95,10 @@ class GpArticle::Doc < ApplicationRecord
   before_save :set_display_published_at
   before_save :set_display_updated_at
 
-  after_save     GpArticle::Publisher::DocCallbacks.new, if: :changed?
+  after_save     GpArticle::Publisher::DocCallbacks.new, if: :saved_changes?
   before_destroy GpArticle::Publisher::DocCallbacks.new, prepend: true
 
-  after_save     Cms::SearchIndexerCallbacks.new, if: :changed?
+  after_save     Cms::SearchIndexerCallbacks.new, if: :saved_changes?
   before_destroy Cms::SearchIndexerCallbacks.new, prepend: true
 
   after_save :replace_public
@@ -117,24 +120,19 @@ class GpArticle::Doc < ApplicationRecord
                               if: -> { site.use_mobile_feature? }
 
   validate :validate_name, if: -> { name.present? }
-  validate :validate_event_dates_range
   validate :validate_accessibility_check, if: -> { !state_draft? && errors.blank? }
   validate :validate_broken_link_existence, if: -> { !state_draft? && errors.blank? }
 
   validates_with Sys::TaskValidator, if: -> { !state_draft? }
-  validates_with Cms::ContentNodeValidator, if: -> { state_approvable? || state_public? }
+  validates_with Cms::ContentNodeValidator, if: -> { state_approvable? || state_approved? || state_prepared? || state_public? }
 
   scope :public_state, -> { where(state: 'public') }
   scope :mobile, ->(m) { m ? where(terminal_mobile: true) : where(terminal_pc_or_smart_phone: true) }
   scope :visible_in_list, -> { where(feature_1: true) }
-  scope :event_scheduled_between, ->(start_date, end_date, category_ids = nil) {
-    rel = dates_intersects(:event_started_on, :event_ended_on, start_date.try(:beginning_of_day), end_date.try(:end_of_day))
-    rel = rel.categorized_into(category_ids, categorized_as: 'GpCalendar::Event', alls: true) if category_ids.present?
-    rel
-  }
+  scope :visible_in_feed, -> { where(feed_state: 'visible') }
   scope :categorized_into, ->(categories, categorized_as: 'GpArticle::Doc', alls: false) {
     cats = GpCategory::Categorization.select(:categorizable_id)
-                                     .where(categorized_as: categorized_as, categorizable_type: self.to_s)
+                                     .where(categorized_as: categorized_as, categorizable_type: self.name)
     if alls
       Array(categories).inject(all) { |rel, c| rel.where(id: cats.where(category_id: c)) }
     else
@@ -149,16 +147,6 @@ class GpArticle::Doc < ApplicationRecord
     super && !state_public?
   end
 
-  def public_path
-    return '' if public_uri.blank?
-    "#{content.public_path}#{public_uri(without_filename: true)}#{filename_base}.html"
-  end
-
-  def public_smart_phone_path
-    return '' if public_uri.blank?
-    "#{content.public_path}/_smartphone#{public_uri(without_filename: true)}#{filename_base}.html"
-  end
-
   def filename_for_uri
     if filename_base == 'index'
       ''
@@ -167,35 +155,34 @@ class GpArticle::Doc < ApplicationRecord
     end
   end
 
-  def public_uri(without_filename: false, with_closed_preview: false)
-    uri =
-      if with_closed_preview && content.main_node && content.main_node.public_uri.present?
-        "#{content.main_node.public_uri}#{name}/"
-      elsif !with_closed_preview && content.public_node
-        "#{content.public_node.public_uri}#{name}/"
-      end
-    return '' unless uri
-    without_filename ? uri : "#{uri}#{filename_for_uri}"
+  def public_dir
+    return unless node = content.node
+    "#{node.public_uri}#{name}/"
   end
 
-  def public_full_uri(without_filename: false)
-    uri =
-      if content.public_node
-        "#{content.public_node.public_full_uri}#{name}/"
-      end
-    return '' unless uri
-    without_filename ? uri : "#{uri}#{filename_for_uri}"
+  def public_uri
+    return unless dir = public_dir
+    "#{dir}#{filename_for_uri}"
   end
 
-  def preview_uri(terminal: nil, without_filename: false, params: {})
+  def public_path
+    return unless dir = public_dir
+    "#{site.public_path}#{dir}#{filename_base}.html"
+  end
+
+  def public_smart_phone_path
+    return unless dir = public_dir
+    "#{site.public_smart_phone_path}#{dir}#{filename_base}.html"
+  end
+
+  def preview_uri(terminal: nil, params: {})
     return if terminal == :mobile && !terminal_mobile
     return if terminal.in?([nil, :pc, :smart_phone]) && !terminal_pc_or_smart_phone
-    return if (path = public_uri(without_filename: true, with_closed_preview: true)).blank?
+    return if (dir = public_dir).blank?
 
     flag = { mobile: 'm', smart_phone: 's' }[terminal]
     query = "?#{params.to_query}" if params.present?
-    filename = without_filename ? '' : filename_for_uri
-    "#{site.main_admin_uri}_preview/#{format('%04d', site.id)}#{flag}#{path}preview/#{id}/#{filename}#{query}"
+    "/_preview/#{format('%04d', site.id)}#{flag}#{dir}preview/#{id}/#{filename_for_uri}#{query}"
   end
 
   def file_base_uri
@@ -295,6 +282,10 @@ class GpArticle::Doc < ApplicationRecord
       attrs[:id] = nil
       attrs[:group_id] = Core.user.group_id if i == 0 && !Core.user.has_auth?(:manager)
       new_doc.inquiries.build(attrs)
+    end
+
+    periods.each do |period|
+      new_doc.periods.build(period.attributes.slice('started_on', 'ended_on'))
     end
 
     maps.each do |map|
@@ -420,13 +411,6 @@ class GpArticle::Doc < ApplicationRecord
     errors.add(:name, :taken) if doc.exists?
   end
 
-  def validate_event_dates_range
-    return if self.event_started_on.blank? && self.event_ended_on.blank?
-    self.event_started_on = self.event_ended_on if self.event_started_on.blank?
-    self.event_ended_on = self.event_started_on if self.event_ended_on.blank?
-    errors.add(:event_ended_on, "が#{self.class.human_attribute_name :event_started_on}を過ぎています。") if self.event_ended_on < self.event_started_on
-  end
-
   def validate_broken_link_existence
     return unless content.link_check_enabled?
     return if in_ignore_link_check == '1'
@@ -468,6 +452,7 @@ class GpArticle::Doc < ApplicationRecord
     self.qrcode_state = content.qrcode_default_state if self.has_attribute?(:qrcode_state) && self.qrcode_state.nil?
     self.feature_1 = content.feature_settings[:feature_1] if self.has_attribute?(:feature_1) && self.feature_1.nil?
     self.feature_2 = content.feature_settings[:feature_2] if self.has_attribute?(:feature_2) && self.feature_2.nil?
+    self.feed_state ||= content.feature_settings[:feed_state] if self.has_attribute?(:feed_state)
 
     if !content.setting_value(:basic_setting).blank?
       self.layout_id ||= content.setting_extra_value(:basic_setting, :default_layout_id).to_i

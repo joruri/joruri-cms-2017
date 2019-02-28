@@ -27,7 +27,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -37,7 +36,9 @@
   qrcode_state: "hidden",
   serial_no: 1,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_263 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -67,7 +68,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -77,7 +77,9 @@
   qrcode_state: "hidden",
   serial_no: 2,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_264 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -107,7 +109,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -117,7 +118,9 @@
   qrcode_state: "hidden",
   serial_no: 3,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_265 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -147,7 +150,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -157,7 +159,9 @@
   qrcode_state: "hidden",
   serial_no: 4,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_269 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -187,7 +191,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -197,7 +200,9 @@
   qrcode_state: "hidden",
   serial_no: 5,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_270 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -227,7 +232,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -237,7 +241,9 @@
   qrcode_state: "hidden",
   serial_no: 6,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_271 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -267,7 +273,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -277,7 +282,9 @@
   qrcode_state: "hidden",
   serial_no: 7,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_272 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -307,7 +314,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -317,7 +323,9 @@
   qrcode_state: "hidden",
   serial_no: 8,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_273 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -347,7 +355,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -357,7 +364,9 @@
   qrcode_state: "hidden",
   serial_no: 9,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_275 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -387,7 +396,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -397,7 +405,9 @@
   qrcode_state: "hidden",
   serial_no: 10,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_276 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -427,7 +437,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -437,7 +446,9 @@
   qrcode_state: "hidden",
   serial_no: 11,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_277 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -467,7 +478,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -477,7 +487,9 @@
   qrcode_state: "hidden",
   serial_no: 12,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_278 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -507,7 +519,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -517,7 +528,9 @@
   qrcode_state: "hidden",
   serial_no: 13,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_279 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -547,7 +560,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -557,7 +569,9 @@
   qrcode_state: "hidden",
   serial_no: 14,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_280 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -587,7 +601,6 @@
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -597,7 +610,9 @@
   qrcode_state: "hidden",
   serial_no: 15,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_287 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -668,7 +683,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 2,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_290 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -748,7 +765,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 3,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_295 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -818,7 +837,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -828,7 +846,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 5,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_302 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -886,7 +906,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -896,7 +915,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 3,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_303 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -944,7 +965,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -954,7 +974,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 4,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_304 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -993,7 +1015,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1003,7 +1024,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 5,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_305 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -1062,7 +1085,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1072,7 +1094,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 6,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_306 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -1125,7 +1149,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1135,7 +1158,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 7,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_307 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -1174,7 +1199,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1184,7 +1208,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 8,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_309 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -1241,7 +1267,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1251,7 +1276,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 9,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_310 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -1300,7 +1327,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1310,7 +1336,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 10,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_312 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -1410,7 +1438,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1420,7 +1447,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 11,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_313 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -1485,7 +1514,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1495,7 +1523,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 12,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_314 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -1560,7 +1590,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1570,7 +1599,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 13,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_315 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -1632,7 +1663,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1642,7 +1672,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 14,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_317 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -1745,7 +1777,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1755,7 +1786,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 15,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_318 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -1817,7 +1850,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1827,7 +1859,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 16,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_320 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -1963,7 +1997,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -1973,7 +2006,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 17,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_321 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -2072,7 +2107,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -2082,7 +2116,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 18,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_322 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -2210,7 +2246,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -2220,7 +2255,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 19,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_323 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -2271,7 +2308,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -2281,7 +2317,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 20,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_325 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -2324,7 +2362,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -2334,7 +2371,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 21,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_328 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -2534,7 +2573,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -2544,7 +2582,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 22,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_330 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -2619,7 +2659,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -2629,7 +2668,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 23,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_331 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -2740,7 +2781,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -2750,7 +2790,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 24,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_332 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -2841,7 +2883,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -2851,7 +2892,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 25,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_333 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -2972,7 +3015,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -2982,7 +3024,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 26,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_334 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -3037,7 +3081,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -3047,7 +3090,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 27,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_335 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -3108,7 +3153,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -3118,7 +3162,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 28,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_336 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -3361,7 +3407,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -3371,7 +3416,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 29,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_337 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -3455,7 +3502,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -3465,7 +3511,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 30,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_338 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -3544,7 +3592,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -3554,7 +3601,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 31,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_339 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -3600,7 +3649,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -3610,7 +3658,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 32,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_340 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -3677,7 +3727,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -3687,7 +3736,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 33,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_341 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -3835,7 +3886,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -3845,7 +3895,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 34,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_342 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -3898,7 +3950,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -3908,7 +3959,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 35,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_343 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -4016,7 +4069,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -4026,7 +4078,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 36,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_344 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -4208,7 +4262,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -4218,7 +4271,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 37,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_345 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -4303,7 +4358,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -4313,7 +4367,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 38,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_346 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -4408,7 +4464,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -4418,7 +4473,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 39,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_347 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -4629,7 +4686,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -4639,7 +4695,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 40,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_348 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -4750,7 +4808,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -4760,7 +4817,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 41,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_349 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -5070,7 +5129,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -5080,7 +5138,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 42,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_350 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -5157,7 +5217,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -5167,7 +5226,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 43,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_351 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -5276,7 +5337,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -5286,7 +5346,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 44,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_352 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -5371,7 +5433,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -5381,7 +5442,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 45,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_353 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -5471,7 +5534,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -5481,7 +5543,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 46,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_354 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -5583,7 +5647,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -5593,7 +5656,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 47,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_355 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -5656,7 +5721,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -5666,7 +5730,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 48,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_356 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -5708,7 +5774,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -5718,7 +5783,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 49,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_357 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -5776,7 +5843,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -5786,7 +5852,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 50,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_358 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -5913,7 +5981,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -5923,7 +5990,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 51,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_359 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -6121,7 +6190,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -6131,7 +6199,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 52,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_360 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -6190,7 +6260,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -6200,7 +6269,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 53,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_361 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -6273,7 +6344,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -6283,7 +6353,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 54,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_362 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -6424,7 +6496,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -6434,7 +6505,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 55,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_363 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -6527,7 +6600,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -6537,7 +6609,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 56,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_364 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -6648,7 +6722,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -6658,7 +6731,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 57,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_365 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -6713,7 +6788,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -6723,7 +6797,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 58,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_366 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -6829,7 +6905,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -6839,7 +6914,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 59,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_369 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -6904,7 +6981,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -6914,7 +6990,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 62,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_370 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -6997,7 +7075,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -7007,7 +7084,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 60,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_371 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -7085,7 +7164,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -7095,7 +7173,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 61,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_372 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -7167,7 +7247,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -7177,7 +7256,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 63,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_373 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -7265,7 +7346,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -7275,7 +7355,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 64,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_374 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -7356,7 +7438,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -7366,7 +7447,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 65,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_376 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -7417,7 +7500,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -7427,7 +7509,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 66,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_377 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -7533,7 +7617,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -7543,7 +7626,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 67,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_378 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -7605,7 +7690,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -7615,7 +7699,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 68,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_379 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -7722,7 +7808,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -7732,7 +7817,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 69,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_380 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -7808,7 +7895,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -7818,7 +7904,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 70,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_381 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -7993,7 +8081,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -8003,7 +8090,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 71,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_382 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -8385,7 +8474,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -8395,7 +8483,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 72,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_383 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -8895,7 +8985,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -8905,7 +8994,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 73,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_384 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -8948,7 +9039,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -8958,7 +9048,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 74,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_385 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -9156,7 +9248,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -9166,7 +9257,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 75,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_386 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -9283,7 +9376,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -9293,7 +9385,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 76,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_387 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -9373,7 +9467,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -9383,7 +9476,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 77,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_388 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -9709,7 +9804,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -9719,7 +9813,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 78,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_389 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -10413,7 +10509,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -10423,7 +10518,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 79,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_390 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -10504,7 +10601,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -10514,7 +10610,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 80,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_391 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -10646,7 +10744,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -10656,7 +10753,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 81,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_392 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -10715,7 +10814,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -10725,7 +10823,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 82,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_393 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -10780,7 +10880,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -10790,7 +10889,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 83,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_394 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -10932,7 +11033,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -10942,7 +11042,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 84,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_395 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -11066,7 +11168,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -11076,7 +11177,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 85,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_396 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -11200,7 +11303,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -11210,7 +11312,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 86,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_397 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -11270,7 +11374,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -11280,7 +11383,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 87,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_398 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -11324,7 +11429,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -11334,7 +11438,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 88,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_399 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -11569,7 +11675,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -11579,7 +11684,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 89,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_400 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -11676,7 +11783,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -11686,7 +11792,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 90,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_401 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -11921,7 +12029,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -11931,7 +12038,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 91,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_402 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -12078,7 +12187,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -12088,7 +12196,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 92,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_403 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -12196,7 +12306,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -12206,7 +12315,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 93,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_405 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -12253,7 +12364,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -12263,7 +12373,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 94,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_406 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -12329,7 +12441,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -12339,7 +12450,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 95,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_407 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -12387,7 +12500,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -12397,7 +12509,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 96,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_409 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -12508,7 +12622,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -12518,7 +12631,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 97,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_411 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -12650,7 +12765,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -12660,7 +12774,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 98,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_414 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -12727,7 +12843,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -12737,7 +12852,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 99,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_416 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -12797,7 +12914,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -12807,7 +12923,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 100,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_417 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -12868,7 +12986,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -12878,7 +12995,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 101,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_418 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -12950,7 +13069,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -12960,7 +13078,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 102,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_419 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -12998,7 +13118,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -13008,7 +13127,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 103,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_420 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -13144,7 +13265,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -13154,7 +13274,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 104,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_422 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -13266,7 +13388,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -13276,7 +13397,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 105,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_423 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -13336,7 +13459,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -13346,7 +13468,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 106,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_424 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -13388,7 +13512,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -13398,7 +13521,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 107,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_426 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -13435,7 +13560,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -13445,7 +13569,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 108,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_427 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -13484,7 +13610,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -13494,7 +13619,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 109,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_439 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -13604,7 +13731,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -13614,7 +13740,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 110,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_440 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -13706,7 +13834,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -13716,7 +13843,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 111,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_441 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -13802,7 +13931,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -13812,7 +13940,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 112,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_442 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -13859,7 +13989,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -13869,7 +13998,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 113,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_443 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -14196,7 +14327,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -14206,7 +14336,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 114,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_444 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -14520,7 +14652,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -14530,7 +14661,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 115,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_445 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -14690,7 +14823,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -14700,7 +14832,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 116,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_446 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15002,7 +15136,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15012,7 +15145,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 117,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_448 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15081,7 +15216,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15091,7 +15225,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 118,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_450 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15143,7 +15279,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15153,7 +15288,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 120,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_452 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15280,7 +15417,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15290,7 +15426,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 121,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_453 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15357,7 +15495,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15367,7 +15504,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 122,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_454 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15431,7 +15570,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15441,7 +15579,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 123,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_456 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15508,7 +15648,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15518,7 +15657,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 124,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_457 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15586,7 +15727,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15596,7 +15736,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 125,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_458 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15653,7 +15795,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15663,7 +15804,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 119,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_459 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15714,7 +15857,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15724,7 +15866,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 126,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_460 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15778,7 +15922,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15788,7 +15931,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 127,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_461 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15845,7 +15990,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15855,7 +15999,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 128,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_462 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15912,7 +16058,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15922,7 +16067,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 129,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_463 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -15979,7 +16126,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -15989,7 +16135,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 130,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_464 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -16267,7 +16415,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -16277,7 +16424,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 131,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_465 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -16343,7 +16492,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -16353,7 +16501,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 132,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_466 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -16450,7 +16600,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -16460,7 +16609,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 133,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_467 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -16505,7 +16656,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -16515,7 +16665,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 134,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_468 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -16664,7 +16816,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -16674,7 +16825,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 135,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_470 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -16727,7 +16880,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -16737,7 +16889,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 136,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_472 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -16886,7 +17040,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -16896,7 +17049,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 137,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_473 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17017,7 +17172,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17027,7 +17181,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 138,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_474 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17115,7 +17271,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17125,7 +17280,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 139,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_476 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17187,7 +17344,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17197,7 +17353,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 140,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_477 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17245,7 +17403,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17255,7 +17412,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 141,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_478 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17381,7 +17540,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17391,7 +17549,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 142,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_479 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17430,7 +17590,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17440,7 +17599,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 143,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_480 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17496,7 +17657,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17506,7 +17666,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 145,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_482 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17564,7 +17726,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17574,7 +17735,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 146,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_484 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17674,7 +17837,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17684,7 +17846,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 144,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_485 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17724,7 +17888,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17734,7 +17897,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 147,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_487 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17782,7 +17947,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17792,7 +17956,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 148,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_488 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17904,7 +18070,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17914,7 +18079,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 149,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_489 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -17967,7 +18134,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -17977,7 +18143,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 150,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_490 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18016,7 +18184,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18026,7 +18193,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 151,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_491 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18087,7 +18256,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18097,7 +18265,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 152,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_492 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18162,7 +18332,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18172,7 +18341,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 153,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_493 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18229,7 +18400,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18239,7 +18409,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 154,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_495 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18296,7 +18468,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18306,7 +18477,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 155,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_496 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18354,7 +18527,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18364,7 +18536,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 156,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_497 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18400,7 +18574,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18410,7 +18583,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 157,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_498 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18491,7 +18666,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18501,7 +18675,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 158,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_501 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18548,7 +18724,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18558,7 +18733,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 159,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_502 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18620,7 +18797,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18630,7 +18806,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 160,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_504 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18676,7 +18854,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18686,7 +18863,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 161,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_505 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18783,7 +18962,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18793,7 +18971,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 162,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_508 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -18960,7 +19140,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -18970,7 +19149,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 163,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_509 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -19063,7 +19244,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -19073,7 +19253,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 164,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_511 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -19148,7 +19330,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -19158,7 +19339,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 165,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_513 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -19212,7 +19395,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -19222,7 +19404,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 166,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_514 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -19384,7 +19568,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -19394,7 +19577,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 167,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_515 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -19477,7 +19662,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -19487,7 +19671,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 168,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_516 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -19567,7 +19753,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -19577,7 +19762,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 169,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_518 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -19668,7 +19855,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -19678,7 +19864,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 170,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_519 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -20061,7 +20249,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -20071,7 +20258,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 171,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_520 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -20144,7 +20333,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -20154,7 +20342,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 172,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_521 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -20319,7 +20509,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -20329,7 +20518,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 173,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_522 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -20377,7 +20568,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -20387,7 +20577,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 174,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_523 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -20465,7 +20657,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -20475,7 +20666,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 175,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_524 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -20540,7 +20733,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -20550,7 +20742,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 176,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_525 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -20618,7 +20812,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -20628,7 +20821,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 177,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_529 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -20674,7 +20869,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 1,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_530 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -20740,7 +20937,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -20750,7 +20946,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 178,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_532 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21023,7 +21221,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21033,7 +21230,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 179,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_533 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21092,7 +21291,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21102,7 +21300,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 180,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_534 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21207,7 +21407,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21217,7 +21416,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 181,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_535 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21306,7 +21507,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21316,7 +21516,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 182,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_537 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21394,7 +21596,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21404,7 +21605,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 183,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_538 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21445,7 +21648,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21455,7 +21657,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 184,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_539 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21491,7 +21695,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21501,7 +21704,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 185,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_540 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21550,7 +21755,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21560,7 +21764,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 186,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_541 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21615,7 +21821,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21625,7 +21830,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 187,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_543 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21736,7 +21943,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21746,7 +21952,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 188,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_544 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21800,7 +22008,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21810,7 +22017,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 189,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_546 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21934,7 +22143,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21944,7 +22152,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 190,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_547 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -21983,7 +22193,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -21993,7 +22202,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 191,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_548 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -22041,7 +22252,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -22051,7 +22261,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 192,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_549 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -22118,7 +22330,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -22128,7 +22339,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 193,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_550 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -22203,7 +22416,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -22213,7 +22425,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 194,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_551 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -22251,7 +22465,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -22261,7 +22474,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 195,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_552 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -22332,7 +22547,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -22342,7 +22556,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 196,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_554 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -22398,7 +22614,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -22408,7 +22623,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 197,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_555 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -22570,7 +22787,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -22580,7 +22796,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 4,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_571 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -22697,7 +22915,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 7,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_572 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -22771,7 +22991,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -22781,7 +23000,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 8,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_573 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -22939,7 +23160,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -22949,7 +23169,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 9,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_575 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -23036,7 +23258,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -23046,7 +23267,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 10,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_576 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -23192,7 +23415,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -23202,7 +23424,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 11,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_577 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -23232,7 +23456,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -23242,7 +23465,9 @@ EOS
   qrcode_state: "hidden",
   serial_no: 198,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )
 @gp_article_docs_578 ||= GpArticle::Doc.create!(
   concept_id: @cms_concepts_1.id,
@@ -23272,7 +23497,6 @@ EOS
   og_title: "",
   og_description: "",
   og_image: "",
-  body_more: "",
   body_more_link_text: "続きを読む",
   feature_1: true,
   feature_2: true,
@@ -23282,5 +23506,208 @@ EOS
   qrcode_state: "hidden",
   serial_no: 199,
   lang: "ja",
-  event_note: ""
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
+)
+@gp_article_docs_579 ||= GpArticle::Doc.create!(
+  concept_id: @cms_concepts_1.id,
+  content_id: @cms_contents_1.id,
+  title: "夏休み子ども・家族ふれあい教室",
+  body: <<EOS.chomp,
+<p>じょうるり市中央公民館では、じょうるり市内に在住又は在学する小学3年生から中学生までの児童・生徒とその保護者を対象に、「夏休み子ども・家族ふれあい教室」を開催します。<br />\r
+開催する教室の内容や申込み方法、受講料、教材費などの詳細は、以下のパンフレット（PDF形式）をご覧ください。<!--?p--> <a class="iconFile iconPdf" href="#">平成29年度夏休み子ども・家族ふれあい教室パンフレット[PDF：154KB]</a><br />\r
+注釈：各教室の開催日程は都合により変更することがあります。</p>\r
+\r
+<h2>申込み方法</h2>\r
+\r
+<p><strong>申込み期間　平成29年6月15日（木曜）から6月26日（月曜）まで　（はがき必着）</strong></p>\r
+\r
+<p>往復はがきに、希望教室名、郵便番号、住所、電話番号、児童生徒氏名、フリガナ、学校名、学年、性別、返信はがきの宛名を記入して申し込んでください。<br />\r
+（返信はがきの宛名は保護者氏名とし、その左側に児童生徒氏名も記入してください。）<br />\r
+応募者が定員を超える場合は、抽選を行います。<br />\r
+応募者が少ない教室は中止することがあります。</p>\r
+\r
+<h2>受講決定の通知</h2>\r
+\r
+<p>受講決定の通知は、6月末頃に返信はがきでお知らせします。<br />\r
+応募者が定員を超えた教室は抽選を行います。<br />\r
+抽選にはずれた人は「キャンセル待ち」又は「落選」とし、その旨をお知らせします。</p>\r
+\r
+<h2>受講料の納付</h2>\r
+\r
+<ul>\r
+	<li>納付期間　平成29年7月1日（土曜）から7月10日（月曜）まで</li>\r
+	<li>受付時間　午前9時から午後5時まで</li>\r
+	<li>納付場所　じょうるり市中央公民館5階事務室</li>\r
+</ul>\r
+\r
+<table>\r
+	<caption>子ども教室の受講料（1教室につき）</caption>\r
+	<tbody>\r
+		<tr>\r
+			<th scope="col" style="text-align: center">教室名</th>\r
+			<th scope="col" style="text-align: center">1人あたりの受講料</th>\r
+			<th colspan="1" rowspan="1" scope="col" style="text-align: center">教材費等</th>\r
+		</tr>\r
+		<tr>\r
+			<td>スポーツチャンバラ</td>\r
+			<td style="text-align: right">2,000円</td>\r
+			<td colspan="1" rowspan="1" style="text-align: right">&nbsp;</td>\r
+		</tr>\r
+		<tr>\r
+			<td>すいさい画A・B・C・D</td>\r
+			<td style="text-align: right">2,000円</td>\r
+			<td colspan="1" rowspan="1" style="text-align: right">&nbsp;</td>\r
+		</tr>\r
+		<tr>\r
+			<td>夏休みわくわくキッズクックA・B</td>\r
+			<td style="text-align: right">1,000円</td>\r
+			<td colspan="1" rowspan="1" style="text-align: right">1,600円</td>\r
+		</tr>\r
+		<tr>\r
+			<td>たのしい習字A・B</td>\r
+			<td style="text-align: right">1,000円</td>\r
+			<td colspan="1" rowspan="1" style="text-align: right">&nbsp;</td>\r
+		</tr>\r
+		<tr>\r
+			<td>粘土教室A・B</td>\r
+			<td style="text-align: right">1,000円</td>\r
+			<td colspan="1" rowspan="1" style="text-align: right">1,000円</td>\r
+		</tr>\r
+		<tr>\r
+			<td>おもしろサイエンスA・B</td>\r
+			<td style="text-align: right">500円</td>\r
+			<td colspan="1" rowspan="1" style="text-align: right">300円</td>\r
+		</tr>\r
+	</tbody>\r
+</table>\r
+\r
+<table>\r
+	<caption>家族ふれあい教室の受講料（1教室につき）</caption>\r
+	<tbody>\r
+		<tr>\r
+			<th scope="col" style="text-align: center">教室名</th>\r
+			<th scope="col" style="text-align: center">家族2人の受講料</th>\r
+			<th colspan="1" rowspan="1" scope="col" style="text-align: center">教材費等</th>\r
+		</tr>\r
+		<tr>\r
+			<td>家族で作ろう!雑穀料理</td>\r
+			<td style="text-align: right">1,000円</td>\r
+			<td colspan="1" rowspan="1" style="text-align: right">1人 500円</td>\r
+		</tr>\r
+		<tr>\r
+			<td>親子でウキウキお菓子作り</td>\r
+			<td style="text-align: right">\r
+			<p>1,000円</p>\r
+			</td>\r
+			<td colspan="1" rowspan="1" style="text-align: right">1人 400円</td>\r
+		</tr>\r
+		<tr>\r
+			<td>茜庵の和菓子で作る夏の風景</td>\r
+			<td style="text-align: right">\r
+			<p>1,000円</p>\r
+			</td>\r
+			<td colspan="1" rowspan="1" style="text-align: right">1人 500円</td>\r
+		</tr>\r
+		<tr>\r
+			<td>\r
+			<p>前方後円墳の模型を作ろう</p>\r
+			</td>\r
+			<td style="text-align: right">\r
+			<p>1,000円</p>\r
+			</td>\r
+			<td colspan="1" rowspan="1" style="text-align: right">&nbsp;</td>\r
+		</tr>\r
+		<tr>\r
+			<td>家族陶芸体験教室A・B</td>\r
+			<td style="text-align: right">\r
+			<p>1,000円</p>\r
+			</td>\r
+			<td colspan="1" rowspan="1" style="text-align: right">家族1組 2,000円</td>\r
+		</tr>\r
+	</tbody>\r
+</table>\r
+
+EOS
+  href: "",
+  target: "",
+  subtitle: "",
+  summary: "",
+  name: "2017080200044",
+  published_at: Time.now,
+  state: "draft",
+  event_state: "hidden",
+  raw_tags: "中央公民館　イベント　夏休み親子教室",
+  mobile_title: "",
+  mobile_body: "",
+  terminal_pc_or_smart_phone: true,
+  terminal_mobile: true,
+  display_published_at: Time.now,
+  marker_state: "hidden",
+  meta_description: "",
+  meta_keywords: "",
+  list_image: "",
+  template_values: "{}",
+  og_type: "",
+  og_title: "",
+  og_description: "",
+  og_image: "",
+  body_more_link_text: "続きを読む",
+  feature_1: true,
+  feature_2: true,
+  filename_base: "index",
+  keep_display_updated_at: false,
+  layout_id: @cms_layouts_4.id,
+  qrcode_state: "hidden",
+  serial_no: 11,
+  lang: "ja",
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
+)
+@gp_article_docs_580 ||= GpArticle::Doc.create!(
+  concept_id: @cms_concepts_1.id,
+  content_id: @cms_contents_1.id,
+  title: "あああああ",
+  body: <<EOS.chomp,
+<h2>場所</h2>\r
+\r
+<h3>日時</h3>\r
+
+EOS
+  href: "",
+  target: "",
+  subtitle: "",
+  summary: "",
+  name: "2018100500014",
+  state: "draft",
+  event_state: "hidden",
+  raw_tags: "",
+  mobile_title: "",
+  mobile_body: "",
+  terminal_pc_or_smart_phone: true,
+  terminal_mobile: true,
+  marker_state: "hidden",
+  meta_description: "",
+  meta_keywords: "",
+  list_image: "",
+  template_values: "{}",
+  og_type: "",
+  og_title: "",
+  og_description: "",
+  og_image: "",
+  body_more: "",
+  body_more_link_text: "続きを読む",
+  feature_1: true,
+  feature_2: true,
+  filename_base: "index",
+  keep_display_updated_at: false,
+  layout_id: @cms_layouts_4.id,
+  qrcode_state: "hidden",
+  serial_no: 12,
+  lang: "ja",
+  event_note: "",
+  navigation_state: "disabled",
+  feed_state: "visible"
 )

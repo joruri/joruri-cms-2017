@@ -1,18 +1,7 @@
 ## ---------------------------------------------------------
 ## sys
 
-first_group = Sys::Group.new(
-  :parent_id => 0,
-  :level_no  => 1,
-  :sort_no   => 1,
-  :state     => 'enabled',
-  :web_state => 'closed',
-  :ldap      => 0,
-  :code      => "root",
-  :name      => 'トップ',
-  :name_en   => "top"
-)
-first_group.save(validate: false)
+first_group = @site.groups.roots.first
 
 cms_group = Sys::Group.new(
   :parent_id => first_group.id,
@@ -25,6 +14,7 @@ cms_group = Sys::Group.new(
   :name      => 'じょうるり',
   :name_en   => 'cms'
 )
+cms_group.sites << @site
 cms_group.save(validate: false)
 
 first_user = Sys::User.create!(
@@ -40,9 +30,6 @@ Sys::UsersGroup.create!(group: cms_group, user: first_user)
 
 Core.user_group = cms_group
 Core.user       = first_user
-
-@site.groups << first_group
-@site.groups << cms_group
 
 awa = Sys::User.create!(state: 'enabled', ldap: 0, auth_no: 2, name: '阿波 ぞめき', name_en: 'awa zomeki', account: 'awa', password: 'awa')
 Sys::UsersGroup.create!(group: cms_group, user: awa)

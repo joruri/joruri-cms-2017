@@ -1,7 +1,7 @@
 module Approval::Model::Rel::Approval
   extend ActiveSupport::Concern
 
-  attr_accessor :in_approval_flow_ids, :in_approval_assignment_ids
+  attr_accessor :in_approval_flow_ids, :in_approval_assignment_ids, :in_approval_comment
 
   included do
     has_many :approval_requests, class_name: 'Approval::ApprovalRequest', as: :approvable, dependent: :destroy
@@ -13,6 +13,19 @@ module Approval::Model::Rel::Approval
       validate :validate_approval_assignments
     end
 
+    scope :approval_requested_by, ->(user) {
+      all.left_joins(:approval_requests)
+         .where(state: 'approvable')
+         .where(Approval::ApprovalRequest.table_name => { user_id: user })
+    }
+    scope :approvables_for, ->(user) {
+      assignments = Approval::Assignment.arel_table
+      selected_assignments = Approval::Assignment.arel_table.alias('selected_assignments_approval_approval_requests')
+      all.left_joins(approval_requests: [approval_flow: [approvals: :assignments],  selected_assignments: []])
+         .where(state: 'approvable')
+         .where([assignments[:user_id].eq(user.id).and(assignments[:approved_at].eq(nil)),
+                 selected_assignments[:user_id].eq(user.id).and(selected_assignments[:approved_at].eq(nil))].reduce(:or))
+    }
     scope :creator_or_approvables, ->(user) {
       creators = Sys::Creator.arel_table
       approval_requests = Approval::ApprovalRequest.arel_table
@@ -112,8 +125,10 @@ module Approval::Model::Rel::Approval
       end
 
       request.user_id = Core.user.id
-      request.save! if request.changed?
+      request.save! if request.has_changes_to_save?
       request.reset
+
+      request.histories.create(user_id: Core.user.id, reason: 'request', comment: in_approval_comment)
     end
 
     approval_requests.where.not(approval_flow_id: in_approval_flow_ids).destroy_all

@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 
 /* =========================================================
     CRUD.
@@ -21,7 +21,6 @@ p.managerForm {
   border-bottom: 1px solid #bf1400;
   color: #bf1400;
 }
-
 .inlineForm {
   margin: 0px 0px 2px 0px;
   padding: 2px;
@@ -29,6 +28,27 @@ p.managerForm {
 }
 form .note {
   color: #e00;
+}
+
+span.remark {
+  color: #777;
+}
+span.change_state {
+  margin: 0 4px;
+  padding: 0 2px;
+  border-radius: 3px;
+  background-color: #c33;
+  color: #fff;
+  font-size: 85%;
+}
+span.change_state.create {
+  background-color: #5a5;
+}
+span.change_state.update {
+  background-color: #55c;
+}
+span.change_state.delete {
+  background-color: #c55;
 }
 
 /* Index
@@ -105,6 +125,38 @@ table.show td textarea {
 }
 table.show td label {
   margin-right: 4px;
+}
+
+/* Tree
+--------------------------------------------------------- */
+table.tree .icon {
+  display: inline-block;
+  width: 14px;
+  background-color: #eee;
+  text-align: center;
+  text-decoration: none;
+  font-size: 80%;
+  cursor: pointer;
+}
+table.tree .indent.level2 {
+  margin-left: 16px;
+}
+table.tree .indent.level3 {
+  margin-left: 32px;
+}
+table.tree .indent.level4 {
+  margin-left: 48px;
+}
+table.tree .indent.level5 {
+  margin-left: 64px;
+}
+table.tree .indent.level6 {
+  margin-left: 80px;
+}
+table.tree .opened,
+table.tree .closed {
+  border: 1px solid #ccc;
+  height: 14px;
 }
 
 /* Form
@@ -236,6 +288,31 @@ table.show td textarea.head {
 .crudTree .footer {
   position: relative;
   clear: both;
+}
+
+.crudTree .tree ul.root > li {
+  margin-left: 0;
+}
+.crudTree .tree li:not(:last-child) {
+  margin-bottom: 2px;
+}
+.crudTree .tree li > ul {
+  margin-top: 2px;
+}
+.crudTree .tree li .icon {
+  display: inline-block;
+  width: 16px;
+  background-color: #eee;
+  text-align: center;
+  text-decoration: none;
+}
+.crudTree .tree li .opend {
+}
+.crudTree .tree li .closed {
+  background-color: #ddd;
+}
+.crudTree .tree li a.current {
+  color: #f0d;
 }
 
 /* Contents > Search

@@ -168,8 +168,8 @@ EOS
 <div id="cse-search-box">\r
   <form action="https://www.google.com/search">\r
     <input type="hidden" value="ja" name="hl" />\r
-    <input type="hidden" name="domains" value="demo.cms2017.joruri.org" />\r
-    <input type="hidden" name="sitesearch" value="demo.cms2017.joruri.org" />\r
+    <input type="hidden" name="domains" value="demo.cms2017.joruri-cms.jp" />\r
+    <input type="hidden" name="sitesearch" value="demo.cms2017.joruri-cms.jp" />\r
     <input type="text" title="サイト内検索" placeholder="サイト内検索" class="text" id="search-box" size="40" name="q" />\r
     <input type="submit" id="search-button" value="検索" name="sa" />\r
   </form>\r

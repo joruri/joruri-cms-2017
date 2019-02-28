@@ -3197,3 +3197,15 @@ Sys::Creator.create!(
   creatable_id: @gp_article_docs_578.id,
   creatable_type: "GpArticle::Doc"
 )
+Sys::Creator.create!(
+  user_id: @sys_users_7.id,
+  group_id: @sys_groups_4.id,
+  creatable_id: @gp_article_docs_579.id,
+  creatable_type: "GpArticle::Doc"
+)
+Sys::Creator.create!(
+  user_id: @sys_users_1.id,
+  group_id: @sys_groups_13.id,
+  creatable_id: @gp_article_docs_580.id,
+  creatable_type: "GpArticle::Doc"
+)

@@ -10,6 +10,9 @@ ZomekiCMS::Application.routes.draw do
     match "tests_link_check" => "admin/tests/link_check#index",
       :as => :tests_link_check, via: [:get, :post]
 
+    match "storage_files(/*path)" => "admin/storage_files#index",
+      as: :storage_files, format: false, via: [:get, :post, :put, :patch, :delete]
+
     resources :settings,
       :controller  => "admin/settings"
     resources :maintenances,
@@ -64,7 +67,7 @@ ZomekiCMS::Application.routes.draw do
       :controller  => "admin/role_names"
     resources :object_privileges,
       :controller  => "admin/object_privileges",
-      :path        => ":parent/object_privileges"
+      :path        => ":role_name/object_privileges"
     resources :inline_files,
       :controller  => "admin/inline/files",
       :path        => ":content/:parent/inline_files" do
@@ -78,10 +81,6 @@ ZomekiCMS::Application.routes.draw do
           get :view
         end
       end
-    resources :storage_files,
-      :controller => "admin/storage_files",
-      :path       => "storage_files(/*path)",
-      :format     => false
     resources :operation_logs,
       :controller => "admin/operation_logs"
     resources :processes,
@@ -98,6 +97,26 @@ ZomekiCMS::Application.routes.draw do
       :controller => "admin/users_sessions"
     resources :publishers,
       :controller => "admin/publishers"
+    resources :bookmarks,
+      :controller  => "admin/bookmarks",
+      :path        => ":parent/bookmarks"
+
+    resources :reorg_groups,
+      :controller  => "admin/reorg/groups",
+      :path        => ":parent/reorg/groups"
+    resources :reorg_group_users,
+      :controller  => "admin/reorg/group_users",
+      :path        => ":parent/reorg/group_users"
+    resources :reorg_schedules,
+      :controller  => "admin/reorg/schedules",
+      :path        => ":parent/reorg/schedules"
+    resources :reorg_runners,
+      :controller  => "admin/reorg/runners",
+      :path        => ":parent/reorg/runners" do
+        collection do
+          post :init, :exec, :clear
+        end
+    end
   end
 
   get "#{ZomekiCMS::ADMIN_URL_PREFIX}/#{mod}/:parent/inline_files/files/:name.:format" => 'sys/admin/inline/files#download'

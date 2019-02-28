@@ -10,8 +10,8 @@ Joruri CMS 2017 は、自治体サイト向けに開発された国産オープ�
 | Webサーバ | nginx 1.12     |
 | Appサーバ | unicorn 5.4    |
 | Database  | PostgreSQL 9.5 |
-| Ruby      | 2.3            |
-| Rails     | 5.0            |
+| Ruby      | 2.6            |
+| Rails     | 5.2            |
 
 ## デモ
 https://joruri-cms.jp/2017/about/demo.html
