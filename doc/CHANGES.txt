@@ -1,5 +1,8 @@
 ## Joruri CMS 2017 / リリース内容
 
+Release 4
+ * ZOMEKI 3.4.7 build-92 を取り込み
+
 Release 3
  * ZOMEKI 3.3.9 build-83 を取り込み
 
