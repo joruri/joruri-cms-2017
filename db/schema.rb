@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_31_084651) do
+ActiveRecord::Schema.define(version: 2019_11_05_140262) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,8 @@ ActiveRecord::Schema.define(version: 2018_10_31_084651) do
     t.integer "thumb_size"
     t.text "alt_text"
     t.string "sp_url"
+    t.string "nofollow"
+    t.string "lazyload"
     t.index ["token"], name: "index_ad_banner_banners_on_token"
   end
 
@@ -1051,6 +1053,7 @@ ActiveRecord::Schema.define(version: 2018_10_31_084651) do
     t.integer "sort_no"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean "required", default: true
     t.index ["template_id"], name: "index_gp_template_items_on_template_id"
   end
 
@@ -1346,6 +1349,7 @@ ActiveRecord::Schema.define(version: 2018_10_31_084651) do
     t.string "index_link"
     t.string "mail_to"
     t.datetime "recognized_at"
+    t.boolean "mail_attachment", default: false
     t.index ["content_id"], name: "index_survey_forms_on_content_id"
   end
 

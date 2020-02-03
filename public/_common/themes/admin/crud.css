@@ -80,6 +80,9 @@ table.index td.approvable {
 table.index tr.cycle td {
   background-color: #f4f4f4;
 }
+table.index tr.approvable_current td {
+  background-color: #ffefd5;
+}
 table.index th.action_link,
 table.index td.action_link {
   width: 45px;
@@ -101,13 +104,13 @@ table.show {
 }
 table.show th {
   width: 180px;
-  padding: 13px 5px 13px 15px;
+  padding: 8px 5px 8px 15px;
   border-top:5px solid #fff;
   border-bottom:1px solid #ccc;
   background-color: #ededed;
 }
 table.show td {
-  padding: 13px 5px 13px 15px;
+  padding: 8px 5px 8px 15px;
   border-top: 5px solid #fff;
   border-bottom:1px solid #ccc; 
 }
@@ -125,6 +128,18 @@ table.show td textarea {
 }
 table.show td label {
   margin-right: 4px;
+}
+table.show ol,
+table.show li {
+  list-style: none;
+}
+table.show li {
+  display: inline-block;
+  margin-left: 0;
+}
+table.show li:not(:first-child):before {
+  content: ">";
+  margin: 0 5px;
 }
 
 /* Tree

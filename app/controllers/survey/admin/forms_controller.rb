@@ -33,7 +33,7 @@ class Survey::Admin::FormsController < Cms::Controller::Admin::Base
 
   def create
     @item = @content.forms.build(form_params)
-    @item.state = new_state_from_params
+    @item.state = new_state_from_params(@item)
 
     _create(@item, location: location_after_save) do
       send_approval_request_mail(@item) if @item.state_approvable?
@@ -42,7 +42,7 @@ class Survey::Admin::FormsController < Cms::Controller::Admin::Base
 
   def update
     @item.attributes = form_params
-    @item.state = new_state_from_params
+    @item.state = new_state_from_params(@item)
 
     _update(@item, location: location_after_save) do
       send_approval_request_mail(@item) if @item.state_approvable?
@@ -90,13 +90,15 @@ class Survey::Admin::FormsController < Cms::Controller::Admin::Base
 
   private
 
-  def new_state_from_params
+  def new_state_from_params(item)
     state = params.keys.detect { |k| k =~ /^commit_/ }.to_s.sub(/^commit_/, '')
-    if @content.form_state_options(Core.user).map(&:last).include?(state)
-      state
-    else
-      nil
+    if !@content.form_state_options(Core.user).map(&:last).include?(state)
+      state = nil
     end
+    if state == 'approved' && item.tasks.detect { |task| task.name == 'publish' && task.process_at.present? }
+      state = 'prepared'
+    end
+    state
   end
 
   def location_after_save
@@ -109,10 +111,10 @@ class Survey::Admin::FormsController < Cms::Controller::Admin::Base
     if params[:target_public].blank?
       if Core.user.has_auth?(:manager)
         params[:target] = 'all' if params[:target].blank?
-        params[:target_state] = 'processing' if params[:target_state].blank?
+        params[:target_state] = 'all' if params[:target_state].blank?
       else
         params[:target] = 'user' if params[:target].blank? || params[:target] == 'all'
-        params[:target_state] = 'processing' if params[:target_state].blank?
+        params[:target_state] = 'all' if params[:target_state].blank?
       end
     end
 
@@ -131,7 +133,7 @@ class Survey::Admin::FormsController < Cms::Controller::Admin::Base
     params.require(:item).permit(
       :confirmation, :description, :index_link, :name,
       :receipt, :sitemap_state, :sort_no, :summary, :title, :mail_to,
-      :in_approval_comment,
+      :mail_attachment, :in_approval_comment,
       :creator_attributes => [:id, :group_id, :user_id],
       :tasks_attributes => [:id, :name, :process_at],
       :in_approval_flow_ids => []

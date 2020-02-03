@@ -3,7 +3,7 @@ ja:
     models:
       cms/content: コンテンツ
       cms/node: ディレクトリ
-      cms/node/page: 自由形式ページ
+      cms/node/page: 固定ページ
       cms/period: 期間
       cms/piece: ピース
       cms/layout: レイアウト
@@ -155,6 +155,7 @@ ja:
 
       cms/piece/bread_crumb:
         top_label: TOPリンク文字
+        top_link_uri: TOPリンクURL
 
       cms/node:
         parent_id: 親ディレクトリ
@@ -220,6 +221,7 @@ ja:
       ## node
       cms/node/page:
         name: ファイル名
+        recognizers: 承認者
       cms/node/sitemap:
         name: ファイル名
       cms/node/sitemap_xml:

@@ -35,7 +35,7 @@ class Cms::Node < ApplicationRecord
                    uniqueness: { scope: [:site_id, :parent_id], if: -> { !replace_page? } },
                    format: { with: /\A[0-9A-Za-z@\.\-_\+]+\z/, message: :not_a_filename, if: -> { parent_id != 0 } }
   validates :model, presence: true,
-                    uniqueness: { scope: [:content_id], if: :content_id? }
+                    uniqueness: { scope: [:content_id], if: -> { content_id? && ( new_record? || state != 'closed' )} }
 
   validate {
     errors.add :parent_id, :invalid if id != nil && id == parent_id
@@ -63,6 +63,11 @@ class Cms::Node < ApplicationRecord
 
   def deletable?
     parent && Core.user.has_priv?(:delete, item: parent.concept) && state != 'public'
+  end
+  
+  def editable?
+    return false unless parent
+    return super
   end
 
   def states
@@ -162,7 +167,7 @@ class Cms::Node < ApplicationRecord
     parent = self.class.find_by(id: parent_id)
     parent_before = self.class.find_by(id: parent_id_before_last_save)
     return {} if parent.nil? || parent_before.nil?
-    name_changes = saved_changes[:name]
+    name_changes = saved_changes[:name] || [name, name]
     {
       "#{parent_before.public_path}#{name_changes[0]}" => "#{parent.public_path}#{name_changes[1]}",
       "#{parent_before.public_smart_phone_path}#{name_changes[0]}" => "#{parent.public_smart_phone_path}#{name_changes[1]}"
@@ -214,7 +219,7 @@ class Cms::Node < ApplicationRecord
     validates_with Sys::TaskValidator, if: -> { state != 'draft' }
 
     def states
-      s = [['下書き保存','draft'],['承認待ち','recognize']]
+      s = [['下書き保存','draft'],['承認依頼','recognize']]
       s << ['公開保存','public'] if Core.user.has_auth?(:manager)
       s
     end
@@ -244,13 +249,16 @@ class Cms::Node < ApplicationRecord
       inquiries.each_with_index do |inquiry, i|
         attrs = inquiry.attributes
         attrs[:id] = nil
-        attrs[:group_id] = Core.user.group_id if i.zero?
+        attrs[:group_id] = Core.user.group_id if i.zero? && (rel_type.blank? || !Core.user.has_auth?(:manager))
         item.inquiries.build(attrs)
       end
 
       return false unless item.save(validate: false)
 
-      Sys::ObjectRelation.create(source: item, related: self, relation_type: 'replace') if rel_type == :replace
+      if rel_type == :replace
+        item.update_column(:created_at, self.created_at)
+        Sys::ObjectRelation.create(source: item, related: self, relation_type: 'replace')
+      end
 
       return item
     end

@@ -11,7 +11,7 @@ class Cms::Piece < ApplicationRecord
   include Cms::Model::Base::Piece
   include Cms::Model::Base::Page
 
-  enum_ish :state, [:public, :closed]
+  enum_ish :state, [:public, :closed], default: :closed
 
   has_many :settings, -> { order(:sort_no) }, class_name: 'Cms::PieceSetting', dependent: :destroy
 
@@ -108,6 +108,7 @@ class Cms::Piece < ApplicationRecord
 
     new_attributes = self.attributes
     new_attributes[:id] = nil
+    new_attributes[:state] = 'closed'
     new_attributes[:created_at] = nil
     new_attributes[:updated_at] = nil
     new_attributes[:recognized_at] = nil
@@ -118,8 +119,6 @@ class Cms::Piece < ApplicationRecord
     if rel_type == nil
       item.name  = nil
       item.title = item.title.gsub(/^(【複製】)*/, "【複製】")
-    elsif rel_type == :replace
-      item.state = "closed"
     end
 
     item.setting_save_skip = true
@@ -135,8 +134,11 @@ class Cms::Piece < ApplicationRecord
       dupe_setting = Cms::PieceSetting.new(setting_attributes)
       dupe_setting.save(validate: false)
     end
-
-    Sys::ObjectRelation.create(source: item, related: self, relation_type: 'replace') if rel_type == :replace
+    
+    if rel_type == :replace
+      item.update_column(:created_at, self.created_at) 
+      Sys::ObjectRelation.create(source: item, related: self, relation_type: 'replace')
+    end
 
     return item
   end

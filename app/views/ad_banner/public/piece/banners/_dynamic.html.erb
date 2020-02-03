@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 $(function() {
   $.ajax({
     url: '/_api/ad_banner/piece_banners',
@@ -19,7 +19,14 @@ $(function() {
         $(banners).each(function(index, item) {
           var l = $('<li>', { class: 'banner' });
           var a = $('<a>', { href: item['url'], target: item['target'], data: { token: item['token'] } });
-          a.append($('<img>', { src: item['image_url'], alt: item['alt_text'], title: item['title'] }));
+          var i = $('<img>', { src: item['image_url'], alt: item['alt_text'], title: item['title'] });
+          if (item['nofollow']) {
+            a.attr('rel', item['nofollow']);
+          }
+          if (item['loading']) {
+            i.attr('loading', item['loading']);
+          }
+          a.append(i);
           l.append(a);
           u.append(l);
         });
@@ -40,7 +47,7 @@ $(function() {
 </script>
 
 <%- if !request.mobile? && @piece.content.click_count_related? -%>
-<script type="text/javascript">
+<script>
 $(function() {
   $(document).on('click', '#<%= @piece.css_id %> li.banner a', function() {
     $.get('/_api/ad_banner/piece_clicks', { piece_id: <%= @piece.id %>, token: $(this).data('token') });

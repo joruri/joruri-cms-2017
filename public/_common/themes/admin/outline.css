@@ -129,7 +129,7 @@ body {
   display: flex;
   flex-direction: column;
   visibility: hidden;
-  width: 100px;
+  width: auto;
   position: absolute;
   z-index: 999;
   background-color: #3C5082;
@@ -139,10 +139,15 @@ body {
 }
 #navi .mainMenu li:hover > ul {
   visibility: visible;
-  transition-delay: 0.1s;
+  transition-delay: 0.7s;
+}
+#navi .mainMenu li a.current:hover + ul {
+  display:none;
 }
 #navi .mainMenu li > ul > li {
   flex: 0 0 32px;
+  text-align: left;
+  padding: 0 20px;
 }
 #navi .mainMenu li > ul > li:hover {
   background-color: #4A5C8A;

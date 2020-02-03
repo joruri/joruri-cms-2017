@@ -8,7 +8,7 @@
         categories_for_option = category.category_type.categories_for_option
         category_id = category.id
       else
-        category_types_for_option = @item.content.category_content&.category_types_for_option
+        category_types_for_option = @item.content.category_content&.category_types_for_option.presence || []
         category_type_id = nil
         categories_for_option = []
         category_id = nil
@@ -31,7 +31,7 @@
   <%= button_tag '追加', type: 'button', id: 'add_category' %>
 </div>
 
-<script type="text/javascript">
+<script>
 $(function() {
   $('#add_category').addFields({
     container: '#categories tbody',
