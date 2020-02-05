@@ -1544,6 +1544,12 @@ Sys::Creator.create!(
 Sys::Creator.create!(
   user_id: @sys_users_7.id,
   group_id: @sys_groups_13.id,
+  creatable_id: @ad_banner_banners_5.id,
+  creatable_type: "AdBanner::Banner"
+)
+Sys::Creator.create!(
+  user_id: @sys_users_7.id,
+  group_id: @sys_groups_13.id,
   creatable_id: @cms_pieces_23.id,
   creatable_type: "Cms::Piece"
 )
