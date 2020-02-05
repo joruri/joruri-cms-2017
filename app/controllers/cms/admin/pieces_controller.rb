@@ -18,7 +18,7 @@ class Cms::Admin::PiecesController < Cms::Controller::Admin::Base
     if params[:do] == 'preview'
       preview
     else
-      exit
+      return http_error(404)
     end
   end
 
@@ -31,8 +31,7 @@ class Cms::Admin::PiecesController < Cms::Controller::Admin::Base
 
   def new
     @item = Cms::Piece.new(
-      concept_id: Core.concept(:id),
-      state: 'public'
+      concept_id: Core.concept(:id)
     )
 
     @contents = content_options(false)

@@ -12,7 +12,11 @@ class GpCalendar::Public::Piece::CategoryDailyLinksController < GpCalendar::Publ
   end
 
   def index
-    @calendar = Util::Date::Calendar.new(@date.year, @date.month)
+    start_date = @date.beginning_of_month.beginning_of_week(:sunday)
+    end_date = @date.end_of_month.end_of_week(:sunday)
+    holidays = @content.public_holidays.scheduled_between(start_date, end_date)
+    
+    @calendar = Util::Date::Calendar.new(@date.year, @date.month, holidays)
     @calendar.set_event_class = true
     @calendar.day_uri = "#{@node.public_uri}?start_date=:year-:month-:day&end_date=:year-:month-:day"
     @calendar.day_link = calendar_link_dates
@@ -20,7 +24,7 @@ class GpCalendar::Public::Piece::CategoryDailyLinksController < GpCalendar::Publ
     if @min_date && @max_date
       @pagination = Util::Html::SimplePagination.new
       @pagination.prev_label = '前の月'
-      @pagination.separator  = %Q(<span class="separator">|</span> <a href="#{@piece.public_uri}#{@today.strftime('%Y/%m/')}" class="current_page"">今月</a> <span class="separator">|</span>)
+      @pagination.separator  = %Q(<span class="separator">|</span> <a href="#{@piece.public_uri}#{@today.strftime('%Y/%m/')}" class="current_page">今月</a> <span class="separator">|</span>)
       @pagination.next_label = '次の月'
       @pagination.prev_uri   = "#{@piece.public_uri}#{@date.prev_month.strftime('%Y/%m/')}" if @calendar.prev_month_date >= @min_date
       @pagination.next_uri   = "#{@piece.public_uri}#{@date.next_month.strftime('%Y/%m/')}" if @calendar.next_month_date <= @max_date

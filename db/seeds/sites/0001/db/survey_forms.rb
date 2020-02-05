@@ -14,7 +14,8 @@
 EOS
   confirmation: true,
   sitemap_state: "visible",
-  index_link: "visible"
+  index_link: "visible",
+  mail_attachment: false
 )
 @survey_forms_2 ||= Survey::Form.create!(
   content_id: @cms_contents_6.id,
@@ -36,5 +37,6 @@ EOS
 EOS
   confirmation: true,
   sitemap_state: "visible",
-  index_link: "visible"
+  index_link: "visible",
+  mail_attachment: false
 )

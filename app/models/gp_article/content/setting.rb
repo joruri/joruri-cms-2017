@@ -53,7 +53,7 @@ class GpArticle::Content::Setting < Cms::ContentSetting
   set_config :word_dictionary, menu: :form,
     name: "本文/単語変換辞書",
     form_type: :text,
-    lower_text: "CSV形式（例　対象文字,変換後文字 ）"
+    lower_text: "CSV形式（例　対象文字,変換後文字 ）<br />正規表現も使用可能です。<br />正規表現を使用する場合は、「###」で区切ってください。（例　(\\d+)-(\\d+)-(\\d+)###\\1年\\2月\\3日 ）"
   set_config :map_setting, menu: :form,
     name: '地図設定',
     form_type: :radio_buttons,
@@ -260,6 +260,7 @@ class GpArticle::Content::Setting < Cms::ContentSetting
   after_update :update_docs_marker_state, if: -> { name == 'map_relation' }
 
   validate :validate_doc_list_pagination, if: -> { name == 'doc_list_pagination' }
+  validate :validate_gp_template_content_template_id, if: -> { name == 'gp_template_content_template_id' }
 
   def value_name
     case name
@@ -378,10 +379,18 @@ class GpArticle::Content::Setting < Cms::ContentSetting
 
   def validate_doc_list_pagination
     if extra_values[:doc_list_number].to_s !~ /\A\d+\z/
-      errors.add("#{name}.doc_list_number", I18n.t('activerecord.errors.messages.not_a_number'))
+      errors.add("#{name}.doc_list_number", errors.generate_message(:base, :not_a_number))
     end
     if extra_values[:doc_publish_more_pages].to_s !~ /\A\d+\z/
-      errors.add("#{name}.doc_publish_more_pages", I18n.t('activerecord.errors.messages.not_a_number'))
+      errors.add("#{name}.doc_publish_more_pages", errors.generate_message(:base, :not_a_number))
+    end
+  end
+
+  def validate_gp_template_content_template_id
+    if extra_values[:default_template_id].to_i > 0
+      unless extra_values[:template_ids].include?(extra_values[:default_template_id])
+        errors.add("#{name}.default_template_id", 'は利用テンプレートの中から選択してください。')
+      end
     end
   end
 end

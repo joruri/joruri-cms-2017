@@ -1,5 +1,5 @@
 <%- if @content.template_available? -%>
-  <%- if @content.templates.size == 1 && @item.template -%>
+  <%- if @content.templates.size == 1 && @item.template && @content.default_template -%>
     <%= f.hidden_field :template_id %>
   <%- else -%>
     <table class="show">
@@ -24,7 +24,9 @@
   <table class="show">
     <tr>
       <th><%= f.label :href %></th>
-      <td><%= f.text_field :href, style: 'width: 500px;' %></td>
+      <td><%= f.text_field :href, style: 'width: 500px;' %>
+        <div>リンクURLを設定している場合フィードに表示されません</div>
+      </td>
       <td><%= f.collection_radio_buttons :target, @item.class.target_options, :last, :first %></td>
     </tr>
     <tr>
@@ -120,7 +122,7 @@
   <%- end -%>
 </table>
 
-<script type="text/javascript">
+<script>
 $(function() {
   <%- @content.visible_category_types.each do |category_type| -%>
   $("#add_category_<%= category_type.id %>").addFields({
@@ -200,7 +202,7 @@ $(function() {
 </table>
 
 <%- if @content.template_available? -%>
-<script type="text/javascript">
+<script>
 $(function() {
   var prevTemplateId;
   $('#item_template_id').on('click', function() {
@@ -236,7 +238,7 @@ $(function() {
   <%- end -%>
 </table>
 
-<script type="text/javascript">
+<script>
 $(function() {
   searchRelatedDocs();
 

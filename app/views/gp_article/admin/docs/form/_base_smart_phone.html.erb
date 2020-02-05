@@ -49,7 +49,7 @@
   <%= render 'gp_template/admin/shared/form', template: @item.template, template_values: @item.template_values if @item.template %>
 </div>
 
-<div>
+<div class="form_buttoms">
   <%= submit_tag 'リンクチェック', name: 'link_check_in_body' if @content.link_check_enabled? %>
   <%= submit_tag 'アクセシビリティチェック', name: 'accessibility_check' if @content.accessibility_check_enabled? %>
 </div>
@@ -89,7 +89,7 @@
 <span><%= button_tag '追加', type: 'button', id: "add_category_#{category_type.id}" %></span>
 <%- end -%>
 
-<script type="text/javascript">
+<script>
 $(function() {
   <%- @content.visible_category_types.each do |category_type| -%>
   $("#add_category_<%= category_type.id %>").addFields({
@@ -138,8 +138,8 @@ $(function() {
 </div>
 <div>
   <div class="label2"><%= GpArticle::Doc.model_name.human %></div>
-  <%= select_tag 'rel_doc', '', include_blank: true %><br />
-  <%= button_tag '選択', type: 'button', id: 'add_rel_doc' %>
+  <%= select_tag 'rel_doc', '', include_blank: true %>
+  <div class="form_buttoms"><%= button_tag '選択', type: 'button', id: 'add_rel_doc' %></div>
 </div>
 
 <hr />
@@ -161,7 +161,7 @@ $(function() {
 <%- end -%>
 
 <%- if @content.template_available? -%>
-<script type="text/javascript">
+<script>
 $(function() {
   var prevTemplateId;
   $('#item_template_id').on('click', function() {
@@ -197,7 +197,7 @@ $(function() {
   <%- end -%>
 </div>
 
-<script type="text/javascript">
+<script>
 $(function() {
   searchRelatedDocs();
 

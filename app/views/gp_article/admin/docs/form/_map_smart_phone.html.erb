@@ -1,4 +1,5 @@
 <table class="show">
+<%- if @content.map_related? %>
   <%- if @content.map_content_marker -%>
     <tr>
       <th><%= f.label :marker_state %></th>
@@ -27,6 +28,7 @@
     </td>
   </tr>
   <%- end -%>
+<%- end -%>
   <%- if @content.site.use_navigation? && @content.navigation_enabled? -%>
     <tr>
       <th><%= f.label :navigation_state %></th>
@@ -37,7 +39,7 @@
 
 <%= map_form f %>
 
-<script type="text/javascript">
+<script>
 $(function() {
   <%- @content.marker_category_types.each do |category_type| -%>
   $("#add_marker_category_<%= category_type.id %>").addFields({

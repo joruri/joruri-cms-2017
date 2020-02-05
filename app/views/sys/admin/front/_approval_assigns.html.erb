@@ -16,8 +16,15 @@
       <th style="text-align: center; width: 120px;">更新日時</th>
       <th style="text-align: center; width: 100px;">プレビュー</th>
     </tr>
-    <%- @approval_assigns.each do |item| -%>
-    <tr class="<%= cycle '', 'cycle' %>">
+    <%- @approval_assigns.each do |item|
+      params = item.class == Cms::Node::Page ? {params: { node_id: item.id }} : {}
+      approvable_current = if (item.respond_to?(:approvable?) && item.approvable?(Core.user)) || !item.respond_to?(:approvable?)
+                             true
+                           else
+                             false
+                           end
+    -%>
+    <tr class="<%= cycle '', 'cycle ' %><%= item.state %><%= ' approvable_current' if approvable_current %>">
       <td class="action_link"><%= link_to :show, item.admin_uri(active_tab: 'approval'), target: '_blank' %></td>
       <td><%= item.content ? item.content.name : item.class.model_name.human %></td>
       <td style="text-align: left;"><%= item.title %></td>
@@ -25,9 +32,9 @@
       <td><%= item.creator&.user&.name %></td>
       <td style="text-align: center;"><%=l item.updated_at %></td>
       <td style="text-align: center;">
-        <%= preview_links(Core.site, item.preview_uri,
-                                     item.preview_uri(terminal: :smart_phone),
-                                     item.preview_uri(terminal: :mobile)) %>
+        <%= preview_links(Core.site, item.preview_uri(params),
+                                     item.preview_uri(params.merge(terminal: :smart_phone)),
+                                     item.preview_uri(params.merge(terminal: :mobile))) %>
       </td>
     </tr>
     <%- end -%>

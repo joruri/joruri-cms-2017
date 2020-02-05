@@ -1,7 +1,12 @@
 <%= init_ckeditor readOnly: true %>
+<%- if @content.editor_css.present? -%>
+<script>
+CKEDITOR.config.contentsCss = [CKEDITOR.config.contentsCss, '<%= @content.editor_css %>'];
+</script>
+<%- end -%>
 <%= render 'gp_article/admin/docs/shared/replacement_notification' %>
 
-<script type="text/javascript">
+<script>
 $(function() {
   var active_tab_index = $('#tabs > ul > li').length - 1;
 
