@@ -118,8 +118,40 @@
   nofollow: 'enabled',
   lazyload: 'enabled'
 )
-@ad_banner_banners_4.file = Sys::Lib::File::NoUploadedFile.new(path: "db/seeds/sites/0001/upload/ad_banner/banners/00/00/00/05/00000005/0000005.dat", mime_type: "image/gif")
+@ad_banner_banners_4.file = Sys::Lib::File::NoUploadedFile.new(path: "db/seeds/sites/0001/upload/ad_banner/banners/00/00/00/04/00000004/0000004.dat", mime_type: "image/gif")
 @ad_banner_banners_4.send(:set_upload_file_info)
 @ad_banner_banners_4.send(:upload_internal_file)
 @ad_banner_banners_4.send(:set_token)
 @ad_banner_banners_4.save!
+
+@ad_banner_banners_5 ||= AdBanner::Banner.create!(
+  name: "joruricms2017.png",
+  title: "Joruri CMS 2017",
+  mime_type: "image/png",
+  size: 4234,
+  image_is: 1,
+  image_width: 170,
+  image_height: 50,
+  content_id: @cms_contents_8.id,
+  group_id: @ad_banner_groups_2.id,
+  state: "public",
+  advertiser_name: "サイトブリッジ株式会社",
+  advertiser_phone: "",
+  advertiser_email: "",
+  advertiser_contact: "",
+  url: "https://joruri-cms.jp/",
+  sort_no: 50,
+  target: "_blank",
+  site_id: 1,
+  thumb_width: 120,
+  thumb_height: 90,
+  thumb_size: 3269,
+  alt_text: "Joruri CMS 2017",
+  nofollow: 'enabled',
+  lazyload: 'enabled'
+)
+@ad_banner_banners_5.file = Sys::Lib::File::NoUploadedFile.new(path: "db/seeds/sites/0001/upload/ad_banner/banners/00/00/00/05/00000005/0000005.dat", mime_type: "image/png")
+@ad_banner_banners_5.send(:set_upload_file_info)
+@ad_banner_banners_5.send(:upload_internal_file)
+@ad_banner_banners_5.send(:set_token)
+@ad_banner_banners_5.save!
