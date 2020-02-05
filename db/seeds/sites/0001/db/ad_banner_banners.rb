@@ -21,7 +21,9 @@
   thumb_width: 120,
   thumb_height: 90,
   thumb_size: 2138,
-  alt_text: "キービジュアル１"
+  alt_text: "キービジュアル１",
+  nofollow: 'enabled',
+  lazyload: 'enabled'
 )
 @ad_banner_banners_1.file = Sys::Lib::File::NoUploadedFile.new(path: "db/seeds/sites/0001/upload/ad_banner/banners/00/00/00/01/00000001/0000001.dat", mime_type: "image/jpeg")
 @ad_banner_banners_1.send(:set_upload_file_info)
@@ -50,7 +52,9 @@
   thumb_width: 120,
   thumb_height: 90,
   thumb_size: 1941,
-  alt_text: "キービジュアル２"
+  alt_text: "キービジュアル２",
+  nofollow: 'enabled',
+  lazyload: 'enabled'
 )
 @ad_banner_banners_2.file = Sys::Lib::File::NoUploadedFile.new(path: "db/seeds/sites/0001/upload/ad_banner/banners/00/00/00/02/00000002/0000002.dat", mime_type: "image/jpeg")
 @ad_banner_banners_2.send(:set_upload_file_info)
@@ -79,7 +83,9 @@
   thumb_width: 120,
   thumb_height: 90,
   thumb_size: 2143,
-  alt_text: "Joruri公式サイト"
+  alt_text: "Joruri公式サイト",
+  nofollow: 'enabled',
+  lazyload: 'enabled'
 )
 @ad_banner_banners_3.file = Sys::Lib::File::NoUploadedFile.new(path: "db/seeds/sites/0001/upload/ad_banner/banners/00/00/00/03/00000003/0000003.dat", mime_type: "image/gif")
 @ad_banner_banners_3.send(:set_upload_file_info)
@@ -87,35 +93,6 @@
 @ad_banner_banners_3.send(:set_token)
 @ad_banner_banners_3.save!
 @ad_banner_banners_4 ||= AdBanner::Banner.create!(
-  name: "bn-jorurionline.gif",
-  title: "Joruri ONLINE",
-  mime_type: "image/gif",
-  size: 1073,
-  image_is: 1,
-  image_width: 170,
-  image_height: 50,
-  content_id: @cms_contents_8.id,
-  group_id: @ad_banner_groups_2.id,
-  state: "public",
-  advertiser_name: "サイトブリッジ株式会社",
-  advertiser_phone: "",
-  advertiser_email: "",
-  advertiser_contact: "",
-  url: "http://joruri-online.jp/",
-  sort_no: 200,
-  target: "_blank",
-  site_id: 1,
-  thumb_width: 120,
-  thumb_height: 90,
-  thumb_size: 1732,
-  alt_text: "Joruri ONLINE"
-)
-@ad_banner_banners_4.file = Sys::Lib::File::NoUploadedFile.new(path: "db/seeds/sites/0001/upload/ad_banner/banners/00/00/00/04/00000004/0000004.dat", mime_type: "image/gif")
-@ad_banner_banners_4.send(:set_upload_file_info)
-@ad_banner_banners_4.send(:upload_internal_file)
-@ad_banner_banners_4.send(:set_token)
-@ad_banner_banners_4.save!
-@ad_banner_banners_5 ||= AdBanner::Banner.create!(
   name: "bn-sitebridge.gif",
   title: "サイトブリッジ株式会社",
   mime_type: "image/gif",
@@ -137,10 +114,12 @@
   thumb_width: 120,
   thumb_height: 90,
   thumb_size: 1479,
-  alt_text: "サイトブリッジ株式会社"
+  alt_text: "サイトブリッジ株式会社",
+  nofollow: 'enabled',
+  lazyload: 'enabled'
 )
-@ad_banner_banners_5.file = Sys::Lib::File::NoUploadedFile.new(path: "db/seeds/sites/0001/upload/ad_banner/banners/00/00/00/05/00000005/0000005.dat", mime_type: "image/gif")
-@ad_banner_banners_5.send(:set_upload_file_info)
-@ad_banner_banners_5.send(:upload_internal_file)
-@ad_banner_banners_5.send(:set_token)
-@ad_banner_banners_5.save!
+@ad_banner_banners_4.file = Sys::Lib::File::NoUploadedFile.new(path: "db/seeds/sites/0001/upload/ad_banner/banners/00/00/00/05/00000005/0000005.dat", mime_type: "image/gif")
+@ad_banner_banners_4.send(:set_upload_file_info)
+@ad_banner_banners_4.send(:upload_internal_file)
+@ad_banner_banners_4.send(:set_token)
+@ad_banner_banners_4.save!
