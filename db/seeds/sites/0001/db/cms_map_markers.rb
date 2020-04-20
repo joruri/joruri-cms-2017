@@ -17,9 +17,3 @@ Cms::MapMarker.create!(
   lat: "34.070162",
   lng: "134.55624650000004"
 )
-Cms::MapMarker.create!(
-  map_id: @cms_maps_579.id,
-  name: "",
-  lat: "34.070162",
-  lng: "134.55624650000004"
-)
