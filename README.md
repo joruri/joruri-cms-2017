@@ -36,6 +36,10 @@ CentOS 7での自動インストールスクリプトになります。
 
 CentOS 8の自動インストールスクリプトは近日公開予定です。
 
+### WEBｘCMSサーバー分離構成設定手順
+
+* https://joruri-cms.jp/2017/document/web-cms.html
+
 ## ライセンス
 MIT License
 
