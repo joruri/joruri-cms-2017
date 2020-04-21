@@ -11,9 +11,3 @@
   relatable_type: "GpArticle::Doc",
   name: "2017080200037"
 )
-@gp_article_related_docs_43 ||= GpArticle::RelatedDoc.create!(
-  content_id: @cms_contents_1.id,
-  relatable_id: @gp_article_docs_579.id,
-  relatable_type: "GpArticle::Doc",
-  name: "2017080200037"
-)

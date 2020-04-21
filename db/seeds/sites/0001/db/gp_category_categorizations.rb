@@ -2445,9 +2445,3 @@ GpCategory::Categorization.create!(
   category_id: @gp_category_categories_13.id,
   categorized_as: "GpArticle::Doc"
 )
-GpCategory::Categorization.create!(
-  categorizable_id: @gp_article_docs_579.id,
-  categorizable_type: "GpArticle::Doc",
-  category_id: @gp_category_categories_12.id,
-  categorized_as: "GpArticle::Doc"
-)

@@ -69,6 +69,7 @@ h1 + span {
 }
 #account,
 #password,
+#password_confirmation,
 #email {
   width: 254px;
   padding: 8px 10px;
