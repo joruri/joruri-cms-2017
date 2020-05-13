@@ -30,11 +30,13 @@ https://joruri-cms.jp/2017/about/demo.html
   - [doc/INSTALL_CENTOS8.md](doc/INSTALL_CENTOS8.md)
 
 ### 自動スクリプト
-CentOS 7での自動インストールスクリプトになります。
+CentOS 7の場合
 
     export LANG=ja_JP.UTF-8; curl -fsSL https://raw.githubusercontent.com/joruri/joruri-cms-2017/master/doc/install_scripts/prepare.sh | bash
 
-CentOS 8の自動インストールスクリプトは近日公開予定です。
+CentOS 8の場合
+
+    export LANG=ja_JP.UTF-8; curl -fsSL https://raw.githubusercontent.com/joruri/joruri-cms-2017/master/doc/install_scripts_centos8/prepare.sh | bash
 
 ### WEBｘCMSサーバー分離構成設定手順
 
