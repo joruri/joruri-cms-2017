@@ -18,15 +18,18 @@ centos() {
   id joruri || useradd -m joruri
 
   rpm -ivh https://kojipkgs.fedoraproject.org/packages/http-parser/2.7.1/3.el7/x86_64/http-parser-2.7.1-3.el7.x86_64.rpm
-  curl --silent --location https://rpm.nodesource.com/setup_4.x | bash -
-  yum -y install libxml2-devel libxslt-devel openldap-devel nodejs patch zip exiv2
+  curl --silent --location https://rpm.nodesource.com/setup_12.x | bash -
+  dnf -y install libxml2-devel libxslt-devel openldap-devel nodejs patch zip exiv2 postfix
 
-  rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
-  yum -y install --enablerepo=remi ImageMagick6-devel
+  dnf -y install http://rpms.famillecollet.com/enterprise/remi-release-8.rpm
+  dnf -y install --enablerepo=remi ImageMagick-devel
 
   git clone https://github.com/joruri/joruri-cms-2017.git /var/www/joruri
   chown -R joruri:joruri /var/www/joruri
-  su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle config build.pg --with-pg-config=/usr/pgsql-9.5/bin/pg_config'
+
+  rm -rf /var/www/joruri/Gemfile.lock
+
+  su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle config build.pg --with-pg-config=/usr/pgsql-12/bin/pg_config'
   su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle install --path vendor/bundle --without development test'
 
   cp /var/www/joruri/config/samples/logrotate /etc/logrotate.d/joruri_logrotate

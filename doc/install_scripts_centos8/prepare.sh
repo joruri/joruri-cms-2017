@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INSTALL_SCRIPTS_URL='https://raw.githubusercontent.com/joruri/joruri-cms-2017/master/doc/install_scripts'
+INSTALL_SCRIPTS_URL='https://raw.githubusercontent.com/joruri/joruri-cms-2017/master/doc/install_scripts_centos8'
 
 echo '#### Prepare to install ####'
 
@@ -10,7 +10,9 @@ centos() {
   setenforce 0
   sed -i --follow-symlinks -e 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/sysconfig/selinux
 
-  yum -y install git epel-release
+  dnf config-manager --set-enabled PowerTools
+
+  dnf -y install git epel-release
 
   cd /usr/local/src
 
@@ -41,10 +43,22 @@ echo "
     ユーザID   : joruri
     パスワード : joruri
 
-１．PostgreSQLのjoruriユーザはパスワードがjoruripassに設定されています。適宜変更してください。
+１．管理画面にアクセスできない場合、下記のファイルを確認して「server_name」の部分を適宜変更してください。
+    # vi /var/www/joruri/config/nginx/servers/site_0001.conf
+    # vi /var/www/joruri/config/nginx/admin_servers/site_0001.conf
+    --------------
+    server_name `ruby -ryaml -e "puts YAML.load_file('/var/www/joruri/config/core.yml')['production']['uri'].gsub(/(^http:\/\/|\/)/,'')"`;
+    --------------
+
+    変更後は下記のコマンドを実行して、設定を反映してください。
+    # systemctl reload nginx
+
+    管理画面にログイン後、「サイト」の「ドメイン」画面から「サイトURL」の設定値を修正してください。
+
+２．PostgreSQLのjoruriユーザはパスワードがjoruripassに設定されています。適宜変更してください。
     postgres=# ALTER USER joruri WITH ENCRYPTED PASSWORD 'newpass';
 
-２．OS の joruri ユーザに cron が登録されています。
+３．OS の joruri ユーザに cron が登録されています。
     # crontab -u joruri -l
 "
 EOF

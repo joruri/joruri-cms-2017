@@ -35,12 +35,19 @@ def centos
     f.flock File::LOCK_UN
   end
 
+  smtp_yml = '/var/www/joruri/config/smtp.yml'
+  db = YAML::Store.new(smtp_yml)
+  db.transaction do
+    db['production']['enable_starttls_auto'] = 'false'
+  end
+
   system "su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake db:setup RAILS_ENV=production'"
   system "su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake db:seed:demo RAILS_ENV=production'"
 
   system "su - joruri -c 'export LANG=ja_JP.UTF-8; cd /var/www/joruri && bundle exec rake joruri:configure RAILS_ENV=production'"
   system 'ln -s /var/www/joruri/config/nginx/nginx.conf /etc/nginx/conf.d/joruri.conf'
-  system 'mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.org'
+  system 'cp  /etc/nginx/nginx.conf  /etc/nginx/nginx.conf.org'
+#######  system '/etc/nginx/nginx.conf'
 end
 
 def others

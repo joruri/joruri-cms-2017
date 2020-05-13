@@ -9,7 +9,7 @@ read KEY
 centos() {
   echo "It's CentOS!"
 
-  systemctl start postgresql-9.5 && systemctl enable postgresql-9.5
+  systemctl start postgresql-12 && systemctl enable postgresql-12
   systemctl start nginx && systemctl enable nginx
 
   cp /var/www/joruri/config/samples/unicorn.service /usr/lib/systemd/system/joruri_unicorn.service

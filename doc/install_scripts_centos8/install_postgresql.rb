@@ -11,12 +11,14 @@ require 'fileutils'
 def centos
   puts "It's CentOS!"
 
-  system 'yum -y install http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm'
-  system 'yum -y install postgresql95-server postgresql95-contrib postgresql95-devel'
+  system 'dnf -y module disable  postgresql'
+  system 'dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm'
 
-  system 'export PGSETUP_INITDB_OPTIONS="--encoding=UTF8 --locale=ja_JP.UTF-8"; /usr/pgsql-9.5/bin/postgresql95-setup initdb'
+  system 'dnf -y install postgresql12-server postgresql12-contrib postgresql12-devel'
 
-  pg_hba_conf = '/var/lib/pgsql/9.5/data/pg_hba.conf'
+  system 'export PGSETUP_INITDB_OPTIONS="--encoding=UTF8 --locale=ja_JP.UTF-8"; /usr/pgsql-12/bin/postgresql-12-setup initdb'
+
+  pg_hba_conf = '/var/lib/pgsql/12/data/pg_hba.conf'
   FileUtils.copy pg_hba_conf, "#{pg_hba_conf}.#{Time.now.strftime('%Y%m%d%H%M')}", preserve: true
   File.open pg_hba_conf, File::RDWR do |f|
     f.flock File::LOCK_EX
@@ -32,7 +34,7 @@ def centos
     f.flock File::LOCK_UN
   end
 
-  system 'systemctl start postgresql-9.5'
+  system 'systemctl start postgresql-12'
 
   psql_c = %q!psql -c \"CREATE USER joruri WITH CREATEDB ENCRYPTED PASSWORD 'joruripass';\"!
   system %Q!su - postgres -c "#{psql_c}"!
