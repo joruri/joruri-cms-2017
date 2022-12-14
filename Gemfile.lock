@@ -86,7 +86,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.5)
-    crass (1.0.4)
+    crass (1.0.6)
     database_rewinder (0.5.3)
     datewari (1.0.2)
       actionview (>= 5.0)
@@ -159,7 +159,7 @@ GEM
       ruby_dep (~> 1.2)
     logical_query_parser (0.2.0)
       treetop (~> 1.6.8)
-    loofah (2.2.3)
+    loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.0)
@@ -169,7 +169,9 @@ GEM
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (0.8.2)
-    mimemagic (0.3.2)
+    mimemagic (0.3.10)
+      nokogiri (~> 1)
+      rake
     mini_mime (1.0.1)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
